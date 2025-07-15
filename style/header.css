@@ -1,0 +1,209 @@
+.cabecalho__menu-hamburguer {
+    width: 24px;
+    height: 24px;
+    background-image: url("../img/Menu.svg");
+    display: inline-block;
+    background-repeat: no-repeat;
+    /* faz com que a imagem de fundo aplicado no hearder parede que ficar se repetindo*/
+    background-position: center;
+    /* faz com que a imagem fique centralizada */
+}
+
+.cabecalho {
+    background-color: var(--branco);
+    display: flex;
+    /* tornar o header por completo flexivel*/
+    justify-content: space-between;
+    /* separa cada elemento com o mesmo espaço entrew entre eles, por só ter duas "div's, cada uma foi para um canto da tela" */
+    align-items: center;
+    /*centraliza os itens no meio da linha do header*/
+    position: relative;
+    /*permite colocar outros atributos, como por ex: direita e esqueda.. tornando ele em um objeto não estatico*/
+}
+
+.container {
+    display: flex;
+    /*torna a div's que tem class container flexiveis */
+    align-items: center;
+    /*a linha os itens dentro div's centralizados */
+    justify-content: space-between;
+}
+
+.container__imagem {
+    padding: 1em;
+    /*da um espaçamento entre cada item que possui a class*/
+}
+.desktop{
+    display: none;
+}
+.lista-menu {
+    display: none;
+    /*responsavel por esconder o menu */
+    position: absolute;
+    /*permite mover o elemento filho, desde que o elemento pai não esteja estatico*/
+    top: 100%;
+    /* tirou 100% do cabeçalho e ficou para baixo*/
+    width: 100vw;
+    /*ajusta a largura para 60 do viewport*/
+}
+
+.container__botao:checked~.lista-menu {
+    /* caso o input de tipo checkbox da class "container__botao" estibver ativo, ele realizar o comando que está dentro  das {chaves}*/
+    display: block;
+    /*neste caso o quando o checkbox estiver ativo, ele vai fazer com a lista da classe lista-menu se torno em bloco visivel, já que ocutamos ela com display none*/
+}
+
+.container__botao:checked~.container__rotulo>.cabecalho__menu-hamburguer {
+    background-image: url(../img/Menu\ Aberto.svg);
+}
+
+.container__botao:checked~.container__rotulo {
+    background: var(--rosa-degrade);
+}
+
+.lista-menu__titulo,
+.lista-menu__item {
+    padding: 1em;
+    background-color: var(--branco);
+}
+
+.lista-menu__titulo {
+    color: var(--laranja);
+    font-weight: 700;
+}
+
+.lista-menu__Link {
+    background: var(--rosa-degrade);
+    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+
+.container__botao {
+    display: none;
+}
+
+.container__titulo {
+    display: none;
+}
+
+.opções {
+    display: none;
+}
+
+.container__texto {
+    display: none;
+}
+
+@media screen and (min-width: 1024px) {
+
+    .container__titulo,
+    .container__titulo--negrito {
+        font-family: var(--fonte-secundaria);
+        font-size: 1.875rem;
+    }
+
+    .container__titulo {
+        font-weight: 400;
+        display: block;
+    }
+
+    .container__titulo--negrito {
+        font-weight: 700;
+    }
+
+    .opções {
+        display: flex;
+    }
+
+    .opções__item {
+        padding: 0 1em;
+        text-transform: uppercase;
+    }
+
+    .opções__link {
+        text-decoration: none;
+
+        color: var(--preto);
+    }
+
+    .container__imagem{
+        display: none;
+    }
+    .desktop{display: block;
+        height: 40px;
+    }
+    .container_imagem-transparente {
+        display: none;
+    }
+
+    .cabecalho__menu-hamburguer {
+        display: none;
+    }
+
+    .opções__botao:checked~.lista-menu {
+        display: block;
+        width: auto;
+    }
+
+    .opções__botao {
+        display: none;
+    }
+
+    .opções__botao:checked~.opções__rotulo>.opções__item {
+        background: var(--rosa-degrade);
+        color: var(--branco);
+    }
+
+    .opções__item {
+        padding: 2em 1em;
+    }
+
+    .lista-menu__item:hover {
+        background: var(--rosa-degrade);
+    }
+
+    .lista-menu__item:hover>.lista-menu__Link {
+        -webkit-text-fill-color: var(--branco);
+        text-decoration: none;
+    }
+}
+
+@media screen and (min-width: 1728px) {
+    .container__link {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        color: var(--preto);
+        font-size: 1.25rem;
+
+    }
+
+    .container__texto {
+        display: block;
+    }
+
+    .cabecalho {
+        padding: 0 5em;
+    }
+
+    .left {
+
+        gap: 3.75em;
+    }
+
+    .opções {
+        margin-right: auto;
+        gap: 2em;
+    }
+
+    .container {
+        margin: 0 3.56em 0 0;
+
+    }
+
+    .container__titulo,
+    .container__titulo--negrito {
+        font-size: 2.5rem;
+    }
+}
