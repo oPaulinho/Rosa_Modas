@@ -19,6 +19,7 @@
     /*centraliza os itens no meio da linha do header*/
     position: relative;
     /*permite colocar outros atributos, como por ex: direita e esqueda.. tornando ele em um objeto não estatico*/
+    text-align: center;
 }
 
 .container {
@@ -30,12 +31,15 @@
 }
 
 .container__imagem {
+    position: relative;
     padding: 1em;
     /*da um espaçamento entre cada item que possui a class*/
 }
-.desktop{
+
+.desktop {
     display: none;
 }
+
 .lista-menu {
     display: none;
     /*responsavel por esconder o menu */
@@ -45,6 +49,13 @@
     /* tirou 100% do cabeçalho e ficou para baixo*/
     width: 100vw;
     /*ajusta a largura para 60 do viewport*/
+    right: 0;
+
+    left: 0;
+
+    height: 100vh;
+
+    text-align: center;
 }
 
 .container__botao:checked~.lista-menu {
@@ -114,10 +125,11 @@
 
     .opções {
         display: flex;
+        align-items: center;
     }
 
     .opções__item {
-        padding: 0 1em;
+        /* padding: 0 1em; */
         text-transform: uppercase;
     }
 
@@ -127,12 +139,23 @@
         color: var(--preto);
     }
 
-    .container__imagem{
+    .opções__link:hover {
+        background: var(--rosa-degrade);
+        -webkit-text-fill-color: transparent;
+        -webkit-background-clip: text;
+    }
+
+    .container__imagem {
         display: none;
     }
-    .desktop{display: block;
+
+    .desktop {
+        display: block;
         height: 40px;
+        width: 200px;
+        padding: 0;
     }
+
     .container_imagem-transparente {
         display: none;
     }
@@ -167,6 +190,14 @@
         -webkit-text-fill-color: var(--branco);
         text-decoration: none;
     }
+
+    .cabecalho {
+        display: flex;
+        text-align: center;
+        padding: 0 12em 0 2em;
+
+    }
+
 }
 
 @media screen and (min-width: 1728px) {
@@ -184,21 +215,24 @@
     }
 
     .cabecalho {
-        padding: 0 5em;
+        padding: 0 20em 0 5em;
+        text-align: center;
     }
 
     .left {
 
         gap: 3.75em;
+        position: relative;
     }
 
     .opções {
-        margin-right: auto;
-        gap: 2em;
+        display: flex;
+        text-align: center;
+        /* gap: 2em; */
     }
 
     .container {
-        margin: 0 3.56em 0 0;
+        /* margin: 0 3.56em 0 0; */
 
     }
 

@@ -1,36 +1,41 @@
+/* Linha separadora */
 hr {
     margin: 0;
 }
 
+/* Estilo base do rodapé */
 .rodape {
     background-color: var(--branco);
     padding: 1em;
 }
 
+/* Oculta a lista no mobile */
 .lista-rodape {
     display: none;
 }
 
+/* Hover dos links */
 .lista-rodape__link:hover {
     color: var(--laranja);
 }
 
+/* Estilos a partir de 1024px (desktop/tablet grande) */
 @media screen and (min-width: 1024px) {
-    .lista-rodape {
-        display: block;
-    }
-
     .rodape {
         display: flex;
         justify-content: space-around;
         padding: 3.4rem 0;
     }
 
+    .lista-rodape {
+        display: block;
+    }
+
     .lista-rodape__titulo {
-        padding: 0 0 1.56em 0;
-        color: var(--cinza-claro);
-        align-items: first baseline;
         font-size: 0.87rem;
+        color: var(--cinza-claro);
+        padding-bottom: 1.56em;
+        align-items: first baseline;
     }
 
     .lista-rodape__item {
@@ -48,9 +53,9 @@ hr {
     .rodape__titulo {
         font-size: 1.5rem;
     }
-
 }
 
+/* Estilo para telas muito grandes (monitor) */
 @media screen and (min-width: 1728px) {
     .lista-rodape {
         border-left: 1px solid var(--cinza-claro);
