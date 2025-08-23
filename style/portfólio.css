@@ -1,0 +1,29 @@
+.container__portfolio {
+    display: flex;
+    flex-direction: row;
+    gap: 5em; /* Espaço entre elementos */
+    margin: 5em 5em 20em; /* Margens vertical e inferior */
+}
+
+.titulo__portfolio {
+    font-size: 2rem;
+    font-family: var(--fonte-primaria);
+    padding: 1.5em 0 1em;
+    color: var(--cor-secundaria);
+}
+
+.texto__portfolio {
+    font-size: 1.2rem;
+    font-family: var(--fonte-secundaria);
+    color: var(--cor-terciaria);
+}
+
+.portfolio__apresentacao {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.imagem{
+    width: 40vw;
+}

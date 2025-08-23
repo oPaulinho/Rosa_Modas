@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rosa Modas – Hair</title>
+    <link rel="stylesheet" href="style/reset.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="style/Styles.css">
+</head>
+
+<body>
+    <header class="cabecalho">
+        <div class="container">
+            <a href="index.html" class="opções__link"><img src="img/Logo.svg" alt="Logo da Rosa Modas" class="container__imagem"></a>
+            <a href="index.html" class="opções__link"><img src="img/Rosa Modas.svg" alt="Logo Rosa Modas Escrita" class="container__imagem desktop"></a>
+        </div>
+
+        <ul class="opções">
+            <li class="opções__item"><a href="index.html" class="opções__link">INÍCIO</a></li>
+            <li class="opções__item"><a href="fashion.html" class="opções__link">FASHION</a></li>
+            <li class="opções__item"><a href="acessorios.html" class="opções__link">ACESSÓRIOS</a></li>
+            <li class="opções__item"><a href="contatos.html" class="opções__link">CONTATOS</a></li>
+            <li class="opções__item"><a href="sobre.html" class="opções__link">SOBRE NÓS</a></li>
+        </ul>
+
+        <div class="container left">
+            <input type="checkbox" id="menu" class="container__botao">
+            <label for="menu" class="container__rotulo">
+                <span class="cabecalho__menu-hamburguer container__imagem"></span>
+            </label>
+            <ul class="lista-menu">
+                <li class="lista-menu__item"><a href="index.html" class="lista-menu__Link">INÍCIO</a></li>
+                <li class="lista-menu__item"><a href="fashion.html" class="lista-menu__Link">FASHION</a></li>
+                <li class="lista-menu__item"><a href="acessorios.html" class="lista-menu__Link">ACESSÓRIOS</a></li>
+                <li class="lista-menu__item"><a href="contatos.html" class="lista-menu__Link">CONTATOS</a></li>
+                <li class="lista-menu__item"><a href="sobre.html" class="lista-menu__Link">SOBRE NÓS</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Conteúdo adaptado para Hair -->
+    <section class="banner">
+        <h2 class="banner__titulo">Hair<br> – Cuidados com seus cabelos -</h2>
+        <p class="banner__texto">Tudo sobre tratamentos, cortes e serviços que realçam sua beleza e autoestima.</p>
+    </section>
+    <h3 class="carrossel__titulo">Nossos Procedimentos</h3>
+
+    <section class="container__portfolio">
+        <div>
+            <img src="img/procedimento1.jpg" alt="Escova moderna" class="imagem">
+        </div>
+        <div class="portfolio__apresentacao">
+            <h2 class="titulo__portfolio">
+                Escova moderna
+            </h2>
+            <p class="texto__portfolio">
+                Procedimento de escova moderna que proporciona fios soltos, brilhantes e com acabamento impecável. Ideal
+                para ocasiões especiais ou para manter o look do dia a dia sempre elegante.
+            </p>
+
+            <a href="https://projeto-alura-plus-three-zeta.vercel.app/" class="apresentacao__links__navegacao">
+                <p class="botoes__ancora">
+                    AGENDAR
+                </p>
+        </div>
+    </section>
+
+    <section class="carrossel">
+        <h2 class="carrossel__titulo">Nossos Procedimentos</h2>
+        <div class="carrossel__container">
+            <div class="swiper swiper-hair">
+                <div class="swiper-pagination"></div>
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide"><img src="img/procedimento1.jpg" alt="Escova moderna"></div>
+                    <div class="swiper-slide"><img src="img/procedimento2.jpg" alt="Botox capilar"></div>
+                    <div class="swiper-slide"><img src="img/procedimento3.jpg" alt="Progressiva"></div>
+                    <div class="swiper-slide"><img src="img/procedimento4.jpg" alt="Hidratação intensa"></div>
+                    <div class="swiper-slide"><img src="img/procedimento5.jpg" alt="Tintura e mechas"></div>
+                </div>
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next"></div>
+            </div>
+
+            <div class="card">
+                <div class="card__descricao">
+                    <div class="descricao">
+                        <h3 class="descricao__titulo">Destaque</h3>
+                        <h2 class="descricao__titulo-livro">Kit Reconstrução Capilar</h2>
+                        <p class="descricao__texto">Tratamento intensivo para cabelos danificados. Nutrição, brilho e
+                            força em um só pacote.</p>
+                    </div>
+                    <img src="img/produto1.jpg" class="descricao__imagem" alt="Kit Reconstrução Capilar">
+                </div>
+                <div class="card__botoes">
+                    <ul class="botoes">
+                        <li class="botoes__item"><img src="img/Favoritos.svg" alt="Favoritar Produto"></li>
+                        <li class="botoes__item"><img src="img/Compras.svg" alt="Adicionar ao Carrinho"></li>
+                    </ul>
+                    <a href="#" class="botoes__ancora">Saiba mais</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer igual ao seu index -->
+    <section class="contato">
+        <div class="contato__descrição">
+            <h2 class="contato__titulo">Fique por dentro!</h2>
+            <p class="contato__texto">Promos exclusivas e novidades sobre tratamentos capilares.</p>
+        </div>
+        <a href="https://api.whatsapp.com/send/?phone=5511958723409&text&type=phone_number&app_absent=0"
+            class="contato__email">Fale no WhatsApp</a>
+    </section>
+
+    <hr />
+
+    <footer class="rodape">
+        <h2 class="rodape__titulo">Rosa Modas</h2>
+
+        <ul class="lista-rodape">
+            <li class="lista-rodape__titulo">Contato</li>
+            <li class="lista-rodape__item">
+                <img src="/img/whatsapp.png" alt="Ícone WhatsApp">
+                <a href="https://wa.me/5511958723409" class="lista-rodape__link" target="_blank">WhatsApp</a>
+            </li>
+            <li class="lista-rodape__item">
+                <img src="img/instagram.svg" alt="Ícone Instagram">
+                <a href="https://instagram.com/rosamodas" class="lista-rodape__link" target="_blank">Instagram</a>
+            </li>
+            <li class="lista-rodape__item">
+                <img src="img/email.svg" alt="Ícone Email">
+                <a href="mailto:rosamodas@gmail.com" class="lista-rodape__link">roseaneamarasilvaa@gmail.com</a>
+            </li>
+        </ul>
+
+        <ul class="lista-rodape">
+            <li class="lista-rodape__titulo">Loja</li>
+            <li class="lista-rodape__item"><a href="#" class="lista-rodape__link">Sobre nós</a></li>
+            <li class="lista-rodape__item"><a href="#" class="lista-rodape__link">Serviços</a></li>
+            <li class="lista-rodape__item"><a href="#" class="lista-rodape__link">Política de Troca</a></li>
+        </ul>
+
+        <ul class="lista-rodape">
+            <li class="lista-rodape__titulo">Endereço</li>
+            <li class="lista-rodape__item">
+                Rua Nova Esperança, 402<br>
+                Bairro da Inamar<br>
+                Diadema - SP<br>
+                CEP 09981-130
+            </li>
+        </ul>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script>
+        const swiperHair = new Swiper('.swiper-hair', {
+            spaceBetween: 10,
+            slidesPerView: 3,
+            pagination: { el: '.swiper-pagination', type: 'bullets' },
+            navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' }
+        });
+    </script>
+    <a href="https://wa.me/5511958723409" class="whatsapp-fixo" target="_blank">
+        <img src="img/whatsapp.png" alt="WhatsApp">
+    </a>
+</body>
+
+</html>
