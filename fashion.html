@@ -124,9 +124,87 @@
         </div>
     </section>
 
-    <!-- Rodapé -->
+    <section class="contato">
+        <div class="contato__descrição">
+            <h2 class="contato__titulo">Fique por dentro das novidades!</h2>
+            <p class="contato__texto">Atualizações de novos produtos, novos looks, promoções e outros.</p>
+        </div>
+        <a href="https://api.whatsapp.com/send/?phone=5511958723409&text&type=phone_number&app_absent=0"
+            class="contato__email">Acompanhe-nos no WhatsApp</a>
+    </section>
+
+    <hr />
+
     <footer class="rodape">
-        <h2 class="rodape__texto">Rosa Modas – Sua moda com estilo.</h2>
+        <h2 class="rodape__titulo">Rosa Modas</h2>
+
+        <ul class="lista-rodape">
+            <li class="lista-rodape__titulo">Contato</li>
+            <li class="lista-rodape__item">
+                <img src="/img/whatsapp.png" alt="Ícone WhatsApp">
+                <a href="https://wa.me/5511958723409" class="lista-rodape__link" target="_blank">WhatsApp</a>
+            </li>
+            <li class="lista-rodape__item">
+                <img src="img/instagram.svg" alt="Ícone Instagram">
+                <a href="https://instagram.com/rosamodas" class="lista-rodape__link" target="_blank">Instagram</a>
+            </li>
+            <li class="lista-rodape__item">
+                <img src="img/email.svg" alt="Ícone Email">
+                <a href="mailto:rosamodas@gmail.com" class="lista-rodape__link">roseaneamarasilvaa@gmail.com</a>
+            </li>
+        </ul>
+
+        <ul class="lista-rodape">
+            <li class="lista-rodape__titulo">Loja</li>
+            <li class="lista-rodape__item"><a href="#" class="lista-rodape__link">Sobre nós</a></li>
+            <li class="lista-rodape__item"><a href="#" class="lista-rodape__link">Serviços</a></li>
+            <li class="lista-rodape__item"><a href="#" class="lista-rodape__link">Política de Troca</a></li>
+        </ul>
+
+        <ul class="lista-rodape">
+            <li class="lista-rodape__titulo">Endereço</li>
+            <li class="lista-rodape__item">
+                Rua Nova Esperança, 402<br>
+                Bairro da Inamar<br>
+                Diadema - SP<br>
+                CEP 09981-130
+            </li>
+        </ul>
     </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script>
+        const swiperHair = new Swiper('.swiper-hair', {
+            spaceBetween: 10,
+            slidesPerView: 3,
+            pagination: {
+                el: '.swiper-pagination',
+                type: 'bullets',
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            }
+        });
+
+        const swiperFashion = new Swiper('.swiper-fashion', {
+            spaceBetween: 10,
+            slidesPerView: 3,
+            pagination: {
+                el: '.swiper-pagination',
+                type: 'bullets',
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            }
+        });
+    </script>
+
+    <a href="https://wa.me/5511958723409" class="whatsapp-fixo" target="_blank">
+        <img src="/img/whatsapp.png" alt="WhatsApp">
+    </a>
+
 </body>
+
 </html>
