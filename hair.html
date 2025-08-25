@@ -139,34 +139,13 @@
         </div>
     </section>
 
-    <!-- Footer igual ao seu index -->
     <section class="contato">
         <div class="contato__descrição">
-            <h2 class="contato__titulo">Fique por dentro!</h2>
-            <p class="contato__texto">Promos exclusivas e novidades sobre tratamentos capilares.</p>
-        <!--
-        </div><section class="carrossel">
-        <h2 class="carrossel__titulo">Nossos Procedimentos</h2>
-        <div class="carrossel__container">
-            <div class="swiper swiper-hair">
-                <div class="swiper-pagination"></div>
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide"><img src="img/procedimento1.jpg" alt="Escova moderna"></div>
-                    <div class="swiper-slide"><img src="img/procedimento2.jpg" alt="Botox capilar"></div>
-                    <div class="swiper-slide"><img src="img/procedimento3.jpg" alt="Progressiva"></div>
-                    <div class="swiper-slide"><img src="img/procedimento4.jpg" alt="Hidratação intensa"></div>
-                    <div class="swiper-slide"><img src="img/procedimento5.jpg" alt="Tintura e mechas"></div>
-                </div>
-                <div class="swiper-button-prev"></div>
-                <div class="swiper-button-next"></div>
-            </div>
-            -->
-
-            <div class="card">
-                <div class="card__descricao">
-                    <div c
+            <h2 class="contato__titulo">Fique por dentro das novidades!</h2>
+            <p class="contato__texto">Atualizações de novos produtos, novos looks, promoções e outros.</p>
+        </div>
         <a href="https://api.whatsapp.com/send/?phone=5511958723409&text&type=phone_number&app_absent=0"
-            class="contato__email">Fale no WhatsApp</a>
+            class="contato__email">Acompanhe-nos no WhatsApp</a>
     </section>
 
     <hr />
@@ -213,13 +192,34 @@
         const swiperHair = new Swiper('.swiper-hair', {
             spaceBetween: 10,
             slidesPerView: 3,
-            pagination: { el: '.swiper-pagination', type: 'bullets' },
-            navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' }
+            pagination: {
+                el: '.swiper-pagination',
+                type: 'bullets',
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            }
+        });
+
+        const swiperFashion = new Swiper('.swiper-fashion', {
+            spaceBetween: 10,
+            slidesPerView: 3,
+            pagination: {
+                el: '.swiper-pagination',
+                type: 'bullets',
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            }
         });
     </script>
+
     <a href="https://wa.me/5511958723409" class="whatsapp-fixo" target="_blank">
-        <img src="img/whatsapp.png" alt="WhatsApp">
+        <img src="/img/whatsapp.png" alt="WhatsApp">
     </a>
+
 </body>
 
 </html>
