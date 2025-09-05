@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rosa Modas - Contatos</title>
+    <link rel="stylesheet" href="style/reset.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="style/Styles.css">
+</head>
+
+<body>
+    <header class="cabecalho">
+        <div class="container">
+            <a href="index.html" class="opções__link"><img src="img/Logo.svg" alt="Logo da Rosa Modas" class="container__imagem"></a>
+            <a href="index.html" class="opções__link"><img src="img/Rosa Modas.svg" alt="Logo Rosa Modas Escrita" class="container__imagem desktop"></a>
+        </div>
+
+        <ul class="opções">
+            <li class="opções__item"><a href="hair.html" class="opções__link">HAIR</a></li>
+            <li class="opções__item"><a href="fashion.html" class="opções__link">FASHION</a></li>
+            <li class="opções__item"><a href="contatos.html" class="opções__link">CONTATOS</a></li>
+            <li class="opções__item"><a href="#" class="opções__link">SOBRE NÓS</a></li>
+        </ul>
+
+        <div class="container left">
+            <input type="checkbox" id="menu" class="container__botao">
+            <label for="menu" class="container__rotulo">
+                <span class="cabecalho__menu-hamburguer container__imagem"></span>
+            </label>
+
+            <ul class="lista-menu">
+                <li class="lista-menu__item"><a href="hair.html" class="lista-menu__Link">HAIR</a></li>
+                <li class="lista-menu__item"><a href="fashion.html" class="lista-menu__Link">FASHION</a></li>
+                <li class="lista-menu__item"><a href="contatos.html" class="lista-menu__Link">CONTATOS</a></li>
+                <li class="lista-menu__item"><a href="#" class="lista-menu__Link">SOBRE NÓS</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <main>
+        <section class="banner">
+            <h2 class="banner__titulo">Entre em Contato</h2>
+            <p class="banner__texto">Estamos sempre disponíveis para te ouvir!</p>
+        </section>
+
+        <section class="contato">
+            <div class="contato__descrição">
+                <h2 class="contato__titulo">Fale com a gente</h2>
+                <p class="contato__texto">Utilize um dos canais abaixo ou preencha o formulário para nos enviar uma mensagem.</p>
+            </div>
+
+            <ul class="topicos__lista">
+                <li class="topicos__item">
+                    <a href="https://wa.me/5511958723409" class="topicos__link" target="_blank">
+                        <img src="img/whatsapp.png" alt="WhatsApp" style="width: 20px;"> WhatsApp
+                    </a>
+                </li>
+                <li class="topicos__item">
+                    <a href="mailto:roseaneamarasilvaa@gmail.com" class="topicos__link">
+                        <img src="img/email.svg" alt="Email" style="width: 20px;"> Email
+                    </a>
+                </li>
+                <li class="topicos__item">
+                    <a href="https://instagram.com/rosamodas" class="topicos__link" target="_blank">
+                        <img src="img/instagram.svg" alt="Instagram" style="width: 20px;"> Instagram
+                    </a>
+                </li>
+            </ul>
+
+            <form class="formulario-contato" action="mailto:roseaneamarasilvaa@gmail.com" method="post" enctype="text/plain">
+                <label for="nome">Nome:</label><br>
+                <input type="text" id="nome" name="nome" required><br><br>
+
+                <label for="email">Email:</label><br>
+                <input type="email" id="email" name="email" required><br><br>
+
+                <label for="mensagem">Mensagem:</label><br>
+                <textarea id="mensagem" name="mensagem" rows="5" required></textarea><br><br>
+
+                <button type="submit" class="botoes__ancora">Enviar</button>
+            </form>
+        </section>
+    </main>
+
+    <hr>
+
+    <footer class="rodape">
+        <h2 class="rodape__titulo">Rosa Modas</h2>
+
+        <ul class="lista-rodape">
+            <li class="lista-rodape__titulo">Contato</li>
+            <li class="lista-rodape__item">
+                <img src="/img/whatsapp.png" alt="Ícone WhatsApp">
+                <a href="https://wa.me/5511958723409" class="lista-rodape__link" target="_blank">WhatsApp</a>
+            </li>
+            <li class="lista-rodape__item">
+                <img src="img/instagram.svg" alt="Ícone Instagram">
+                <a href="https://instagram.com/rosamodas" class="lista-rodape__link" target="_blank">Instagram</a>
+            </li>
+            <li class="lista-rodape__item">
+                <img src="img/email.svg" alt="Ícone Email">
+                <a href="mailto:rosamodas@gmail.com" class="lista-rodape__link">roseaneamarasilvaa@gmail.com</a>
+            </li>
+        </ul>
+
+        <ul class="lista-rodape">
+            <li class="lista-rodape__titulo">Loja</li>
+            <li class="lista-rodape__item"><a href="#" class="lista-rodape__link">Sobre nós</a></li>
+            <li class="lista-rodape__item"><a href="#" class="lista-rodape__link">Serviços</a></li>
+            <li class="lista-rodape__item"><a href="#" class="lista-rodape__link">Política de Troca</a></li>
+        </ul>
+
+        <ul class="lista-rodape">
+            <li class="lista-rodape__titulo">Endereço</li>
+            <li class="lista-rodape__item">
+                Rua Nova Esperança, 402<br>
+                Bairro da Inamar<br>
+                Diadema - SP<br>
+                CEP 09981-130
+            </li>
+        </ul>
+    </footer>
+
+    <a href="https://wa.me/5511958723409" class="whatsapp-fixo" target="_blank">
+        <img src="/img/whatsapp.png" alt="WhatsApp">
+    </a>
+</body>
+
+</html>
