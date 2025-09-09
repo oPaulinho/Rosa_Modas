@@ -1,0 +1,47 @@
+#sobre-nos {
+    padding: 50px 20px;
+    background: #fff;
+}
+
+.titulo {
+    text-align: center;
+    font-size: 2em;
+    margin-bottom: 30px;
+    color: #d63384;
+    margin-top: 1em;
+
+    /* rosa principal */
+}
+
+.conteudo-sobre {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    align-items: center;
+    justify-content: center;
+}
+.texto{
+    padding: 1em 0;
+}
+.texto-sobre {
+    padding: 1em;
+    font-size: 1.1em;
+    line-height: 1.6;
+    color: #333;
+}
+
+.texto-sobre strong {
+    color: #d63384;
+}
+
+.foto-sobre {
+    flex: 1 1 300px;
+    text-align: center;
+}
+
+.foto-sobre img {
+    max-width: 70%;
+    margin: 0 0 2em 0;
+    border-radius: 20px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+}
