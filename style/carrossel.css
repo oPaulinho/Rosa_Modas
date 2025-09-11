@@ -75,10 +75,13 @@
     color: var(--branco);
     font-weight: 700;
     text-decoration: none;
+    border-radius: 3%;
+    width: 70vw;
 }
 
 .botoes__ancora:active {
     background-color: var(--azul);
+    text-decoration: none;
 }
 
 @media screen and (min-width: 1024px) {
@@ -107,6 +110,9 @@
     .card {
         width: 40%;
         margin: 2em auto;
+    }
+    .botoes__ancora{
+        width: 20vw;
     }
 }
 

@@ -1,8 +1,10 @@
 .container__portfolio {
     display: flex;
     flex-direction: row;
-    gap: 5em; /* Espaço entre elementos */
-    margin: 5em 5em 20em; /* Margens vertical e inferior */
+    gap: 5em;
+    /* Espaço entre elementos */
+    margin: 5em 5em 20em;
+    /* Margens vertical e inferior */
 }
 
 .titulo__portfolio {
@@ -24,14 +26,17 @@
     gap: 10px;
 }
 
-.imagem{
+.imagem {
     width: 40vw;
 }
+
 .container__portfolio {
     display: flex;
     flex-direction: row;
-    gap: 5em; /* Espaço entre elementos */
-    margin: 5em 5em 20em; /* Margens vertical e inferior */
+    gap: 5em;
+    /* Espaço entre elementos */
+    margin: 5em 5em 20em;
+    /* Margens vertical e inferior */
     align-items: center;
 }
 
@@ -56,20 +61,32 @@
 
 .imagem {
     width: 40vw;
-    max-width: 400px; /* opcional para não ficar enorme em telas grandes */
+    max-width: 400px;
+    /* opcional para não ficar enorme em telas grandes */
     height: auto;
+    border-radius: 5%;
 }
+
+.apresentacao__links__navegacao {
+    text-decoration: none;
+    text-align: center;
+}
+
 
 /* === Responsivo para Mobile === */
 @media (max-width: 768px) {
     .container__portfolio {
-        flex-direction: column; /* imagem em cima, texto embaixo */
-        gap: 2em; /* espaço menor entre elementos */
-        margin: 2em; /* margens menores no mobile */
+        flex-direction: column;
+        /* imagem em cima, texto embaixo */
+        gap: 2em;
+        /* espaço menor entre elementos */
+        margin: 2em;
+        /* margens menores no mobile */
     }
 
     .imagem {
-        width: 100%; /* ocupa toda largura disponível */
+        width: 100%;
+        /* ocupa toda largura disponível */
         max-width: 100%;
     }
 
