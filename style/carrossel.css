@@ -32,10 +32,12 @@
 .card__botoes {
     display: flex;
     justify-content: space-between;
+    text-decoration: none;
 }
 
 .botoes {
     display: flex;
+    text-decoration: none;
 }
 
 .card {
@@ -64,6 +66,7 @@
 
 .botoes__item {
     margin: 0 0.5em;
+    text-decoration: none;
 }
 
 .botoes__ancora {
