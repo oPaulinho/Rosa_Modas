@@ -1,0 +1,20 @@
+# Ignorar arquivos de documentação e atividades pessoais
+FORMULARIO_PREENCHIDO.md
+RESUMO_ATIVIDADE_EXTENSIONISTA.md
+Universo_Rosa/DOCUMENTACAO.md
+
+# Ignorar configurações e dados locais
+.vscode/
+Universo_Rosa/js/firebase-config.js
+*.log
+*.env
+
+# Ignorar arquivos de sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Ignorar arquivos temporários do editor
+*.swp
+*.swo
+*~

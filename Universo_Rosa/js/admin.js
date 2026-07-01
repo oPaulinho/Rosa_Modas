@@ -10,6 +10,86 @@ const formLogin = document.getElementById('form-login');
 const loginAlert = document.getElementById('login-alert');
 const btnLogout = document.getElementById('btn-logout');
 
+window.toggleModulesMenu = function() {
+    const mobileList = document.getElementById('mobile-module-list');
+    if (mobileList) {
+        mobileList.classList.toggle('open');
+    }
+};
+
+window.showPanel = function(panelKey, clickedLink) {
+    const normalizedKey = panelKey === 'home' ? 'panel-home' : (panelKey.startsWith('panel-') ? panelKey : `panel-${panelKey}`);
+    const targetPanel = document.getElementById(normalizedKey);
+
+    const panelLabels = {
+        'agendamentos': 'Agendamentos',
+        'promocoes': 'Promoções',
+        'produtos': 'Catálogo de Roupas',
+        'procedimentos': 'Procedimentos',
+        'espiritual': 'Espiritual',
+        'conteudo': 'Conteúdo do Site',
+        'config-agenda': 'Configurações da Agenda',
+        'home': 'Painel Administrativo'
+    };
+
+    document.querySelectorAll('.admin-panel').forEach((panel) => {
+        panel.classList.remove('active');
+    });
+
+    document.querySelectorAll('.admin-nav a').forEach((link) => {
+        link.classList.remove('active');
+    });
+
+    if (targetPanel) {
+        targetPanel.classList.add('active');
+    }
+
+    const linkToActivate = clickedLink && clickedLink.dataset?.panel
+        ? document.querySelector(`.admin-nav a[data-panel="${clickedLink.dataset.panel}"]`)
+        : document.querySelector(`.admin-nav a[data-panel="${panelKey}"]`);
+
+    if (linkToActivate) {
+        linkToActivate.classList.add('active');
+    }
+
+    const mobileList = document.getElementById('mobile-module-list');
+    if (mobileList) {
+        mobileList.classList.remove('open');
+    }
+
+    const panelHeader = document.getElementById('panel-header');
+    const titleLabel = document.getElementById('mobile-current-module-label');
+    const panelTitle = document.getElementById('panel-title');
+    const label = panelLabels[panelKey] || panelLabels['home'];
+
+    if (panelKey === 'home') {
+        if (panelHeader) panelHeader.classList.add('hidden');
+        if (titleLabel) titleLabel.textContent = 'Selecione um módulo';
+    } else {
+        if (panelHeader) panelHeader.classList.remove('hidden');
+        if (titleLabel) titleLabel.textContent = label;
+    }
+
+    if (panelTitle) {
+        panelTitle.textContent = label;
+    }
+
+    if (window.innerWidth <= 992) {
+        const content = document.querySelector('.admin-content');
+        if (content) {
+            content.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
+};
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+        window.showPanel('home', null);
+    });
+} else {
+    window.showPanel('home', null);
+}
+
 // --- AUTENTICAÇÃO ---
 
 // Verifica se o usuário já está logado

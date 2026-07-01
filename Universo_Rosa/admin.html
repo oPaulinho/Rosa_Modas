@@ -45,22 +45,83 @@
         <aside class="admin-sidebar">
             <h2>Rosa Estética & Terapias</h2>
             <ul class="admin-nav">
-                <li><a class="active" onclick="showPanel('agendamentos', this)">Agendamentos</a></li>
-                <li><a onclick="showPanel('promocoes', this)">Promoções</a></li>
-                <li><a onclick="showPanel('produtos', this)">Catálogo de Roupas</a></li>
-                <li><a onclick="showPanel('procedimentos', this)">Procedimentos</a></li>
-                <li><a onclick="showPanel('espiritual', this)">Espiritual</a></li>
-                <li><a onclick="showPanel('conteudo', this)">Conteúdo do Site</a></li>
-                <li><a onclick="showPanel('config-agenda', this)">Configurações da Agenda</a></li>
+                <li><a class="active" data-panel="agendamentos" onclick="showPanel('agendamentos', this)">Agendamentos</a></li>
+                <li><a data-panel="promocoes" onclick="showPanel('promocoes', this)">Promoções</a></li>
+                <li><a data-panel="produtos" onclick="showPanel('produtos', this)">Catálogo de Roupas</a></li>
+                <li><a data-panel="procedimentos" onclick="showPanel('procedimentos', this)">Procedimentos</a></li>
+                <li><a data-panel="espiritual" onclick="showPanel('espiritual', this)">Espiritual</a></li>
+                <li><a data-panel="conteudo" onclick="showPanel('conteudo', this)">Conteúdo do Site</a></li>
+                <li><a data-panel="config-agenda" onclick="showPanel('config-agenda', this)">Configurações da Agenda</a></li>
             </ul>
             <button id="btn-logout" style="width: 100%; margin-top: 2rem; padding: 0.8rem; background: #ffebee; color: #c62828; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">Sair</button>
         </aside>
 
         <!-- Conteúdo Principal -->
         <main class="admin-content">
+            <div class="mobile-module-switcher">
+                <button class="mobile-module-toggle" type="button" onclick="toggleModulesMenu()">
+                    <span id="mobile-current-module-label">Selecione um módulo</span>
+                    <span class="mobile-module-toggle-icon">▾</span>
+                </button>
+                <div id="mobile-module-list" class="mobile-module-list">
+                    <button class="module-link-chip" type="button" data-panel="agendamentos" onclick="showPanel('agendamentos', this)">Agendamentos</button>
+                    <button class="module-link-chip" type="button" data-panel="promocoes" onclick="showPanel('promocoes', this)">Promoções</button>
+                    <button class="module-link-chip" type="button" data-panel="produtos" onclick="showPanel('produtos', this)">Catálogo</button>
+                    <button class="module-link-chip" type="button" data-panel="procedimentos" onclick="showPanel('procedimentos', this)">Procedimentos</button>
+                    <button class="module-link-chip" type="button" data-panel="espiritual" onclick="showPanel('espiritual', this)">Espiritual</button>
+                    <button class="module-link-chip" type="button" data-panel="conteudo" onclick="showPanel('conteudo', this)">Conteúdo</button>
+                    <button class="module-link-chip" type="button" data-panel="config-agenda" onclick="showPanel('config-agenda', this)">Agenda</button>
+                </div>
+            </div>
+
+            <div id="panel-header" class="panel-header hidden">
+                <button class="back-to-home" type="button" onclick="showPanel('home', this)">← Voltar aos módulos</button>
+                <span id="panel-title">Painel Administrativo</span>
+            </div>
+
+            <section id="panel-home" class="admin-panel home-panel active">
+                <div class="home-panel-inner">
+                    <p class="home-eyebrow">Painel administrativo</p>
+                    <h2>Bem-vindo(a), administrador!</h2>
+                    <p>Escolha o módulo que deseja acessar e começar a atualizar o site com mais praticidade.</p>
+
+                    <div class="module-grid">
+                        <button class="module-card" type="button" data-panel="agendamentos" onclick="showPanel('agendamentos', this)">
+                            <span class="module-icon">📅</span>
+                            <strong>Agendamentos</strong>
+                            <small>Consultar reservas</small>
+                        </button>
+                        <button class="module-card" type="button" data-panel="promocoes" onclick="showPanel('promocoes', this)">
+                            <span class="module-icon">🎁</span>
+                            <strong>Promoções</strong>
+                            <small>Gerenciar ofertas</small>
+                        </button>
+                        <button class="module-card" type="button" data-panel="produtos" onclick="showPanel('produtos', this)">
+                            <span class="module-icon">👗</span>
+                            <strong>Catálogo</strong>
+                            <small>Adicionar roupas</small>
+                        </button>
+                        <button class="module-card" type="button" data-panel="procedimentos" onclick="showPanel('procedimentos', this)">
+                            <span class="module-icon">💆</span>
+                            <strong>Procedimentos</strong>
+                            <small>Editar serviços</small>
+                        </button>
+                        <button class="module-card" type="button" data-panel="espiritual" onclick="showPanel('espiritual', this)">
+                            <span class="module-icon">🕊️</span>
+                            <strong>Espiritual</strong>
+                            <small>Controlar atendimentos</small>
+                        </button>
+                        <button class="module-card" type="button" data-panel="conteudo" onclick="showPanel('conteudo', this)">
+                            <span class="module-icon">📝</span>
+                            <strong>Conteúdo</strong>
+                            <small>Atualizar páginas</small>
+                        </button>
+                    </div>
+                </div>
+            </section>
 
             <!-- Painel de Agendamentos -->
-            <section id="panel-agendamentos" class="admin-panel active">
+            <section id="panel-agendamentos" class="admin-panel">
                 <h3>Gerenciar Agendamentos</h3>
                 <p>Consulte ou exclua as reservas de horários dos clientes.</p>
                 <table class="data-table">
@@ -435,17 +496,5 @@
     <script type="module" src="js/firebase-config.js"></script>
     <script type="module" src="js/admin.js"></script>
 
-    <!-- Script inline para navegação do painel -->
-    <script>
-        function showPanel(panelId, element) {
-            // Remove active class de todos os painéis e links
-            document.querySelectorAll('.admin-panel').forEach(p => p.classList.remove('active'));
-            document.querySelectorAll('.admin-nav a').forEach(a => a.classList.remove('active'));
-            
-            // Adiciona active no clicado
-            document.getElementById('panel-' + panelId).classList.add('active');
-            element.classList.add('active');
-        }
-    </script>
 </body>
 </html>
