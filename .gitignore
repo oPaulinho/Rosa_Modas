@@ -5,7 +5,6 @@ Universo_Rosa/DOCUMENTACAO.md
 
 # Ignorar configurações e dados locais
 .vscode/
-Universo_Rosa/js/firebase-config.js
 *.log
 *.env
 
