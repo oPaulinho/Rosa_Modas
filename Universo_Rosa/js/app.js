@@ -1,4 +1,4 @@
-import { API_URL } from './firebase-config.js';
+import { API_URL } from './api-config.js';
 
 // --- MÁSCARA DE TELEFONE ---
 // Captura o campo de entrada do telefone/WhatsApp no formulário

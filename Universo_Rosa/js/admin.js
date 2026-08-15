@@ -1,4 +1,4 @@
-import { API_URL } from './firebase-config.js';
+import { API_URL } from './api-config.js';
 
 // --- ELEMENTOS DO DOM ---
 const loginSection = document.getElementById('login-section');
