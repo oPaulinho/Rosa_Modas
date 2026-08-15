@@ -11,8 +11,8 @@ if (telInput) {
         // Limita o tamanho máximo a 11 dígitos (DDD + 9 dígitos)
         if (v.length > 11) v = v.slice(0, 11);
         // Formata como (XX) XXXXX-XXXX ou (XX) XXXX-XXXX dependendo do tamanho
-        if (v.length > 6) v = `(${v.slice(0,2)}) ${v.slice(2,7)}-${v.slice(7)}`;
-        else if (v.length > 2) v = `(${v.slice(0,2)}) ${v.slice(2)}`;
+        if (v.length > 6) v = `(${v.slice(0, 2)}) ${v.slice(2, 7)}-${v.slice(7)}`;
+        else if (v.length > 2) v = `(${v.slice(0, 2)}) ${v.slice(2)}`;
         else if (v.length > 0) v = `(${v}`;
         telInput.value = v; // Aplica o valor formatado de volta no campo
     });
@@ -23,13 +23,13 @@ if (telInput) {
 const formAgendamento = document.getElementById('form-agendamento');
 const alertAgendamento = document.getElementById('agendamento-alert');
 
-if(formAgendamento) {
+if (formAgendamento) {
     // Escuta o envio (submit) do formulário
     formAgendamento.addEventListener('submit', async (e) => {
         e.preventDefault(); // Evita que a página recarregue
-        
+
         const btnSubmit = document.getElementById('btn-submit-agendamento');
-        
+
         // Coleta os dados preenchidos no formulário
         const area = document.getElementById('area').value;
         const servico = document.getElementById('servico').value;
@@ -71,7 +71,7 @@ if(formAgendamento) {
 
             const agora = new Date();
             const telefoneNormalizado = telNumeros;
-            
+
             // Verifica se este mesmo número de celular já possui algum agendamento futuro ativo
             const temDuplicado = agendamentosExistentes.some(ag => {
                 const agTel = (ag.telefone || '').replace(/\D/g, '');
@@ -112,7 +112,7 @@ if(formAgendamento) {
             alertAgendamento.className = "alert success";
             alertAgendamento.textContent = "Agendamento pré-registrado com sucesso! Aguarde nossa confirmação.";
             formAgendamento.reset(); // Limpa os campos do formulário
-            
+
             // Limpa as seleções visuais de data e hora
             document.getElementById('selected-date-time').value = '';
             document.querySelectorAll('.date-card').forEach(c => c.classList.remove('active'));
@@ -170,8 +170,8 @@ function renderizarCarrossel() {
     promoAtivas.forEach((p, idx) => {
         const [iY, iM, iD] = p.dataInicio.split('-').map(Number);
         const [fY, fM, fD] = p.dataFim.split('-').map(Number);
-        const dtInicioFmt = `${String(iD).padStart(2,'0')}/${String(iM).padStart(2,'0')}/${iY}`;
-        const dtFimFmt = `${String(fD).padStart(2,'0')}/${String(fM).padStart(2,'0')}/${fY}`;
+        const dtInicioFmt = `${String(iD).padStart(2, '0')}/${String(iM).padStart(2, '0')}/${iY}`;
+        const dtFimFmt = `${String(fD).padStart(2, '0')}/${String(fM).padStart(2, '0')}/${fY}`;
         const imageSrc = p.imagemUrl || 'img/Rosa.png';
 
         const slide = document.createElement('div');
@@ -223,7 +223,7 @@ function irParaSlide(idx) {
 }
 
 // Expõe a função globalmente para os botões anteriores e próximos
-window.mudarPromoSlide = function(direction) {
+window.mudarPromoSlide = function (direction) {
     irParaSlide(promoAtualIdx + direction);
 };
 
@@ -330,12 +330,12 @@ async function carregarServicos() {
 // Carrega as peças de roupas do catálogo da nossa REST API
 async function carregarCatalogo() {
     const catalogContainer = document.getElementById('catalog-container');
-    if(!catalogContainer) return;
+    if (!catalogContainer) return;
 
     try {
         const response = await fetch(`${API_URL}/produtos`);
         const produtos = await response.json();
-        
+
         if (produtos.length === 0) {
             catalogContainer.innerHTML = '<p style="text-align: center; width: 100%; grid-column: 1 / -1;">Nenhum produto cadastrado ainda.</p>';
             return;
@@ -463,7 +463,7 @@ async function inicializarAgenda() {
 
             const diaTrabalhado = agendaConfig.diasSemana.includes(diaSemana);
             const diaBloqueado = agendaConfig.datasBloqueadas.includes(dataStr);
-            
+
             let hojeValido = true;
             if (i === 0) {
                 // Se for hoje, confere se a hora atual já passou do expediente de fechamento
@@ -477,7 +477,7 @@ async function inicializarAgenda() {
             if (diaTrabalhado && !diaBloqueado && hojeValido) {
                 const dayNum = diaCorrente.getDate();
                 const dayName = diaCorrente.toLocaleDateString('pt-BR', { weekday: 'short' }).replace('.', '');
-                
+
                 const card = document.createElement('div');
                 card.className = 'date-card';
                 card.dataset.date = dataStr;
@@ -514,7 +514,7 @@ function carregarHorariosDoDia(dataStr, agendamentos) {
     if (!timeSlotsContainer) return;
 
     timeSlotsContainer.innerHTML = '';
-    
+
     const [startH, startM] = agendaConfig.horaInicio.split(':').map(Number);
     const [endH, endM] = agendaConfig.horaFim.split(':').map(Number);
 

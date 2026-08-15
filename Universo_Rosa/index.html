@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rosa Estética & Terapias</title>
-    
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-    
+
     <!-- CSS -->
     <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
 
     <!-- Header -->
@@ -38,8 +40,10 @@
                 <!-- Slides gerados dinamicamente via JS -->
             </div>
             <!-- Controles do carrossel (mostrados apenas se houver > 1 promo ativa) -->
-            <button class="promo-ctrl-btn promo-prev-btn" id="promo-prev-btn" onclick="window.mudarPromoSlide(-1)" aria-label="Anterior">❮</button>
-            <button class="promo-ctrl-btn promo-next-btn" id="promo-next-btn" onclick="window.mudarPromoSlide(1)" aria-label="Próximo">❯</button>
+            <button class="promo-ctrl-btn promo-prev-btn" id="promo-prev-btn" onclick="window.mudarPromoSlide(-1)"
+                aria-label="Anterior">❮</button>
+            <button class="promo-ctrl-btn promo-next-btn" id="promo-next-btn" onclick="window.mudarPromoSlide(1)"
+                aria-label="Próximo">❯</button>
             <div class="promo-dots" id="promo-dots"></div>
         </div>
     </section>
@@ -49,7 +53,8 @@
         <div class="hero-side hero-aesthetics">
             <h2 class="hero-title">Beleza, Confiança e Autoestima</h2>
             <p style="max-width: 640px; margin: 0 auto; color: #4a148c; font-size: 1.1rem; line-height: 1.8;">
-                Transforme seu visual com procedimentos capilares modernos, atendimento acolhedor e resultados que realçam sua autoestima.
+                Transforme seu visual com procedimentos capilares modernos, atendimento acolhedor e resultados que
+                realçam sua autoestima.
             </p>
             <a href="#estetica" class="hero-btn btn-aesthetics">Ver Procedimentos</a>
         </div>
@@ -59,7 +64,8 @@
     <section id="estetica" class="section-aesthetics">
         <h2 class="section-title">Nossos Procedimentos Estéticos</h2>
         <p style="text-align: center; max-width: 600px; margin: -2rem auto 3rem; color: var(--color-aesthetics-text);">
-            Cuidamos da sua autoestima com técnicas modernas e produtos de alta qualidade. Conheça nossas especialidades:
+            Cuidamos da sua autoestima com técnicas modernas e produtos de alta qualidade. Conheça nossas
+            especialidades:
         </p>
 
         <div class="catalog-grid" id="procedimentos-container">
@@ -71,7 +77,8 @@
     <section id="catalogo" class="section-aesthetics">
         <h2 class="section-title">Moda Rosa Estética & Terapias</h2>
         <p style="text-align: center; max-width: 600px; margin: -2rem auto 3rem; color: var(--color-aesthetics-text);">
-            Confira as peças exclusivas que trouxemos para realçar ainda mais o seu estilo. Peças selecionadas e de excelente caimento.
+            Confira as peças exclusivas que trouxemos para realçar ainda mais o seu estilo. Peças selecionadas e de
+            excelente caimento.
         </p>
         <div class="catalog-grid" id="catalog-container">
             <p style="text-align: center; width: 100%; grid-column: 1 / -1;">Carregando produtos...</p>
@@ -82,25 +89,29 @@
     <section id="vantagens" class="section-aesthetics">
         <h2 class="section-title">Vantagens para Corpo e Mente</h2>
         <p style="text-align: center; max-width: 700px; margin: -2rem auto 3rem; color: #6a1b9a;">
-            Além dos resultados visíveis no cabelo, nossos serviços também trazem bem-estar, autoconfiança e tranquilidade para o seu dia a dia.
+            Além dos resultados visíveis no cabelo, nossos serviços também trazem bem-estar, autoconfiança e
+            tranquilidade para o seu dia a dia.
         </p>
         <div class="catalog-grid">
             <div class="product-card">
                 <div class="product-info" style="padding: 2rem;">
                     <h3 class="product-title">Bem-estar emocional</h3>
-                    <p style="color: #555; margin-top: 1rem;">Mais que beleza, oferecemos um momento dedicado a você, para renovar sua energia e autoestima.</p>
+                    <p style="color: #555; margin-top: 1rem;">Mais que beleza, oferecemos um momento dedicado a você,
+                        para renovar sua energia e autoestima.</p>
                 </div>
             </div>
             <div class="product-card">
                 <div class="product-info" style="padding: 2rem;">
                     <h3 class="product-title">Confiança renovada</h3>
-                    <p style="color: #555; margin-top: 1rem;">Transformações que impactam sua imagem e ajudam você a se sentir mais segura e radiante.</p>
+                    <p style="color: #555; margin-top: 1rem;">Transformações que impactam sua imagem e ajudam você a se
+                        sentir mais segura e radiante.</p>
                 </div>
             </div>
             <div class="product-card">
                 <div class="product-info" style="padding: 2rem;">
                     <h3 class="product-title">Equilíbrio e suporte</h3>
-                    <p style="color: #555; margin-top: 1rem;">Cuidamos dos detalhes do seu visual, para que você possa também encontrar mais equilíbrio no seu dia.</p>
+                    <p style="color: #555; margin-top: 1rem;">Cuidamos dos detalhes do seu visual, para que você possa
+                        também encontrar mais equilíbrio no seu dia.</p>
                 </div>
             </div>
         </div>
@@ -112,10 +123,10 @@
         <p style="text-align: center; max-width: 600px; margin: -2rem auto 3rem; color: var(--color-spiritual-text);">
             Escolha o atendimento desejado, preencha os dados e entraremos em contato para confirmar a disponibilidade.
         </p>
-        
+
         <div class="form-container">
             <div id="agendamento-alert" class="alert"></div>
-            
+
             <form id="form-agendamento">
                 <div class="input-group">
                     <label for="area">Área de Atendimento</label>
@@ -144,16 +155,21 @@
                 </div>
 
                 <div class="input-group">
-                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--color-text-dark);">Selecione o Dia de Atendimento</label>
+                    <label
+                        style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--color-text-dark);">Selecione
+                        o Dia de Atendimento</label>
                     <div class="date-carousel" id="date-carousel">
                         <!-- Carregado via JS -->
                     </div>
-                    
-                    <label style="display: block; margin-top: 1.5rem; margin-bottom: 0.5rem; font-weight: 600; color: var(--color-text-dark);">Selecione o Horário Disponível</label>
+
+                    <label
+                        style="display: block; margin-top: 1.5rem; margin-bottom: 0.5rem; font-weight: 600; color: var(--color-text-dark);">Selecione
+                        o Horário Disponível</label>
                     <div class="time-slots" id="time-slots">
-                        <p style="color: #888; font-size: 0.95rem;">Por favor, selecione um dia acima para visualizar os horários.</p>
+                        <p style="color: #888; font-size: 0.95rem;">Por favor, selecione um dia acima para visualizar os
+                            horários.</p>
                     </div>
-                    
+
                     <input type="hidden" id="selected-date-time" name="data" required>
                 </div>
 
@@ -166,7 +182,8 @@
     <section id="espiritual" class="section-spiritual">
         <h2 class="section-title">Espaço Espiritual</h2>
         <p style="text-align: center; max-width: 700px; margin: -2rem auto 3rem; color: var(--color-spiritual-text);">
-            No final da página, apresentamos nossos atendimentos espirituais com foco em clareza, proteção e apoio emocional.
+            No final da página, apresentamos nossos atendimentos espirituais com foco em clareza, proteção e apoio
+            emocional.
         </p>
         <div class="catalog-grid" id="servicos-container">
             <p style="text-align: center; width: 100%; grid-column: 1 / -1;">Carregando serviços espirituais...</p>
@@ -177,7 +194,8 @@
     <footer>
         <h2>Rosa Estética & Terapias</h2>
         <p>Da comunidade para o mundo, com força, beleza e espiritualidade.</p>
-        <p style="margin-top: 1rem;"><a href="admin.html" style="color: #666; text-decoration: none; font-size: 0.9rem;">Acesso Administrativo</a></p>
+        <p style="margin-top: 1rem;"><a href="admin.html"
+                style="color: #666; text-decoration: none; font-size: 0.9rem;">Acesso Administrativo</a></p>
     </footer>
 
     <!-- Configuração Central da API do Backend -->
@@ -189,12 +207,18 @@
         <div class="modal-content">
             <h3 style="color: #c62828; margin-bottom: 1rem; font-size: 1.5rem;">⚠️ Atenção: Regras de Agendamento</h3>
             <p style="margin-bottom: 1rem; line-height: 1.6;">Seu agendamento foi pré-registrado com sucesso!</p>
-            <div style="background: #fff8e1; border-left: 5px solid #ffb300; padding: 1rem; margin-bottom: 1.5rem; text-align: left; border-radius: 5px;">
+            <div
+                style="background: #fff8e1; border-left: 5px solid #ffb300; padding: 1rem; margin-bottom: 1.5rem; text-align: left; border-radius: 5px;">
                 <p style="font-weight: 600; color: #b78103; margin-bottom: 0.5rem;">Política de Não Comparecimento:</p>
-                <p style="font-size: 0.95rem; color: #555;">O não comparecimento sem aviso prévio gera penalidade (cobrança do procedimento ou suspensão de novos agendamentos).</p>
-                <p style="font-size: 0.95rem; color: #555; margin-top: 0.5rem; font-weight: 600;">Para cancelar ou remarcar, você deve nos avisar com pelo menos 2 horas de antecedência para que possamos liberar seu horário.</p>
+                <p style="font-size: 0.95rem; color: #555;">O não comparecimento sem aviso prévio gera penalidade
+                    (cobrança do procedimento ou suspensão de novos agendamentos).</p>
+                <p style="font-size: 0.95rem; color: #555; margin-top: 0.5rem; font-weight: 600;">Para cancelar ou
+                    remarcar, você deve nos avisar com pelo menos 2 horas de antecedência para que possamos liberar seu
+                    horário.</p>
             </div>
-            <button onclick="fecharModalAviso()" class="btn-submit" style="background: linear-gradient(45deg, var(--color-aesthetics-primary), var(--color-spiritual-primary));">Entendi e Aceito</button>
+            <button onclick="fecharModalAviso()" class="btn-submit"
+                style="background: linear-gradient(45deg, var(--color-aesthetics-primary), var(--color-spiritual-primary));">Entendi
+                e Aceito</button>
         </div>
     </div>
 
@@ -208,7 +232,7 @@
             const selectArea = document.getElementById('area');
             selectArea.value = area;
             atualizarServicos();
-            
+
             if (servicoDesejado) {
                 const selectServico = document.getElementById('servico');
                 selectServico.value = servicoDesejado;
@@ -218,11 +242,11 @@
         function atualizarServicos() {
             const area = document.getElementById('area').value;
             const selectServico = document.getElementById('servico');
-            
+
             const servicosEstetica = [
                 "Corte de Cabelo", "Escova", "Progressiva", "Botox Capilar", "Hidratação", "Coloração"
             ];
-            
+
             const servicosEspiritual = [
                 "Consulta Espiritual", "Orientação", "Limpeza Espiritual", "Tarot / Cartas"
             ];
@@ -230,8 +254,8 @@
             selectServico.innerHTML = '<option value="">Selecione o serviço</option>';
 
             let opcoes = [];
-            if(area === 'estetica') opcoes = servicosEstetica;
-            else if(area === 'espiritual') opcoes = servicosEspiritual;
+            if (area === 'estetica') opcoes = servicosEstetica;
+            else if (area === 'espiritual') opcoes = servicosEspiritual;
 
             opcoes.forEach(servico => {
                 const opt = document.createElement('option');
@@ -242,4 +266,5 @@
         }
     </script>
 </body>
+
 </html>

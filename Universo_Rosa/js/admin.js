@@ -8,7 +8,7 @@ const loginAlert = document.getElementById('login-alert');
 const btnLogout = document.getElementById('btn-logout');
 
 // Exibe/oculta o menu móvel em telas menores
-window.toggleModulesMenu = function() {
+window.toggleModulesMenu = function () {
     const mobileList = document.getElementById('mobile-module-list');
     if (mobileList) {
         mobileList.classList.toggle('open');
@@ -16,7 +16,7 @@ window.toggleModulesMenu = function() {
 };
 
 // Alterna os painéis administrativos correspondentes
-window.showPanel = function(panelKey, clickedLink) {
+window.showPanel = function (panelKey, clickedLink) {
     const normalizedKey = panelKey === 'home' ? 'panel-home' : (panelKey.startsWith('panel-') ? panelKey : `panel-${panelKey}`);
     const targetPanel = document.getElementById(normalizedKey);
 
@@ -105,7 +105,7 @@ function verificarSessao() {
 }
 
 // Tenta realizar o Login chamando o endpoint de login da nossa API REST
-if(formLogin) {
+if (formLogin) {
     formLogin.addEventListener('submit', async (e) => {
         e.preventDefault();
         const email = document.getElementById('email').value;
@@ -147,7 +147,7 @@ if(formLogin) {
 }
 
 // Realiza o Logout limpando a sessão
-if(btnLogout) {
+if (btnLogout) {
     btnLogout.addEventListener('click', () => {
         localStorage.removeItem('admin_session');
         loginSection.style.display = 'flex';
@@ -166,17 +166,17 @@ async function carregarAgendamentos() {
 
         // Ordena por data mais recente primeiro
         agendamentos.sort((a, b) => new Date(b.dataHora) - new Date(a.dataHora));
-        
+
         if (agendamentos.length === 0) {
             tabelaAgendamentos.innerHTML = '<tr><td colspan="7" style="text-align:center;">Nenhum agendamento encontrado.</td></tr>';
             return;
         }
 
         tabelaAgendamentos.innerHTML = '';
-        
+
         agendamentos.forEach((ag) => {
             let dataFormatada = ag.dataHora;
-            if(ag.dataHora) {
+            if (ag.dataHora) {
                 const dateObj = new Date(ag.dataHora);
                 dataFormatada = dateObj.toLocaleString('pt-BR');
             }
@@ -189,7 +189,7 @@ async function carregarAgendamentos() {
                     : '<span style="background:#fff8e1;color:#f57f17;padding:0.3rem 0.7rem;border-radius:99px;font-size:0.8rem;font-weight:700;">⏳ Pendente</span>';
 
             const btnConfirmar = statusAtual !== 'confirmado'
-                ? `<button onclick="window.confirmarAgendamento('${ag.id}', '${(ag.telefone||'').replace(/\D/g,'')}', '${(ag.nomeCliente||'').replace(/'/g,"\\'")}', '${(ag.dataHora||'').replace(/'/g,"\\'")}', '${(ag.servico||'').replace(/'/g,"\\'")}' )" style="background:#e8f5e9;color:#2e7d32;border:none;padding:0.4rem 0.7rem;border-radius:5px;cursor:pointer;font-size:0.8rem;margin-right:4px;">✅ Confirmar</button>`
+                ? `<button onclick="window.confirmarAgendamento('${ag.id}', '${(ag.telefone || '').replace(/\D/g, '')}', '${(ag.nomeCliente || '').replace(/'/g, "\\'")}', '${(ag.dataHora || '').replace(/'/g, "\\'")}', '${(ag.servico || '').replace(/'/g, "\\'")}' )" style="background:#e8f5e9;color:#2e7d32;border:none;padding:0.4rem 0.7rem;border-radius:5px;cursor:pointer;font-size:0.8rem;margin-right:4px;">✅ Confirmar</button>`
                 : '';
 
             const tr = document.createElement('tr');
@@ -198,7 +198,7 @@ async function carregarAgendamentos() {
                 <td><strong>${ag.nomeCliente}</strong></td>
                 <td><span style="text-transform: capitalize;">${ag.area}</span></td>
                 <td>${ag.servico}</td>
-                <td><a href="https://wa.me/55${(ag.telefone||'').replace(/\D/g,'')}" target="_blank" style="color: #25D366; font-weight: bold;">${ag.telefone}</a></td>
+                <td><a href="https://wa.me/55${(ag.telefone || '').replace(/\D/g, '')}" target="_blank" style="color: #25D366; font-weight: bold;">${ag.telefone}</a></td>
                 <td>${statusBadge}</td>
                 <td style="white-space:nowrap;">
                     ${btnConfirmar}
@@ -215,11 +215,11 @@ async function carregarAgendamentos() {
 }
 
 // Exclui fisicamente um agendamento do banco MySQL
-window.excluirAgendamento = async function(id) {
+window.excluirAgendamento = async function (id) {
     if (!confirm('Deseja excluir esta reserva? O horário voltará a ficar disponível.')) return;
     try {
         const res = await fetch(`${API_URL}/agendamentos/${id}`, { method: 'DELETE' });
-        if(!res.ok) throw new Error();
+        if (!res.ok) throw new Error();
         alert('Agendamento excluído com sucesso!');
         carregarAgendamentos();
     } catch (error) {
@@ -229,7 +229,7 @@ window.excluirAgendamento = async function(id) {
 }
 
 // Altera o status do agendamento para confirmado e dispara notificação via WhatsApp
-window.confirmarAgendamento = async function(id, telCliente, nomeCliente, dataHora, servico) {
+window.confirmarAgendamento = async function (id, telCliente, nomeCliente, dataHora, servico) {
     if (!confirm(`Confirmar agendamento de ${nomeCliente}?`)) return;
     try {
         const res = await fetch(`${API_URL}/agendamentos/${id}`, {
@@ -237,13 +237,13 @@ window.confirmarAgendamento = async function(id, telCliente, nomeCliente, dataHo
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ status: 'confirmado' })
         });
-        if(!res.ok) throw new Error();
+        if (!res.ok) throw new Error();
 
         let dataFmt = dataHora;
         try {
             const d = new Date(dataHora);
             dataFmt = d.toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' });
-        } catch {}
+        } catch { }
 
         // Cria a mensagem para abrir no WhatsApp Web/App
         const mensagemCliente = encodeURIComponent(
@@ -260,7 +260,7 @@ window.confirmarAgendamento = async function(id, telCliente, nomeCliente, dataHo
         // Envia notificação adicional para os administradores configurados
         const resConfig = await fetch(`${API_URL}/config-agenda`);
         const config = await resConfig.json();
-        
+
         const numerosAdmin = (config && config.numerosAdmin)
             ? config.numerosAdmin.split(',').map(n => n.trim().replace(/\D/g, '')).filter(n => n.length >= 10)
             : [];
@@ -292,10 +292,10 @@ const formProduto = document.getElementById('form-produto');
 const produtoAlert = document.getElementById('produto-alert');
 
 // Trata o envio de novas roupas realizando primeiro o upload da imagem e depois salvando no MySQL
-if(formProduto) {
+if (formProduto) {
     formProduto.addEventListener('submit', async (e) => {
         e.preventDefault();
-        
+
         const btnAdd = document.getElementById('btn-add-produto');
         btnAdd.disabled = true;
         btnAdd.textContent = "Fazendo Upload...";
@@ -305,7 +305,7 @@ if(formProduto) {
         const fileInput = document.getElementById('prod-imagem');
         const file = fileInput.files[0];
 
-        if(!file) {
+        if (!file) {
             produtoAlert.className = "alert error";
             produtoAlert.textContent = "Selecione uma imagem.";
             btnAdd.disabled = false;
@@ -363,18 +363,18 @@ async function carregarProdutosAdmin() {
     try {
         const response = await fetch(`${API_URL}/produtos`);
         const produtos = await response.json();
-        
+
         if (produtos.length === 0) {
             tabelaProdutos.innerHTML = '<tr><td colspan="5" style="text-align:center;">Nenhum produto cadastrado.</td></tr>';
             return;
         }
 
         tabelaProdutos.innerHTML = '';
-        
+
         produtos.forEach((prod) => {
             const tr = document.createElement('tr');
             const precoFmt = Number(prod.preco).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-            
+
             const selectStatus = `
                 <select onchange="window.alterarStatusProduto('${prod.id}', this.value)" style="padding: 0.3rem; border-radius: 5px;">
                     <option value="Disponível" ${prod.status === 'Disponível' ? 'selected' : ''}>Disponível</option>
@@ -398,14 +398,14 @@ async function carregarProdutosAdmin() {
 }
 
 // Altera o status (Disponível/Esgotado) da roupa
-window.alterarStatusProduto = async function(id, novoStatus) {
+window.alterarStatusProduto = async function (id, novoStatus) {
     try {
         const res = await fetch(`${API_URL}/produtos/${id}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ status: novoStatus })
         });
-        if(!res.ok) throw new Error();
+        if (!res.ok) throw new Error();
         alert("Status atualizado para: " + novoStatus);
     } catch (error) {
         console.error("Erro ao atualizar status:", error);
@@ -414,11 +414,11 @@ window.alterarStatusProduto = async function(id, novoStatus) {
 }
 
 // Exclui uma roupa do catálogo
-window.excluirProduto = async function(id) {
-    if(confirm("Tem certeza que deseja excluir esta peça?")) {
+window.excluirProduto = async function (id) {
+    if (confirm("Tem certeza que deseja excluir esta peça?")) {
         try {
             const res = await fetch(`${API_URL}/produtos/${id}`, { method: 'DELETE' });
-            if(!res.ok) throw new Error();
+            if (!res.ok) throw new Error();
             carregarProdutosAdmin();
         } catch (error) {
             console.error("Erro ao excluir:", error);
@@ -450,7 +450,7 @@ async function carregarPromocoesAdmin() {
             if (p.dataInicio && p.dataFim) {
                 const [iY, iM, iD] = p.dataInicio.split('-').map(Number);
                 const [fY, fM, fD] = p.dataFim.split('-').map(Number);
-                periodo = `${String(iD).padStart(2,'0')}/${String(iM).padStart(2,'0')}/${iY} até ${String(fD).padStart(2,'0')}/${String(fM).padStart(2,'0')}/${fY}`;
+                periodo = `${String(iD).padStart(2, '0')}/${String(iM).padStart(2, '0')}/${iY} até ${String(fD).padStart(2, '0')}/${String(fM).padStart(2, '0')}/${fY}`;
             }
             const tr = document.createElement('tr');
             tr.innerHTML = `
@@ -506,7 +506,7 @@ if (formPromocao) {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(novo)
             });
-            if(!saveRes.ok) throw new Error();
+            if (!saveRes.ok) throw new Error();
 
             promoAlert.className = 'alert success';
             promoAlert.textContent = 'Promoção salva com sucesso!';
@@ -524,11 +524,11 @@ if (formPromocao) {
 }
 
 // Exclui uma promoção
-window.excluirPromocao = async function(id) {
+window.excluirPromocao = async function (id) {
     if (!confirm('Excluir esta promoção?')) return;
     try {
         const res = await fetch(`${API_URL}/promocoes/${id}`, { method: 'DELETE' });
-        if(!res.ok) throw new Error();
+        if (!res.ok) throw new Error();
         carregarPromocoesAdmin();
     } catch (error) {
         console.error('Erro ao excluir promoção:', error);
@@ -604,7 +604,7 @@ if (formProcedimento) {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(novo)
             });
-            if(!saveRes.ok) throw new Error();
+            if (!saveRes.ok) throw new Error();
 
             procAlert.className = 'alert success';
             procAlert.textContent = 'Procedimento salvo com sucesso!';
@@ -622,11 +622,11 @@ if (formProcedimento) {
 }
 
 // Exclui um procedimento capilar
-window.excluirProcedimento = async function(id) {
+window.excluirProcedimento = async function (id) {
     if (!confirm('Excluir este procedimento?')) return;
     try {
         const res = await fetch(`${API_URL}/procedimentos/${id}`, { method: 'DELETE' });
-        if(!res.ok) throw new Error();
+        if (!res.ok) throw new Error();
         carregarProcedimentosAdmin();
     } catch (error) {
         console.error('Erro ao excluir procedimento:', error);
@@ -702,7 +702,7 @@ if (formServico) {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(novo)
             });
-            if(!saveRes.ok) throw new Error();
+            if (!saveRes.ok) throw new Error();
 
             servAlert.className = 'alert success';
             servAlert.textContent = 'Serviço salvo com sucesso!';
@@ -720,11 +720,11 @@ if (formServico) {
 }
 
 // Exclui um serviço espiritual
-window.excluirServico = async function(id) {
+window.excluirServico = async function (id) {
     if (!confirm('Excluir este serviço?')) return;
     try {
         const res = await fetch(`${API_URL}/servicos/${id}`, { method: 'DELETE' });
-        if(!res.ok) throw new Error();
+        if (!res.ok) throw new Error();
         carregarServicosAdmin();
     } catch (error) {
         console.error('Erro ao excluir serviço espiritual:', error);
@@ -741,7 +741,7 @@ async function carregarConteudoCMS() {
     try {
         const res = await fetch(`${API_URL}/conteudo`);
         const content = await res.json();
-        
+
         if (content) {
             document.getElementById('cms-hero-titulo').value = content.heroTitulo || '';
             document.getElementById('cms-hero-desc').value = content.heroDescricao || '';
@@ -788,7 +788,7 @@ if (formConteudo) {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             });
-            if(!res.ok) throw new Error();
+            if (!res.ok) throw new Error();
 
             conteudoAlert.className = 'alert success';
             conteudoAlert.textContent = 'Conteúdo do site atualizado com sucesso!';
@@ -812,14 +812,14 @@ async function carregarConfigAgenda() {
     try {
         const res = await fetch(`${API_URL}/config-agenda`);
         const config = await res.json();
-        
+
         if (config) {
             document.getElementById('agenda-intervalo').value = config.intervalo || '60';
             document.getElementById('agenda-hora-inicio').value = config.horaInicio || '09:00';
             document.getElementById('agenda-hora-fim').value = config.horaFim || '18:00';
             document.getElementById('agenda-nums-admin').value = config.numerosAdmin || '';
             document.getElementById('agenda-datas-bloqueadas').value = config.datasBloqueadas || '';
-            
+
             const diasList = (config.diasSemana || "1,2,3,4,5,6").split(',');
             document.querySelectorAll('input[name="dias_semana"]').forEach(cb => {
                 cb.checked = diasList.includes(cb.value);
@@ -858,7 +858,7 @@ if (formConfig) {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             });
-            if(!res.ok) throw new Error();
+            if (!res.ok) throw new Error();
 
             configAlert.className = 'alert success';
             configAlert.textContent = 'Configurações de agenda salvas com sucesso!';

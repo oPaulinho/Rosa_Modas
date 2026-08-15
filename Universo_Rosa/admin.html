@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - Rosa Estética & Terapias</title>
-    
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-    
+
     <!-- CSS -->
     <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
 
     <!-- Sessão de Login -->
@@ -20,7 +22,7 @@
         <div class="login-card">
             <h2 class="section-title" style="margin-bottom: 2rem; font-size: 2rem;">Acesso Restrito</h2>
             <div id="login-alert" class="alert"></div>
-            
+
             <form id="form-login">
                 <div class="input-group">
                     <label for="email">E-mail</label>
@@ -40,20 +42,23 @@
 
     <!-- Dashboard Administrativo (Escondido inicialmente) -->
     <div id="admin-dashboard" class="admin-container" style="display: none;">
-        
+
         <!-- Menu Lateral -->
         <aside class="admin-sidebar">
             <h2>Rosa Estética & Terapias</h2>
             <ul class="admin-nav">
-                <li><a class="active" data-panel="agendamentos" onclick="showPanel('agendamentos', this)">Agendamentos</a></li>
+                <li><a class="active" data-panel="agendamentos"
+                        onclick="showPanel('agendamentos', this)">Agendamentos</a></li>
                 <li><a data-panel="promocoes" onclick="showPanel('promocoes', this)">Promoções</a></li>
                 <li><a data-panel="produtos" onclick="showPanel('produtos', this)">Catálogo de Roupas</a></li>
                 <li><a data-panel="procedimentos" onclick="showPanel('procedimentos', this)">Procedimentos</a></li>
                 <li><a data-panel="espiritual" onclick="showPanel('espiritual', this)">Espiritual</a></li>
                 <li><a data-panel="conteudo" onclick="showPanel('conteudo', this)">Conteúdo do Site</a></li>
-                <li><a data-panel="config-agenda" onclick="showPanel('config-agenda', this)">Configurações da Agenda</a></li>
+                <li><a data-panel="config-agenda" onclick="showPanel('config-agenda', this)">Configurações da Agenda</a>
+                </li>
             </ul>
-            <button id="btn-logout" style="width: 100%; margin-top: 2rem; padding: 0.8rem; background: #ffebee; color: #c62828; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">Sair</button>
+            <button id="btn-logout"
+                style="width: 100%; margin-top: 2rem; padding: 0.8rem; background: #ffebee; color: #c62828; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">Sair</button>
         </aside>
 
         <!-- Conteúdo Principal -->
@@ -64,18 +69,26 @@
                     <span class="mobile-module-toggle-icon">▾</span>
                 </button>
                 <div id="mobile-module-list" class="mobile-module-list">
-                    <button class="module-link-chip" type="button" data-panel="agendamentos" onclick="showPanel('agendamentos', this)">Agendamentos</button>
-                    <button class="module-link-chip" type="button" data-panel="promocoes" onclick="showPanel('promocoes', this)">Promoções</button>
-                    <button class="module-link-chip" type="button" data-panel="produtos" onclick="showPanel('produtos', this)">Catálogo</button>
-                    <button class="module-link-chip" type="button" data-panel="procedimentos" onclick="showPanel('procedimentos', this)">Procedimentos</button>
-                    <button class="module-link-chip" type="button" data-panel="espiritual" onclick="showPanel('espiritual', this)">Espiritual</button>
-                    <button class="module-link-chip" type="button" data-panel="conteudo" onclick="showPanel('conteudo', this)">Conteúdo</button>
-                    <button class="module-link-chip" type="button" data-panel="config-agenda" onclick="showPanel('config-agenda', this)">Agenda</button>
+                    <button class="module-link-chip" type="button" data-panel="agendamentos"
+                        onclick="showPanel('agendamentos', this)">Agendamentos</button>
+                    <button class="module-link-chip" type="button" data-panel="promocoes"
+                        onclick="showPanel('promocoes', this)">Promoções</button>
+                    <button class="module-link-chip" type="button" data-panel="produtos"
+                        onclick="showPanel('produtos', this)">Catálogo</button>
+                    <button class="module-link-chip" type="button" data-panel="procedimentos"
+                        onclick="showPanel('procedimentos', this)">Procedimentos</button>
+                    <button class="module-link-chip" type="button" data-panel="espiritual"
+                        onclick="showPanel('espiritual', this)">Espiritual</button>
+                    <button class="module-link-chip" type="button" data-panel="conteudo"
+                        onclick="showPanel('conteudo', this)">Conteúdo</button>
+                    <button class="module-link-chip" type="button" data-panel="config-agenda"
+                        onclick="showPanel('config-agenda', this)">Agenda</button>
                 </div>
             </div>
 
             <div id="panel-header" class="panel-header hidden">
-                <button class="back-to-home" type="button" onclick="showPanel('home', this)">← Voltar aos módulos</button>
+                <button class="back-to-home" type="button" onclick="showPanel('home', this)">← Voltar aos
+                    módulos</button>
                 <span id="panel-title">Painel Administrativo</span>
             </div>
 
@@ -86,32 +99,38 @@
                     <p>Escolha o módulo que deseja acessar e começar a atualizar o site com mais praticidade.</p>
 
                     <div class="module-grid">
-                        <button class="module-card" type="button" data-panel="agendamentos" onclick="showPanel('agendamentos', this)">
+                        <button class="module-card" type="button" data-panel="agendamentos"
+                            onclick="showPanel('agendamentos', this)">
                             <span class="module-icon">📅</span>
                             <strong>Agendamentos</strong>
                             <small>Consultar reservas</small>
                         </button>
-                        <button class="module-card" type="button" data-panel="promocoes" onclick="showPanel('promocoes', this)">
+                        <button class="module-card" type="button" data-panel="promocoes"
+                            onclick="showPanel('promocoes', this)">
                             <span class="module-icon">🎁</span>
                             <strong>Promoções</strong>
                             <small>Gerenciar ofertas</small>
                         </button>
-                        <button class="module-card" type="button" data-panel="produtos" onclick="showPanel('produtos', this)">
+                        <button class="module-card" type="button" data-panel="produtos"
+                            onclick="showPanel('produtos', this)">
                             <span class="module-icon">👗</span>
                             <strong>Catálogo</strong>
                             <small>Adicionar roupas</small>
                         </button>
-                        <button class="module-card" type="button" data-panel="procedimentos" onclick="showPanel('procedimentos', this)">
+                        <button class="module-card" type="button" data-panel="procedimentos"
+                            onclick="showPanel('procedimentos', this)">
                             <span class="module-icon">💆</span>
                             <strong>Procedimentos</strong>
                             <small>Editar serviços</small>
                         </button>
-                        <button class="module-card" type="button" data-panel="espiritual" onclick="showPanel('espiritual', this)">
+                        <button class="module-card" type="button" data-panel="espiritual"
+                            onclick="showPanel('espiritual', this)">
                             <span class="module-icon">🕊️</span>
                             <strong>Espiritual</strong>
                             <small>Controlar atendimentos</small>
                         </button>
-                        <button class="module-card" type="button" data-panel="conteudo" onclick="showPanel('conteudo', this)">
+                        <button class="module-card" type="button" data-panel="conteudo"
+                            onclick="showPanel('conteudo', this)">
                             <span class="module-icon">📝</span>
                             <strong>Conteúdo</strong>
                             <small>Atualizar páginas</small>
@@ -137,7 +156,9 @@
                         </tr>
                     </thead>
                     <tbody id="tabela-agendamentos">
-                        <tr><td colspan="7">Carregando agendamentos...</td></tr>
+                        <tr>
+                            <td colspan="7">Carregando agendamentos...</td>
+                        </tr>
                     </tbody>
                 </table>
             </section>
@@ -145,11 +166,13 @@
             <!-- Painel de Promoções -->
             <section id="panel-promocoes" class="admin-panel">
                 <h3>Gerenciar Promoções</h3>
-                <p>Cadastre promoções com imagem, texto e período de validade. A promoção aparece no topo do site apenas durante a data escolhida.</p>
+                <p>Cadastre promoções com imagem, texto e período de validade. A promoção aparece no topo do site apenas
+                    durante a data escolhida.</p>
 
                 <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0;">
                     <h4>Nova Promoção</h4>
-                    <form id="form-promocao" style="margin-top: 1rem; display: grid; gap: 1rem; grid-template-columns: 1fr 1fr;">
+                    <form id="form-promocao"
+                        style="margin-top: 1rem; display: grid; gap: 1rem; grid-template-columns: 1fr 1fr;">
                         <div class="input-group" style="margin: 0;">
                             <label>Título da Promoção</label>
                             <input type="text" id="promo-titulo" required>
@@ -163,7 +186,8 @@
                         </div>
                         <div class="input-group" style="margin: 0; grid-column: 1 / -1;">
                             <label>Descrição Curta</label>
-                            <textarea id="promo-descricao" rows="3" required style="width: 100%; padding: 1rem; border-radius: 10px; border: 2px solid var(--color-gray);"></textarea>
+                            <textarea id="promo-descricao" rows="3" required
+                                style="width: 100%; padding: 1rem; border-radius: 10px; border: 2px solid var(--color-gray);"></textarea>
                         </div>
                         <div class="input-group" style="margin: 0;">
                             <label>Data Início</label>
@@ -177,7 +201,8 @@
                             <label>Imagem da Promoção</label>
                             <input type="file" id="promo-imagem" accept="image/*">
                         </div>
-                        <button type="submit" class="btn-submit" id="btn-add-promocao" style="grid-column: 1 / -1;">Salvar Promoção</button>
+                        <button type="submit" class="btn-submit" id="btn-add-promocao"
+                            style="grid-column: 1 / -1;">Salvar Promoção</button>
                     </form>
                     <div id="promo-alert" class="alert" style="margin-top: 1rem;"></div>
                 </div>
@@ -192,7 +217,9 @@
                         </tr>
                     </thead>
                     <tbody id="tabela-promocoes">
-                        <tr><td colspan="4">Carregando promoções...</td></tr>
+                        <tr>
+                            <td colspan="4">Carregando promoções...</td>
+                        </tr>
                     </tbody>
                 </table>
             </section>
@@ -201,16 +228,17 @@
             <section id="panel-produtos" class="admin-panel">
                 <h3>Gerenciar Roupas</h3>
                 <p>Adicione novas peças de roupa ou altere o status das existentes.</p>
-                
+
                 <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0;">
                     <h4>Adicionar Nova Peça</h4>
-                    <form id="form-produto" style="margin-top: 1rem; display: grid; gap: 1rem; grid-template-columns: 1fr 1fr;">
-                        
+                    <form id="form-produto"
+                        style="margin-top: 1rem; display: grid; gap: 1rem; grid-template-columns: 1fr 1fr;">
+
                         <div class="input-group" style="margin: 0;">
                             <label>Nome da Peça</label>
                             <input type="text" id="prod-nome" required>
                         </div>
-                        
+
                         <div class="input-group" style="margin: 0;">
                             <label>Preço (R$)</label>
                             <input type="number" id="prod-preco" step="0.01" required>
@@ -221,7 +249,8 @@
                             <input type="file" id="prod-imagem" accept="image/*" required>
                         </div>
 
-                        <button type="submit" class="btn-submit" id="btn-add-produto" style="grid-column: 1 / -1;">Salvar Produto</button>
+                        <button type="submit" class="btn-submit" id="btn-add-produto"
+                            style="grid-column: 1 / -1;">Salvar Produto</button>
                     </form>
                     <div id="produto-alert" class="alert" style="margin-top: 1rem;"></div>
                 </div>
@@ -237,7 +266,9 @@
                         </tr>
                     </thead>
                     <tbody id="tabela-produtos">
-                        <tr><td colspan="5">Carregando produtos...</td></tr>
+                        <tr>
+                            <td colspan="5">Carregando produtos...</td>
+                        </tr>
                     </tbody>
                 </table>
             </section>
@@ -249,7 +280,8 @@
 
                 <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0;">
                     <h4>Adicionar Procedimento</h4>
-                    <form id="form-procedimento" style="margin-top: 1rem; display: grid; gap: 1rem; grid-template-columns: 1fr 1fr;">
+                    <form id="form-procedimento"
+                        style="margin-top: 1rem; display: grid; gap: 1rem; grid-template-columns: 1fr 1fr;">
                         <div class="input-group" style="margin: 0;">
                             <label>Nome do Procedimento</label>
                             <input type="text" id="proc-nome" required>
@@ -263,13 +295,15 @@
                         </div>
                         <div class="input-group" style="margin: 0; grid-column: 1 / -1;">
                             <label>Descrição</label>
-                            <textarea id="proc-descricao" rows="3" required style="width: 100%; padding: 1rem; border-radius: 10px; border: 2px solid var(--color-gray);"></textarea>
+                            <textarea id="proc-descricao" rows="3" required
+                                style="width: 100%; padding: 1rem; border-radius: 10px; border: 2px solid var(--color-gray);"></textarea>
                         </div>
                         <div class="input-group" style="margin: 0; grid-column: 1 / -1;">
                             <label>Imagem do Procedimento</label>
                             <input type="file" id="proc-imagem" accept="image/*">
                         </div>
-                        <button type="submit" class="btn-submit" id="btn-add-proc" style="grid-column: 1 / -1;">Salvar Procedimento</button>
+                        <button type="submit" class="btn-submit" id="btn-add-proc" style="grid-column: 1 / -1;">Salvar
+                            Procedimento</button>
                     </form>
                     <div id="proc-alert" class="alert" style="margin-top: 1rem;"></div>
                 </div>
@@ -284,7 +318,9 @@
                         </tr>
                     </thead>
                     <tbody id="tabela-procedimentos">
-                        <tr><td colspan="4">Carregando procedimentos...</td></tr>
+                        <tr>
+                            <td colspan="4">Carregando procedimentos...</td>
+                        </tr>
                     </tbody>
                 </table>
             </section>
@@ -296,7 +332,8 @@
 
                 <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0;">
                     <h4>Adicionar Serviço Espiritual</h4>
-                    <form id="form-servico" style="margin-top: 1rem; display: grid; gap: 1rem; grid-template-columns: 1fr 1fr;">
+                    <form id="form-servico"
+                        style="margin-top: 1rem; display: grid; gap: 1rem; grid-template-columns: 1fr 1fr;">
                         <div class="input-group" style="margin: 0;">
                             <label>Nome do Serviço</label>
                             <input type="text" id="serv-nome" required>
@@ -310,13 +347,15 @@
                         </div>
                         <div class="input-group" style="margin: 0; grid-column: 1 / -1;">
                             <label>Descrição</label>
-                            <textarea id="serv-descricao" rows="3" required style="width: 100%; padding: 1rem; border-radius: 10px; border: 2px solid var(--color-gray);"></textarea>
+                            <textarea id="serv-descricao" rows="3" required
+                                style="width: 100%; padding: 1rem; border-radius: 10px; border: 2px solid var(--color-gray);"></textarea>
                         </div>
                         <div class="input-group" style="margin: 0; grid-column: 1 / -1;">
                             <label>Imagem do Serviço</label>
                             <input type="file" id="serv-imagem" accept="image/*">
                         </div>
-                        <button type="submit" class="btn-submit" id="btn-add-serv" style="grid-column: 1 / -1;">Salvar Serviço</button>
+                        <button type="submit" class="btn-submit" id="btn-add-serv" style="grid-column: 1 / -1;">Salvar
+                            Serviço</button>
                     </form>
                     <div id="serv-alert" class="alert" style="margin-top: 1rem;"></div>
                 </div>
@@ -331,7 +370,9 @@
                         </tr>
                     </thead>
                     <tbody id="tabela-servicos">
-                        <tr><td colspan="4">Carregando serviços...</td></tr>
+                        <tr>
+                            <td colspan="4">Carregando serviços...</td>
+                        </tr>
                     </tbody>
                 </table>
             </section>
@@ -339,56 +380,79 @@
             <!-- Painel de Conteúdo do Site (CMS) -->
             <section id="panel-conteudo" class="admin-panel">
                 <h3>Gerenciar Conteúdo do Site</h3>
-                <p>Altere os textos exibidos na página principal para os clientes. Cada seção está identificada abaixo.</p>
-                
+                <p>Altere os textos exibidos na página principal para os clientes. Cada seção está identificada abaixo.
+                </p>
+
                 <div id="conteudo-alert" class="alert"></div>
                 <form id="form-conteudo" style="display: grid; gap: 1.5rem; margin-top: 1.5rem;">
                     <!-- Seção Hero -->
-                    <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--color-aesthetics-primary);">
-                        <h4 style="margin-bottom: 1rem; color: var(--color-aesthetics-text);">Seção de Abertura (Hero)</h4>
+                    <div
+                        style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--color-aesthetics-primary);">
+                        <h4 style="margin-bottom: 1rem; color: var(--color-aesthetics-text);">Seção de Abertura (Hero)
+                        </h4>
                         <div class="input-group">
                             <label>Título Principal</label>
                             <input type="text" id="cms-hero-titulo" required>
                         </div>
                         <div class="input-group">
                             <label>Descrição / Apresentação</label>
-                            <textarea id="cms-hero-descricao" rows="3" required style="width: 100%; padding: 1rem; border-radius: 10px; border: 2px solid var(--color-gray);"></textarea>
+                            <textarea id="cms-hero-descricao" rows="3" required
+                                style="width: 100%; padding: 1rem; border-radius: 10px; border: 2px solid var(--color-gray);"></textarea>
                         </div>
                     </div>
 
                     <!-- Seção Vantagens -->
-                    <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--color-spiritual-primary);">
-                        <h4 style="margin-bottom: 1rem; color: var(--color-spiritual-text);">Seção Vantagens (Corpo e Mente)</h4>
+                    <div
+                        style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--color-spiritual-primary);">
+                        <h4 style="margin-bottom: 1rem; color: var(--color-spiritual-text);">Seção Vantagens (Corpo e
+                            Mente)</h4>
                         <div class="input-group">
                             <label>Título da Seção</label>
                             <input type="text" id="cms-vantagens-titulo" required>
                         </div>
                         <div class="input-group">
                             <label>Descrição da Seção</label>
-                            <textarea id="cms-vantagens-descricao" rows="2" required style="width: 100%; padding: 1rem; border-radius: 10px; border: 2px solid var(--color-gray);"></textarea>
+                            <textarea id="cms-vantagens-descricao" rows="2" required
+                                style="width: 100%; padding: 1rem; border-radius: 10px; border: 2px solid var(--color-gray);"></textarea>
                         </div>
-                        
+
                         <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-top: 1rem;">
-                            <div style="background: #fff; padding: 1rem; border-radius: 8px; border: 1px solid var(--color-gray);">
+                            <div
+                                style="background: #fff; padding: 1rem; border-radius: 8px; border: 1px solid var(--color-gray);">
                                 <h5>Card 1</h5>
-                                <div class="input-group"><input type="text" id="cms-v1-titulo" placeholder="Título" required style="padding: 0.5rem;"></div>
-                                <div class="input-group"><textarea id="cms-v1-desc" placeholder="Descrição" rows="3" required style="width: 100%; padding: 0.5rem; border-radius: 5px; border: 2px solid var(--color-gray);"></textarea></div>
+                                <div class="input-group"><input type="text" id="cms-v1-titulo" placeholder="Título"
+                                        required style="padding: 0.5rem;"></div>
+                                <div class="input-group"><textarea id="cms-v1-desc" placeholder="Descrição" rows="3"
+                                        required
+                                        style="width: 100%; padding: 0.5rem; border-radius: 5px; border: 2px solid var(--color-gray);"></textarea>
+                                </div>
                             </div>
-                            <div style="background: #fff; padding: 1rem; border-radius: 8px; border: 1px solid var(--color-gray);">
+                            <div
+                                style="background: #fff; padding: 1rem; border-radius: 8px; border: 1px solid var(--color-gray);">
                                 <h5>Card 2</h5>
-                                <div class="input-group"><input type="text" id="cms-v2-titulo" placeholder="Título" required style="padding: 0.5rem;"></div>
-                                <div class="input-group"><textarea id="cms-v2-desc" placeholder="Descrição" rows="3" required style="width: 100%; padding: 0.5rem; border-radius: 5px; border: 2px solid var(--color-gray);"></textarea></div>
+                                <div class="input-group"><input type="text" id="cms-v2-titulo" placeholder="Título"
+                                        required style="padding: 0.5rem;"></div>
+                                <div class="input-group"><textarea id="cms-v2-desc" placeholder="Descrição" rows="3"
+                                        required
+                                        style="width: 100%; padding: 0.5rem; border-radius: 5px; border: 2px solid var(--color-gray);"></textarea>
+                                </div>
                             </div>
-                            <div style="background: #fff; padding: 1rem; border-radius: 8px; border: 1px solid var(--color-gray);">
+                            <div
+                                style="background: #fff; padding: 1rem; border-radius: 8px; border: 1px solid var(--color-gray);">
                                 <h5>Card 3</h5>
-                                <div class="input-group"><input type="text" id="cms-v3-titulo" placeholder="Título" required style="padding: 0.5rem;"></div>
-                                <div class="input-group"><textarea id="cms-v3-desc" placeholder="Descrição" rows="3" required style="width: 100%; padding: 0.5rem; border-radius: 5px; border: 2px solid var(--color-gray);"></textarea></div>
+                                <div class="input-group"><input type="text" id="cms-v3-titulo" placeholder="Título"
+                                        required style="padding: 0.5rem;"></div>
+                                <div class="input-group"><textarea id="cms-v3-desc" placeholder="Descrição" rows="3"
+                                        required
+                                        style="width: 100%; padding: 0.5rem; border-radius: 5px; border: 2px solid var(--color-gray);"></textarea>
+                                </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Rodapé -->
-                    <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--color-text-dark);">
+                    <div
+                        style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--color-text-dark);">
                         <h4 style="margin-bottom: 1rem;">Rodapé & Contato</h4>
                         <div class="input-group">
                             <label>Slogan do Rodapé</label>
@@ -396,22 +460,26 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="btn-submit" id="btn-save-conteudo">Salvar Alterações de Conteúdo</button>
+                    <button type="submit" class="btn-submit" id="btn-save-conteudo">Salvar Alterações de
+                        Conteúdo</button>
                 </form>
             </section>
 
             <!-- Painel de Configurações da Agenda -->
             <section id="panel-config-agenda" class="admin-panel">
                 <h3>Configurações da Agenda</h3>
-                <p>Defina o tempo dos atendimentos, horários de funcionamento, dias de expediente e datas em que não haverá atendimento.</p>
-                
+                <p>Defina o tempo dos atendimentos, horários de funcionamento, dias de expediente e datas em que não
+                    haverá atendimento.</p>
+
                 <div id="config-agenda-alert" class="alert"></div>
-                
+
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1.5rem;">
                     <!-- Configurações Gerais -->
-                    <form id="form-config-agenda-geral" style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px;">
-                        <h4 style="margin-bottom: 1rem; color: var(--color-aesthetics-text);">Expediente e Intervalo</h4>
-                        
+                    <form id="form-config-agenda-geral"
+                        style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px;">
+                        <h4 style="margin-bottom: 1rem; color: var(--color-aesthetics-text);">Expediente e Intervalo
+                        </h4>
+
                         <div class="input-group">
                             <label>Intervalo entre Atendimentos</label>
                             <select id="cfg-intervalo" required>
@@ -421,7 +489,7 @@
                                 <option value="120">2 Horas</option>
                             </select>
                         </div>
-                        
+
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
                             <div class="input-group">
                                 <label>Início do Expediente</label>
@@ -435,30 +503,42 @@
 
                         <div class="input-group">
                             <label>Dias de Atendimento</label>
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-top: 0.5rem;">
-                                <label style="font-weight:normal;"><input type="checkbox" id="cfg-dia-0" value="0"> Domingo</label>
-                                <label style="font-weight:normal;"><input type="checkbox" id="cfg-dia-1" value="1"> Segunda-feira</label>
-                                <label style="font-weight:normal;"><input type="checkbox" id="cfg-dia-2" value="2"> Terça-feira</label>
-                                <label style="font-weight:normal;"><input type="checkbox" id="cfg-dia-3" value="3"> Quarta-feira</label>
-                                <label style="font-weight:normal;"><input type="checkbox" id="cfg-dia-4" value="4"> Quinta-feira</label>
-                                <label style="font-weight:normal;"><input type="checkbox" id="cfg-dia-5" value="5"> Sexta-feira</label>
-                                <label style="font-weight:normal;"><input type="checkbox" id="cfg-dia-6" value="6"> Sábado</label>
+                            <div
+                                style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-top: 0.5rem;">
+                                <label style="font-weight:normal;"><input type="checkbox" id="cfg-dia-0" value="0">
+                                    Domingo</label>
+                                <label style="font-weight:normal;"><input type="checkbox" id="cfg-dia-1" value="1">
+                                    Segunda-feira</label>
+                                <label style="font-weight:normal;"><input type="checkbox" id="cfg-dia-2" value="2">
+                                    Terça-feira</label>
+                                <label style="font-weight:normal;"><input type="checkbox" id="cfg-dia-3" value="3">
+                                    Quarta-feira</label>
+                                <label style="font-weight:normal;"><input type="checkbox" id="cfg-dia-4" value="4">
+                                    Quinta-feira</label>
+                                <label style="font-weight:normal;"><input type="checkbox" id="cfg-dia-5" value="5">
+                                    Sexta-feira</label>
+                                <label style="font-weight:normal;"><input type="checkbox" id="cfg-dia-6" value="6">
+                                    Sábado</label>
                             </div>
                         </div>
 
-                        <button type="submit" class="btn-submit" id="btn-save-cfg-geral">Salvar Configurações Gerais</button>
+                        <button type="submit" class="btn-submit" id="btn-save-cfg-geral">Salvar Configurações
+                            Gerais</button>
                     </form>
 
                     <!-- Datas Bloqueadas (Sem atendimento) -->
                     <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px;">
                         <h4 style="margin-bottom: 1rem; color: #c62828;">Bloquear Datas (Feriados/Folgas)</h4>
-                        
+
                         <form id="form-bloquear-data" style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
-                            <input type="date" id="cfg-bloquear-data" required style="flex: 1; padding: 0.8rem; border-radius: 8px; border: 2px solid var(--color-gray);">
-                            <button type="submit" class="btn-submit" style="width: auto; padding: 0.8rem 1.5rem; background: #c62828;">Bloquear</button>
+                            <input type="date" id="cfg-bloquear-data" required
+                                style="flex: 1; padding: 0.8rem; border-radius: 8px; border: 2px solid var(--color-gray);">
+                            <button type="submit" class="btn-submit"
+                                style="width: auto; padding: 0.8rem 1.5rem; background: #c62828;">Bloquear</button>
                         </form>
 
-                        <div style="max-height: 250px; overflow-y: auto; background: white; border-radius: 8px; border: 1px solid var(--color-gray); padding: 0.5rem;">
+                        <div
+                            style="max-height: 250px; overflow-y: auto; background: white; border-radius: 8px; border: 1px solid var(--color-gray); padding: 0.5rem;">
                             <table class="data-table" style="margin: 0; font-size: 0.9rem;">
                                 <thead>
                                     <tr>
@@ -467,21 +547,29 @@
                                     </tr>
                                 </thead>
                                 <tbody id="tabela-datas-bloqueadas">
-                                    <tr><td colspan="2" style="text-align: center;">Nenhuma data bloqueada.</td></tr>
+                                    <tr>
+                                        <td colspan="2" style="text-align: center;">Nenhuma data bloqueada.</td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
 
                     <!-- Números de WhatsApp do Administrador -->
-                    <div style="background: #f0fdf4; padding: 1.5rem; border-radius: 8px; margin-top: 1rem; border: 1px solid #bbf7d0;">
+                    <div
+                        style="background: #f0fdf4; padding: 1.5rem; border-radius: 8px; margin-top: 1rem; border: 1px solid #bbf7d0;">
                         <h4 style="margin-bottom: 0.5rem; color: #166534;">📱 Números WhatsApp do Administrador</h4>
-                        <p style="font-size: 0.88rem; color: #555; margin-bottom: 1rem;">Informe os números que receberão notificação quando um agendamento for confirmado. Separe múltiplos números com vírgula (ex: 11999990000, 11988887777).</p>
+                        <p style="font-size: 0.88rem; color: #555; margin-bottom: 1rem;">Informe os números que
+                            receberão notificação quando um agendamento for confirmado. Separe múltiplos números com
+                            vírgula (ex: 11999990000, 11988887777).</p>
                         <div class="input-group">
                             <label for="cfg-numeros-admin">Números (somente dígitos, com DDD):</label>
-                            <input type="text" id="cfg-numeros-admin" placeholder="Ex: 11999990000, 21988887777" style="font-family: monospace;">
+                            <input type="text" id="cfg-numeros-admin" placeholder="Ex: 11999990000, 21988887777"
+                                style="font-family: monospace;">
                         </div>
-                        <button type="button" id="btn-save-numeros-admin" class="btn-submit" style="margin-top: 0.5rem; background: #16a34a;" onclick="window.salvarNumerosAdmin()">Salvar Números</button>
+                        <button type="button" id="btn-save-numeros-admin" class="btn-submit"
+                            style="margin-top: 0.5rem; background: #16a34a;"
+                            onclick="window.salvarNumerosAdmin()">Salvar Números</button>
                         <div id="numeros-admin-alert" class="alert" style="display:none; margin-top: 0.5rem;"></div>
                     </div>
 
@@ -497,4 +585,5 @@
     <script type="module" src="js/admin.js"></script>
 
 </body>
+
 </html>
