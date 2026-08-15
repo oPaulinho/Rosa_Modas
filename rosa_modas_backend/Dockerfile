@@ -3,11 +3,11 @@ FROM maven:3.9.6-eclipse-temurin-17-alpine AS build
 WORKDIR /app
 
 # Copy the pom.xml file to download dependencies first (this utilizes Docker cache)
-COPY pom.xml .
+COPY rosa_modas_backend/pom.xml .
 RUN mvn dependency:go-offline -B
 
 # Copy the source code and compile the application
-COPY src ./src
+COPY rosa_modas_backend/src ./src
 RUN mvn package -DskipTests -B
 
 # Stage 2: Create the final lightweight runtime image
