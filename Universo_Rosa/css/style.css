@@ -1,13 +1,17 @@
 :root {
   /* Paleta Estética / Salão / Roupas */
-  --color-aesthetics-primary: #f48fb1; /* Rosa */
-  --color-aesthetics-secondary: #ffb74d; /* Dourado/Laranja claro */
+  --color-aesthetics-primary: #f48fb1;
+  /* Rosa */
+  --color-aesthetics-secondary: #ffb74d;
+  /* Dourado/Laranja claro */
   --color-aesthetics-bg: #fffcfd;
   --color-aesthetics-text: #4a148c;
 
   /* Paleta Espiritual */
-  --color-spiritual-primary: #9575cd; /* Roxo */
-  --color-spiritual-secondary: #b0bec5; /* Prata/Cinza azulado */
+  --color-spiritual-primary: #9575cd;
+  /* Roxo */
+  --color-spiritual-secondary: #b0bec5;
+  /* Prata/Cinza azulado */
   --color-spiritual-bg: #f8f8fc;
   --color-spiritual-text: #311b92;
 
@@ -17,7 +21,7 @@
   --color-bg-dark: #1e1e1e;
   --color-white: #ffffff;
   --color-gray: #e0e0e0;
-  
+
   --font-main: 'Outfit', 'Inter', sans-serif;
   --transition: all 0.3s ease;
 }
@@ -47,7 +51,7 @@ header {
   position: sticky;
   top: 0;
   z-index: 1000;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 }
 
 .logo-container h1 {
@@ -101,12 +105,12 @@ nav a:hover {
 }
 
 .hero-aesthetics {
-  background: linear-gradient(135deg, rgba(244,143,177,0.1), rgba(255,183,77,0.1));
-  border-right: 2px solid rgba(0,0,0,0.05);
+  background: linear-gradient(135deg, rgba(244, 143, 177, 0.1), rgba(255, 183, 77, 0.1));
+  border-right: 2px solid rgba(0, 0, 0, 0.05);
 }
 
 .hero-spiritual {
-  background: linear-gradient(135deg, rgba(149,117,205,0.1), rgba(176,190,197,0.1));
+  background: linear-gradient(135deg, rgba(149, 117, 205, 0.1), rgba(176, 190, 197, 0.1));
 }
 
 .hero-title {
@@ -115,8 +119,13 @@ nav a:hover {
   margin-bottom: 1rem;
 }
 
-.hero-aesthetics .hero-title { color: var(--color-aesthetics-primary); }
-.hero-spiritual .hero-title { color: var(--color-spiritual-primary); }
+.hero-aesthetics .hero-title {
+  color: var(--color-aesthetics-primary);
+}
+
+.hero-spiritual .hero-title {
+  color: var(--color-spiritual-primary);
+}
 
 .hero-btn {
   margin-top: 2rem;
@@ -126,7 +135,7 @@ nav a:hover {
   font-weight: bold;
   font-size: 1.1rem;
   transition: var(--transition);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 
 .btn-aesthetics {
@@ -135,7 +144,7 @@ nav a:hover {
 }
 
 .btn-aesthetics:hover {
-  box-shadow: 0 15px 25px rgba(244,143,177,0.4);
+  box-shadow: 0 15px 25px rgba(244, 143, 177, 0.4);
   transform: translateY(-3px);
 }
 
@@ -145,13 +154,13 @@ nav a:hover {
 }
 
 .btn-spiritual:hover {
-  box-shadow: 0 15px 25px rgba(149,117,205,0.4);
+  box-shadow: 0 15px 25px rgba(149, 117, 205, 0.4);
   transform: translateY(-3px);
 }
 
 /* ===================== PROMOÇÕES - CARROSSEL MAGALU STYLE ===================== */
 .promo-banner {
-  background: linear-gradient(135deg, rgba(255,167,38,0.1), rgba(244,143,177,0.12));
+  background: linear-gradient(135deg, rgba(255, 167, 38, 0.1), rgba(244, 143, 177, 0.12));
   padding: 1.5rem 5%;
   overflow: hidden;
 }
@@ -162,7 +171,7 @@ nav a:hover {
   border-radius: 24px;
   max-width: 700px;
   margin: 0 auto;
-  box-shadow: 0 16px 40px rgba(0,0,0,0.12);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
   background: var(--color-white);
   touch-action: pan-y;
 }
@@ -243,14 +252,14 @@ nav a:hover {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(255,255,255,0.92);
+  background: rgba(255, 255, 255, 0.92);
   border: none;
   border-radius: 50%;
   width: 40px;
   height: 40px;
   font-size: 1.2rem;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   z-index: 10;
   transition: all 0.2s ease;
   display: flex;
@@ -258,9 +267,19 @@ nav a:hover {
   justify-content: center;
   line-height: 1;
 }
-.promo-ctrl-btn:hover { background: var(--color-aesthetics-primary); color: #fff; }
-.promo-prev-btn { left: 0.75rem; }
-.promo-next-btn { right: 0.75rem; }
+
+.promo-ctrl-btn:hover {
+  background: var(--color-aesthetics-primary);
+  color: #fff;
+}
+
+.promo-prev-btn {
+  left: 0.75rem;
+}
+
+.promo-next-btn {
+  right: 0.75rem;
+}
 
 /* Dots indicadores */
 .promo-dots {
@@ -296,9 +315,11 @@ nav a:hover {
   .promo-slide-img {
     max-height: 260px;
   }
+
   .promo-slide-title {
     font-size: 1.15rem;
   }
+
   .promo-ctrl-btn {
     width: 34px;
     height: 34px;
@@ -322,11 +343,21 @@ section {
   font-weight: 700;
 }
 
-.section-aesthetics { background-color: var(--color-aesthetics-bg); }
-.section-aesthetics .section-title { color: var(--color-aesthetics-primary); }
+.section-aesthetics {
+  background-color: var(--color-aesthetics-bg);
+}
 
-.section-spiritual { background-color: var(--color-spiritual-bg); }
-.section-spiritual .section-title { color: var(--color-spiritual-primary); }
+.section-aesthetics .section-title {
+  color: var(--color-aesthetics-primary);
+}
+
+.section-spiritual {
+  background-color: var(--color-spiritual-bg);
+}
+
+.section-spiritual .section-title {
+  color: var(--color-spiritual-primary);
+}
 
 /* Forms */
 .form-container {
@@ -335,7 +366,7 @@ section {
   background: var(--color-white);
   padding: 3rem;
   border-radius: 20px;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
 }
 
 .input-group {
@@ -349,7 +380,8 @@ section {
   color: var(--color-text-dark);
 }
 
-.input-group input, .input-group select {
+.input-group input,
+.input-group select {
   width: 100%;
   padding: 1rem;
   border: 2px solid var(--color-gray);
@@ -358,7 +390,8 @@ section {
   transition: var(--transition);
 }
 
-.input-group input:focus, .input-group select:focus {
+.input-group input:focus,
+.input-group select:focus {
   outline: none;
   border-color: var(--color-aesthetics-primary);
 }
@@ -374,12 +407,12 @@ section {
   font-weight: bold;
   cursor: pointer;
   transition: var(--transition);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 
 .btn-submit:hover {
   transform: translateY(-3px);
-  box-shadow: 0 15px 25px rgba(0,0,0,0.2);
+  box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
 }
 
 /* Catalog Grid */
@@ -397,14 +430,14 @@ section {
   background: var(--color-white);
   border-radius: 24px;
   overflow: hidden;
-  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
   transition: var(--transition);
   min-height: 420px;
 }
 
 .product-card:hover {
   transform: translateY(-8px);
-  box-shadow: 0 18px 35px rgba(0,0,0,0.12);
+  box-shadow: 0 18px 35px rgba(0, 0, 0, 0.12);
 }
 
 .product-img {
@@ -465,13 +498,14 @@ footer {
     flex-direction: column;
     height: auto;
   }
-  
+
   .hero-side {
     padding: 5rem 2rem;
   }
-  
+
   nav ul {
-    display: none; /* Mobile menu needed */
+    display: none;
+    /* Mobile menu needed */
   }
 }
 
@@ -488,7 +522,7 @@ footer {
   color: var(--color-text-dark);
   padding: 2.4rem 1.8rem;
   border-right: 1px solid #e8eaef;
-  box-shadow: 0 0 30px rgba(0,0,0,0.04);
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.04);
 }
 
 .mobile-module-switcher {
@@ -528,7 +562,7 @@ footer {
   background: #fff;
   color: #4a4a4a;
   cursor: pointer;
-  box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
 }
 
 .module-link-chip {
@@ -537,7 +571,7 @@ footer {
 }
 
 .home-panel {
-  background: linear-gradient(135deg, rgba(244,143,177,0.15), rgba(149,117,205,0.14));
+  background: linear-gradient(135deg, rgba(244, 143, 177, 0.15), rgba(149, 117, 205, 0.14));
 }
 
 .home-panel-inner {
@@ -551,7 +585,7 @@ footer {
   width: fit-content;
   padding: 0.35rem 0.7rem;
   border-radius: 999px;
-  background: rgba(255,255,255,0.75);
+  background: rgba(255, 255, 255, 0.75);
   color: #7b2cbf;
   font-size: 0.8rem;
   font-weight: 700;
@@ -615,12 +649,12 @@ footer {
 }
 
 .admin-nav a:hover {
-  background: rgba(244,143,177,0.12);
+  background: rgba(244, 143, 177, 0.12);
   color: var(--color-aesthetics-primary);
 }
 
 .admin-nav a.active {
-  background: linear-gradient(135deg, rgba(244,143,177,0.18), rgba(149,117,205,0.18));
+  background: linear-gradient(135deg, rgba(244, 143, 177, 0.18), rgba(149, 117, 205, 0.18));
   color: var(--color-aesthetics-primary);
 }
 
@@ -635,7 +669,7 @@ footer {
   background: var(--color-white);
   padding: 2rem;
   border-radius: 10px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
 }
 
 .admin-panel.active {
@@ -674,7 +708,7 @@ footer {
 }
 
 .home-panel {
-  background: linear-gradient(135deg, rgba(244,143,177,0.12), rgba(149,117,205,0.12));
+  background: linear-gradient(135deg, rgba(244, 143, 177, 0.12), rgba(149, 117, 205, 0.12));
 }
 
 @media screen and (max-width: 992px) {
@@ -796,41 +830,42 @@ footer {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
-  .admin-container {
-    flex-direction: column;
-    min-height: auto;
-  }
 
-  .admin-sidebar {
-    display: none;
-  }
+.admin-container {
+  flex-direction: column;
+  min-height: auto;
+}
 
-  .admin-content {
-    padding: 1rem;
-  }
+.admin-sidebar {
+  display: none;
+}
 
-  .admin-panel {
-    padding: 1.2rem;
-  }
+.admin-content {
+  padding: 1rem;
+}
 
-  .admin-panel form {
-    grid-template-columns: 1fr !important;
-  }
+.admin-panel {
+  padding: 1.2rem;
+}
 
-  .admin-panel form .input-group {
-    width: 100%;
-  }
+.admin-panel form {
+  grid-template-columns: 1fr !important;
+}
 
-  .data-table {
-    display: block;
-    width: 100%;
-    overflow-x: auto;
-  }
+.admin-panel form .input-group {
+  width: 100%;
+}
 
-  .data-table th,
-  .data-table td {
-    white-space: nowrap;
-  }
+.data-table {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+}
+
+.data-table th,
+.data-table td {
+  white-space: nowrap;
+}
 }
 
 @media screen and (min-width: 768px) {
@@ -855,7 +890,8 @@ footer {
   margin-top: 1.5rem;
 }
 
-.data-table th, .data-table td {
+.data-table th,
+.data-table td {
   padding: 1rem;
   text-align: left;
   border-bottom: 1px solid var(--color-gray);
@@ -873,8 +909,18 @@ footer {
   margin-bottom: 1rem;
   display: none;
 }
-.alert.success { background: #e8f5e9; color: #2e7d32; display: block; }
-.alert.error { background: #ffebee; color: #c62828; display: block; }
+
+.alert.success {
+  background: #e8f5e9;
+  color: #2e7d32;
+  display: block;
+}
+
+.alert.error {
+  background: #ffebee;
+  color: #c62828;
+  display: block;
+}
 
 #login-section {
   display: flex;
@@ -905,6 +951,7 @@ footer {
 .date-carousel::-webkit-scrollbar {
   height: 6px;
 }
+
 .date-carousel::-webkit-scrollbar-thumb {
   background: var(--color-aesthetics-primary);
   border-radius: 10px;
@@ -1020,11 +1067,876 @@ footer {
   width: 100%;
   padding: 2.5rem;
   text-align: center;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
   animation: modalFadeIn 0.3s ease-out;
 }
 
 @keyframes modalFadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}/* ============================================================
+   ROSA ESPAÇO ESPIRITUAL
+   Tema exclusivo do site espiritual
+   ============================================================ */
+
+:root {
+
+  --color-spiritual-primary: #7e57c2;
+  --color-spiritual-secondary: #b39ddb;
+  --color-spiritual-dark: #311b92;
+  --color-spiritual-bg: #faf7ff;
+  --color-spiritual-card: #ffffff;
+  --color-spiritual-text: #3f315b;
+
 }
+
+
+/* ============================================================
+   BODY
+   ============================================================ */
+
+body {
+
+  background:
+    radial-gradient(circle at top,
+      #f3eaff 0%,
+      #faf7ff 40%,
+      #ffffff 100%);
+
+  color: var(--color-spiritual-text);
+
+}
+
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+
+header {
+
+  background: rgba(255, 255, 255, 0.94);
+
+  border-bottom:
+    1px solid rgba(126, 87, 194, 0.12);
+
+}
+
+
+.logo-container h1 {
+
+  background:
+    linear-gradient(45deg,
+      #5e35b1,
+      #9575cd);
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+}
+
+
+nav a:hover {
+
+  color: var(--color-spiritual-primary);
+
+}
+
+
+/* ============================================================
+   HERO ESPIRITUAL
+   ============================================================ */
+
+.hero-spiritual-only {
+
+  min-height: calc(100vh - 80px);
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  text-align: center;
+
+  padding: 5rem 5%;
+
+  background:
+
+    radial-gradient(circle at 20% 20%,
+      rgba(126, 87, 194, 0.18),
+      transparent 35%),
+
+    radial-gradient(circle at 80% 80%,
+      rgba(179, 157, 219, 0.20),
+      transparent 35%),
+
+    linear-gradient(135deg,
+      #faf7ff,
+      #f1e8ff);
+
+}
+
+
+.hero-spiritual-content {
+
+  max-width: 850px;
+
+  margin: 0 auto;
+
+}
+
+
+.hero-symbol {
+
+  display: block;
+
+  font-size: 3rem;
+
+  color: #7e57c2;
+
+  margin-bottom: 1rem;
+
+}
+
+
+.hero-spiritual-only .hero-title {
+
+  font-size: clamp(2.4rem, 6vw, 4.5rem);
+
+  color: #4a148c;
+
+  margin-bottom: 1.5rem;
+
+  font-weight: 800;
+
+}
+
+
+.hero-description {
+
+  max-width: 700px;
+
+  margin: 0 auto;
+
+  font-size: 1.15rem;
+
+  line-height: 1.9;
+
+  color: #5e5073;
+
+}
+
+
+/* ============================================================
+   BOTÕES
+   ============================================================ */
+
+.btn-spiritual {
+
+  background:
+    linear-gradient(135deg,
+      #7e57c2,
+      #512da8);
+
+  color: white;
+
+}
+
+
+.btn-spiritual:hover {
+
+  transform: translateY(-3px);
+
+  box-shadow:
+    0 15px 30px rgba(81, 45, 168, 0.28);
+
+}
+
+
+/* ============================================================
+   SEÇÕES
+   ============================================================ */
+
+.section-spiritual {
+
+  background:
+    linear-gradient(180deg,
+      #faf7ff,
+      #f5effd);
+
+}
+
+
+.section-spiritual .section-title {
+
+  color: #5e35b1;
+
+}
+
+
+.section-description {
+
+  max-width: 700px;
+
+  margin:
+    -1.5rem auto 3rem;
+
+  text-align: center;
+
+  color: #6d5c83;
+
+  font-size: 1.05rem;
+
+}
+
+
+/* ============================================================
+   CARDS DOS ATENDIMENTOS
+   ============================================================ */
+
+.section-spiritual .product-card {
+
+  border:
+    1px solid rgba(126, 87, 194, 0.10);
+
+  background: rgba(255, 255, 255, 0.96);
+
+}
+
+
+.section-spiritual .product-card:hover {
+
+  border-color:
+    rgba(126, 87, 194, 0.25);
+
+  box-shadow:
+    0 20px 40px rgba(81, 45, 168, 0.12);
+
+}
+
+
+.section-spiritual .product-title {
+
+  color: #512da8;
+
+}
+
+
+/* ============================================================
+   FORMULÁRIO
+   ============================================================ */
+
+.form-container {
+
+  border:
+    1px solid rgba(126, 87, 194, 0.10);
+
+}
+
+
+.input-group input:focus,
+.input-group select:focus {
+
+  border-color:
+    #7e57c2;
+
+  box-shadow:
+    0 0 0 3px rgba(126, 87, 194, 0.10);
+
+}
+
+
+.btn-submit {
+
+  background:
+    linear-gradient(135deg,
+      #7e57c2,
+      #512da8);
+
+}
+
+
+.btn-submit:hover {
+
+  box-shadow:
+    0 15px 30px rgba(81, 45, 168, 0.22);
+
+}
+
+
+/* ============================================================
+   SOBRE
+   ============================================================ */
+
+.section-about {
+
+  padding: 5rem 5%;
+
+  text-align: center;
+
+  background: #ffffff;
+
+}
+
+
+.about-content {
+
+  max-width: 750px;
+
+  margin: 0 auto;
+
+}
+
+
+.about-symbol {
+
+  display: block;
+
+  color: #9575cd;
+
+  font-size: 2.5rem;
+
+  margin-bottom: 1rem;
+
+}
+
+
+.section-about .section-title {
+
+  color: #5e35b1;
+
+}
+
+
+.section-about p {
+
+  margin-top: 1rem;
+
+  color: #665a76;
+
+  line-height: 1.8;
+
+}
+
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+
+footer {
+
+  background:
+    linear-gradient(135deg,
+      #311b92,
+      #512da8);
+
+  color: white;
+
+  text-align: center;
+
+  padding: 3rem 5%;
+
+}
+
+
+footer h2 {
+
+  margin-bottom: 0.5rem;
+
+}
+
+
+footer p {
+
+  color: #e8ddff;
+
+}
+
+
+.footer-admin {
+
+  margin-top: 1.5rem;
+
+}
+
+
+.footer-admin a {
+
+  color: #d1bfff;
+
+  text-decoration: none;
+
+}
+
+
+.footer-admin a:hover {
+
+  color: white;
+
+}
+
+
+/* ============================================================
+   RESPONSIVIDADE
+   ============================================================ */
+
+@media (max-width: 768px) {
+
+  header {
+
+    flex-direction: column;
+
+    gap: 1rem;
+
+  }
+
+  nav ul {
+
+    gap: 1rem;
+
+    flex-wrap: wrap;
+
+    justify-content: center;
+
+  }
+
+  .hero-spiritual-only {
+
+    min-height: 85vh;
+
+    padding:
+      4rem 1.5rem;
+
+  }
+
+  .hero-spiritual-only .hero-title {
+
+    font-size: 2.5rem;
+
+  }
+
+  .hero-description {
+
+    font-size: 1rem;
+
+  }
+
+  section {
+
+    padding:
+      4rem 5%;
+
+  }
+
+  .form-container {
+
+    padding: 2rem 1.2rem;
+
+  }
+
+}
+
+
+/* ============================================================
+   HERO SECTION — ESPAÇAMENTO CORRETO
+   ============================================================ */
+
+.hero-spiritual-only {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: calc(100vh - 80px);
+  padding: 5rem 5%;
+}
+
+.hero-spiritual-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.8rem;
+  max-width: 850px;
+  margin: 0 auto;
+}
+
+.hero-spiritual-content .hero-title {
+  font-size: clamp(2.2rem, 5.5vw, 4rem);
+  color: #4a148c;
+  font-weight: 800;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.hero-description {
+  font-size: 1.15rem;
+  line-height: 1.9;
+  color: #5e5073;
+  max-width: 680px;
+  margin: 0;
+}
+
+.hero-btn {
+  display: inline-block;
+  padding: 1rem 2.5rem;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  margin-top: 0.5rem;
+}
+
+.btn-spiritual {
+  background: linear-gradient(135deg, #7e57c2, #512da8);
+  color: white;
+}
+
+.btn-spiritual:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 30px rgba(81, 45, 168, 0.30);
+}
+
+
+/* ============================================================
+   BOTÃO DE MODO NOTURNO
+   ============================================================ */
+
+.btn-dark-mode {
+  background: none;
+  border: 2px solid rgba(126, 87, 194, 0.35);
+  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+  flex-shrink: 0;
+  padding: 0;
+}
+
+.btn-dark-mode:hover {
+  background: rgba(126, 87, 194, 0.12);
+  border-color: #7e57c2;
+  transform: scale(1.1);
+}
+
+header {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 0 5%;
+  height: 80px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(126, 87, 194, 0.12);
+  box-shadow: 0 2px 20px rgba(126, 87, 194, 0.08);
+}
+
+.logo-container {
+  flex: 1;
+}
+
+.logo-container h1 {
+  font-size: 1.4rem;
+  font-weight: 800;
+  background: linear-gradient(45deg, #5e35b1, #9575cd);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+nav ul {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+nav a {
+  text-decoration: none;
+  color: #4a148c;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: color 0.2s;
+}
+
+nav a:hover {
+  color: #7e57c2;
+}
+
+
+/* ============================================================
+   MODALIDADE — BOTÕES DE RÁDIO ESTILIZADOS
+   ============================================================ */
+
+.modalidade-opcoes {
+  display: flex;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+}
+
+.modalidade-label {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.75rem 1.5rem;
+  border: 2px solid rgba(126, 87, 194, 0.25);
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #5e35b1;
+  transition: all 0.25s ease;
+  user-select: none;
+  background: white;
+  flex: 1;
+  min-width: 140px;
+  justify-content: center;
+}
+
+.modalidade-label:hover {
+  border-color: #7e57c2;
+  background: rgba(126, 87, 194, 0.05);
+  transform: translateY(-2px);
+}
+
+.modalidade-label input[type="radio"] {
+  accent-color: #7e57c2;
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.modalidade-label:has(input:checked) {
+  border-color: #7e57c2;
+  background: rgba(126, 87, 194, 0.10);
+  box-shadow: 0 4px 15px rgba(81, 45, 168, 0.12);
+}
+
+.modalidade-icone {
+  font-size: 1.2rem;
+}
+
+
+/* ============================================================
+   MODO NOTURNO
+   ============================================================ */
+
+body {
+  transition: background 0.4s ease, color 0.4s ease;
+}
+
+body.dark-mode {
+  background: #1a1025;
+  color: #e8ddff;
+}
+
+body.dark-mode header {
+  background: rgba(26, 16, 37, 0.96);
+  border-bottom-color: rgba(179, 157, 219, 0.15);
+}
+
+body.dark-mode .logo-container h1 {
+  background: linear-gradient(45deg, #b39ddb, #ce93d8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+body.dark-mode nav a {
+  color: #ce93d8;
+}
+
+body.dark-mode nav a:hover {
+  color: #fff;
+}
+
+body.dark-mode .btn-dark-mode {
+  border-color: rgba(179, 157, 219, 0.4);
+}
+
+body.dark-mode .hero-spiritual-only {
+  background:
+    radial-gradient(circle at 20% 20%, rgba(126, 87, 194, 0.22), transparent 40%),
+    radial-gradient(circle at 80% 80%, rgba(179, 157, 219, 0.15), transparent 40%),
+    linear-gradient(135deg, #1a1025, #2a1a40);
+}
+
+body.dark-mode .hero-spiritual-content .hero-title {
+  color: #e1d5ff;
+}
+
+body.dark-mode .hero-description {
+  color: #c5b0e8;
+}
+
+body.dark-mode .btn-spiritual {
+  background: linear-gradient(135deg, #9575cd, #7e57c2);
+  box-shadow: 0 8px 25px rgba(126, 87, 194, 0.35);
+}
+
+body.dark-mode .section-spiritual,
+body.dark-mode .section-about {
+  background: #1e1230;
+}
+
+body.dark-mode .section-title {
+  color: #ce93d8;
+}
+
+body.dark-mode .section-description {
+  color: #b39ddb;
+}
+
+body.dark-mode .product-card {
+  background: rgba(42, 26, 64, 0.90);
+  border-color: rgba(126, 87, 194, 0.20);
+  color: #e8ddff;
+}
+
+body.dark-mode .product-card:hover {
+  border-color: rgba(179, 157, 219, 0.40);
+}
+
+body.dark-mode .product-title {
+  color: #ce93d8;
+}
+
+body.dark-mode .form-container {
+  background: rgba(42, 26, 64, 0.70);
+  border-color: rgba(126, 87, 194, 0.20);
+}
+
+body.dark-mode .input-group label {
+  color: #ce93d8;
+}
+
+body.dark-mode .input-group input,
+body.dark-mode .input-group select {
+  background: #2a1a40;
+  border-color: rgba(126, 87, 194, 0.30);
+  color: #e8ddff;
+}
+
+body.dark-mode .input-group input::placeholder {
+  color: #9575cd;
+}
+
+body.dark-mode .modalidade-label {
+  background: #2a1a40;
+  border-color: rgba(179, 157, 219, 0.25);
+  color: #ce93d8;
+}
+
+body.dark-mode .modalidade-label:hover {
+  background: rgba(126, 87, 194, 0.15);
+  border-color: #9575cd;
+}
+
+body.dark-mode .modalidade-label:has(input:checked) {
+  border-color: #b39ddb;
+  background: rgba(126, 87, 194, 0.20);
+}
+
+body.dark-mode .date-card {
+  background: #2a1a40;
+  border-color: rgba(126, 87, 194, 0.25);
+  color: #e8ddff;
+}
+
+body.dark-mode .date-card.active {
+  background: #7e57c2;
+  color: white;
+}
+
+body.dark-mode .time-slot {
+  background: #2a1a40;
+  border-color: rgba(126, 87, 194, 0.25);
+  color: #e8ddff;
+}
+
+body.dark-mode .time-slot.active {
+  background: #7e57c2;
+  color: white;
+}
+
+body.dark-mode footer {
+  background: linear-gradient(135deg, #0d0818, #1a1025);
+}
+
+body.dark-mode .modal-content {
+  background: #2a1a40;
+  color: #e8ddff;
+}
+
+body.dark-mode .modal-warning {
+  background: rgba(126, 87, 194, 0.12);
+  border-color: #7e57c2;
+  color: #c5b0e8;
+}
+
+body.dark-mode .alert.error {
+  background: rgba(198, 40, 40, 0.15);
+  border-color: #c62828;
+  color: #ef9a9a;
+}
+
+body.dark-mode .alert.success {
+  background: rgba(46, 125, 50, 0.15);
+  border-color: #2e7d32;
+  color: #a5d6a7;
+}
+
+
+/* ============================================================
+   RESPONSIVIDADE — MOBILE HEADER
+   ============================================================ */
+
+@media (max-width: 600px) {
+  header {
+    flex-wrap: wrap;
+    height: auto;
+    padding: 1rem 5%;
+    gap: 0.8rem;
+  }
+
+  nav ul {
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    font-size: 0.85rem;
+  }
+
+  .hero-spiritual-content {
+    gap: 1.2rem;
+  }
+
+  .hero-spiritual-content .hero-title {
+    font-size: 2rem;
+  }
+
+  .modalidade-opcoes {
+    gap: 0.8rem;
+  }
+
+  .modalidade-label {
+    min-width: 120px;
+    padding: 0.6rem 1rem;
+  }
+}
+

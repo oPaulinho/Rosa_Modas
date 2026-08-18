@@ -14,6 +14,7 @@ public class Agendamento {
     
     private String area; // estetica, espiritual
     private String servico;
+    private String modalidade; // presencial, online
     private String nomeCliente;
     private String telefone;
     private String dataHora; // YYYY-MM-DDTHH:MM
@@ -23,9 +24,10 @@ public class Agendamento {
     public Agendamento() {
     }
 
-    public Agendamento(String area, String servico, String nomeCliente, String telefone, String dataHora, String status, String criadoEm) {
+    public Agendamento(String area, String servico, String modalidade, String nomeCliente, String telefone, String dataHora, String status, String criadoEm) {
         this.area = area;
         this.servico = servico;
+        this.modalidade = modalidade;
         this.nomeCliente = nomeCliente;
         this.telefone = telefone;
         this.dataHora = dataHora;
@@ -55,6 +57,14 @@ public class Agendamento {
 
     public void setServico(String servico) {
         this.servico = servico;
+    }
+
+    public String getModalidade() {
+        return modalidade;
+    }
+
+    public void setModalidade(String modalidade) {
+        this.modalidade = modalidade;
     }
 
     public String getNomeCliente() {

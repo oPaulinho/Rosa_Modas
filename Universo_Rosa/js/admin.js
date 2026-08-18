@@ -1,5 +1,10 @@
 import { API_URL } from './api-config.js';
 
+// =============================================================
+// ENDEREÇO CENTRALIZADO — altere aqui para atualizar em todo o admin
+// =============================================================
+const ENDERECO_PRESENCIAL = 'Rua das Rosas, 123 — Bairro Exemplo, SP';
+
 // --- ELEMENTOS DO DOM ---
 const loginSection = document.getElementById('login-section');
 const adminDashboard = document.getElementById('admin-dashboard');
@@ -188,8 +193,14 @@ async function carregarAgendamentos() {
                     ? '<span style="background:#ffebee;color:#c62828;padding:0.3rem 0.7rem;border-radius:99px;font-size:0.8rem;font-weight:700;">❌ Cancelado</span>'
                     : '<span style="background:#fff8e1;color:#f57f17;padding:0.3rem 0.7rem;border-radius:99px;font-size:0.8rem;font-weight:700;">⏳ Pendente</span>';
 
+            const modalidadeLabel = ag.modalidade === 'online'
+                ? '💻 Online'
+                : ag.modalidade === 'presencial'
+                    ? '🏠 Presencial'
+                    : '—';
+
             const btnConfirmar = statusAtual !== 'confirmado'
-                ? `<button onclick="window.confirmarAgendamento('${ag.id}', '${(ag.telefone || '').replace(/\D/g, '')}', '${(ag.nomeCliente || '').replace(/'/g, "\\'")}', '${(ag.dataHora || '').replace(/'/g, "\\'")}', '${(ag.servico || '').replace(/'/g, "\\'")}' )" style="background:#e8f5e9;color:#2e7d32;border:none;padding:0.4rem 0.7rem;border-radius:5px;cursor:pointer;font-size:0.8rem;margin-right:4px;">✅ Confirmar</button>`
+                ? `<button onclick="window.confirmarAgendamento('${ag.id}', '${(ag.telefone || '').replace(/\D/g, '')}', '${(ag.nomeCliente || '').replace(/'/g, "\\'")}',' ${(ag.dataHora || '').replace(/'/g, "\\'")}', '${(ag.servico || '').replace(/'/g, "\\'")}',' ${(ag.modalidade || '').replace(/'/g, "\\'")}')" style="background:#e8f5e9;color:#2e7d32;border:none;padding:0.4rem 0.7rem;border-radius:5px;cursor:pointer;font-size:0.8rem;margin-right:4px;">✅ Confirmar</button>`
                 : '';
 
             const tr = document.createElement('tr');
@@ -198,6 +209,7 @@ async function carregarAgendamentos() {
                 <td><strong>${ag.nomeCliente}</strong></td>
                 <td><span style="text-transform: capitalize;">${ag.area}</span></td>
                 <td>${ag.servico}</td>
+                <td>${modalidadeLabel}</td>
                 <td><a href="https://wa.me/55${(ag.telefone || '').replace(/\D/g, '')}" target="_blank" style="color: #25D366; font-weight: bold;">${ag.telefone}</a></td>
                 <td>${statusBadge}</td>
                 <td style="white-space:nowrap;">
@@ -229,7 +241,7 @@ window.excluirAgendamento = async function (id) {
 }
 
 // Altera o status do agendamento para confirmado e dispara notificação via WhatsApp
-window.confirmarAgendamento = async function (id, telCliente, nomeCliente, dataHora, servico) {
+window.confirmarAgendamento = async function (id, telCliente, nomeCliente, dataHora, servico, modalidade) {
     if (!confirm(`Confirmar agendamento de ${nomeCliente}?`)) return;
     try {
         const res = await fetch(`${API_URL}/agendamentos/${id}`, {
@@ -245,12 +257,21 @@ window.confirmarAgendamento = async function (id, telCliente, nomeCliente, dataH
             dataFmt = d.toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' });
         } catch { }
 
-        // Cria a mensagem para abrir no WhatsApp Web/App
+        // --------------------------------------------------------
+        // MENSAGEM PERSONALIZADA POR MODALIDADE
+        // --------------------------------------------------------
+        const ehOnline = (modalidade || '').trim().toLowerCase() === 'online';
+
+        const linhaModalidade = ehOnline
+            ? `💻 Modalidade: *Online*\nVocê receberá as instruções de acesso pelo WhatsApp.`
+            : `🏠 Modalidade: *Presencial*\n📍 Endereço: *${ENDERECO_PRESENCIAL}*`;
+
         const mensagemCliente = encodeURIComponent(
             `✅ Olá ${nomeCliente}! Seu agendamento foi *CONFIRMADO*!\n` +
             `📅 Data e hora: *${dataFmt}*\n` +
-            `✂️ Serviço: *${servico}*\n` +
-            `📍 Universo Rosa — te esperamos! 💜`
+            `🔮 Serviço: *${servico}*\n` +
+            `${linhaModalidade}\n` +
+            `Universo Rosa 💜 — estamos te esperando!`
         );
 
         if (telCliente && telCliente.length >= 10) {
