@@ -5,7 +5,7 @@
 // Funcionamento automático:
 // - Abrindo o site localmente (file:// ou http://localhost/127.0.0.1)
 //   → usa a API local (http://localhost:8080/api)
-// - Publicado na Vercel (produção)
+// - Publicado (produção)
 //   → usa a API hospedada no Render (https://rosa-modas.onrender.com/api)
 //
 // Assim é possível rodar o backend local para testes SEM derrubar o Render.
@@ -22,7 +22,8 @@ export const API_URL = isLocal
     ? 'http://localhost:8080/api'
     : 'https://rosa-modas.onrender.com/api';
 
-// URL do site irmão ROSA MODAS (links cruzados entre os dois sites).
-// - Localmente: a home do Rosa Modas fica uma pasta acima desta.
-// - Em produção: troque pelo endereço real do site Rosa Modas.
-export const ROSA_MODAS_URL = '../index.html';
+// URL do site irmão UNIVERSO ROSA (links cruzados entre os dois sites).
+export const UNIVERSO_ROSA_URL = 'Universo_Rosa/index.html';
+
+// URL do painel administrativo (mesmo CMS que controla os dois sites).
+export const ADMIN_URL = 'Universo_Rosa/admin.html';

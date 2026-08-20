@@ -1,9 +1,44 @@
+// admin.js
+// --------
+// Painel administrativo compartilhado (Universo Rosa + Rosa Modas).
+// - Login via POST /auth/login (credenciais em variáveis de ambiente)
+// - CRUD de serviços, produtos, procedimentos e promoções
+// - Agenda: lista pendentes, confirma/cancela com notificação via WhatsApp
+// - Configurações da agenda e números de administrador
+// - CMS: textos editáveis (hero, rodapé) por site
+
 import { API_URL } from './api-config.js';
 
 // =============================================================
 // ENDEREÇO CENTRALIZADO — altere aqui para atualizar em todo o admin
 // =============================================================
 const ENDERECO_PRESENCIAL = 'Rua das Rosas, 123 — Bairro Exemplo, SP';
+
+// Cache das configurações gerais (endereço/contatos) vindas da REST API
+let siteConfigCache = null;
+
+// Busca (e cacheia) as configurações gerais do estabelecimento
+async function obterSiteConfig() {
+    if (siteConfigCache) return siteConfigCache;
+    try {
+        const res = await fetch(`${API_URL}/site-config`);
+        if (!res.ok) throw new Error();
+        siteConfigCache = await res.json();
+    } catch (error) {
+        console.error('Erro ao carregar configurações gerais:', error);
+        siteConfigCache = { endereco: ENDERECO_PRESENCIAL };
+    }
+    return siteConfigCache;
+}
+
+// Badge visual do site a que o registro pertence
+function siteBadge(site) {
+    const s = site || 'ROSA_MODAS';
+    const ehUniversoRosa = s === 'UNIVERSO_ROSA';
+    const label = ehUniversoRosa ? '💜 Universo Rosa' : '🌸 Rosa Modas';
+    const cor = ehUniversoRosa ? '#7c3aed' : '#d81b60';
+    return `<span style="display:inline-block;padding:0.2rem 0.6rem;border-radius:999px;background:${cor}1a;color:${cor};font-weight:600;font-size:0.8rem;white-space:nowrap;">${label}</span>`;
+}
 
 // --- ELEMENTOS DO DOM ---
 const loginSection = document.getElementById('login-section');
@@ -33,6 +68,7 @@ window.showPanel = function (panelKey, clickedLink) {
         'espiritual': 'Espiritual',
         'conteudo': 'Conteúdo do Site',
         'config-agenda': 'Configurações da Agenda',
+        'config-geral': 'Configurações Gerais',
         'home': 'Painel Administrativo'
     };
 
@@ -173,7 +209,7 @@ async function carregarAgendamentos() {
         agendamentos.sort((a, b) => new Date(b.dataHora) - new Date(a.dataHora));
 
         if (agendamentos.length === 0) {
-            tabelaAgendamentos.innerHTML = '<tr><td colspan="7" style="text-align:center;">Nenhum agendamento encontrado.</td></tr>';
+            tabelaAgendamentos.innerHTML = '<tr><td colspan="8" style="text-align:center;">Nenhum agendamento encontrado.</td></tr>';
             return;
         }
 
@@ -200,7 +236,7 @@ async function carregarAgendamentos() {
                     : '—';
 
             const btnConfirmar = statusAtual !== 'confirmado'
-                ? `<button onclick="window.confirmarAgendamento('${ag.id}', '${(ag.telefone || '').replace(/\D/g, '')}', '${(ag.nomeCliente || '').replace(/'/g, "\\'")}',' ${(ag.dataHora || '').replace(/'/g, "\\'")}', '${(ag.servico || '').replace(/'/g, "\\'")}',' ${(ag.modalidade || '').replace(/'/g, "\\'")}')" style="background:#e8f5e9;color:#2e7d32;border:none;padding:0.4rem 0.7rem;border-radius:5px;cursor:pointer;font-size:0.8rem;margin-right:4px;">✅ Confirmar</button>`
+                ? `<button onclick="window.confirmarAgendamento('${ag.id}', '${(ag.telefone || '').replace(/\D/g, '')}', '${(ag.nomeCliente || '').replace(/'/g, "\\'")}', '${(ag.dataHora || '').replace(/'/g, "\\'")}', '${(ag.servico || '').replace(/'/g, "\\'")}', '${(ag.modalidade || '').replace(/'/g, "\\\\'")}')" style="background:#e8f5e9;color:#2e7d32;border:none;padding:0.4rem 0.7rem;border-radius:5px;cursor:pointer;font-size:0.8rem;margin-right:4px;">✅ Confirmar</button>`
                 : '';
 
             const tr = document.createElement('tr');
@@ -222,7 +258,7 @@ async function carregarAgendamentos() {
 
     } catch (error) {
         console.error("Erro ao buscar agendamentos: ", error);
-        tabelaAgendamentos.innerHTML = '<tr><td colspan="7" style="color:red; text-align:center;">Erro ao carregar os dados.</td></tr>';
+        tabelaAgendamentos.innerHTML = '<tr><td colspan="8" style="color:red; text-align:center;">Erro ao carregar os dados.</td></tr>';
     }
 }
 
@@ -247,7 +283,7 @@ window.confirmarAgendamento = async function (id, telCliente, nomeCliente, dataH
         const res = await fetch(`${API_URL}/agendamentos/${id}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ status: 'confirmado' })
+            body: JSON.stringify({ status: 'confirmado', modalidade: modalidade })
         });
         if (!res.ok) throw new Error();
 
@@ -263,8 +299,8 @@ window.confirmarAgendamento = async function (id, telCliente, nomeCliente, dataH
         const ehOnline = (modalidade || '').trim().toLowerCase() === 'online';
 
         const linhaModalidade = ehOnline
-            ? `💻 Modalidade: *Online*\nVocê receberá as instruções de acesso pelo WhatsApp.`
-            : `🏠 Modalidade: *Presencial*\n📍 Endereço: *${ENDERECO_PRESENCIAL}*`;
+            ? `💻 Modalidade: *Online*\nO atendimento será realizado de forma online. As orientações para acesso serão combinadas pelo WhatsApp.`
+            : `🏠 Modalidade: *Presencial*\n📍 Endereço: *${(await obterSiteConfig()).endereco || ENDERECO_PRESENCIAL}*`;
 
         const mensagemCliente = encodeURIComponent(
             `✅ Olá ${nomeCliente}! Seu agendamento foi *CONFIRMADO*!\n` +
@@ -286,6 +322,11 @@ window.confirmarAgendamento = async function (id, telCliente, nomeCliente, dataH
             ? config.numerosAdmin.split(',').map(n => n.trim().replace(/\D/g, '')).filter(n => n.length >= 10)
             : [];
 
+        // Se o próprio cliente também estiver cadastrado como administrador,
+        // não reenvia a notificação de confirmação para evitar mensagem duplicada.
+        const telClienteLimpo = (telCliente || '').replace(/\D/g, '');
+        const numerosAdminAlvo = numerosAdmin.filter(num => num !== telClienteLimpo);
+
         const mensagemAdmin = encodeURIComponent(
             `🔔 Novo agendamento confirmado!\n` +
             `👤 Cliente: *${nomeCliente}*\n` +
@@ -294,7 +335,7 @@ window.confirmarAgendamento = async function (id, telCliente, nomeCliente, dataH
             `✂️ Serviço: *${servico}*`
         );
 
-        numerosAdmin.forEach((num, i) => {
+        numerosAdminAlvo.forEach((num, i) => {
             setTimeout(() => {
                 window.open(`https://wa.me/55${num}?text=${mensagemAdmin}`, '_blank');
             }, (i + 1) * 800);
@@ -356,7 +397,8 @@ if (formProduto) {
                     nome: nome,
                     preco: Number(preco),
                     imagemUrl: downloadURL,
-                    status: "Disponível"
+                    status: "Disponível",
+                    site: document.getElementById('prod-site') ? document.getElementById('prod-site').value : 'ROSA_MODAS'
                 })
             });
 
@@ -386,7 +428,7 @@ async function carregarProdutosAdmin() {
         const produtos = await response.json();
 
         if (produtos.length === 0) {
-            tabelaProdutos.innerHTML = '<tr><td colspan="5" style="text-align:center;">Nenhum produto cadastrado.</td></tr>';
+            tabelaProdutos.innerHTML = '<tr><td colspan="6" style="text-align:center;">Nenhum produto cadastrado.</td></tr>';
             return;
         }
 
@@ -408,6 +450,7 @@ async function carregarProdutosAdmin() {
                 <td>${prod.nome}</td>
                 <td>${precoFmt}</td>
                 <td>${selectStatus}</td>
+                <td>${siteBadge(prod.site)}</td>
                 <td><button onclick="window.excluirProduto('${prod.id}')" style="background: #ffebee; color: #c62828; border: none; padding: 0.5rem; border-radius: 5px; cursor: pointer;">Excluir</button></td>
             `;
             tabelaProdutos.appendChild(tr);
@@ -461,7 +504,7 @@ async function carregarPromocoesAdmin() {
         const promocoes = await response.json();
 
         if (!promocoes.length) {
-            tabelaPromocoes.innerHTML = '<tr><td colspan="4" style="text-align:center;">Nenhuma promoção cadastrada.</td></tr>';
+            tabelaPromocoes.innerHTML = '<tr><td colspan="5" style="text-align:center;">Nenhuma promoção cadastrada.</td></tr>';
             return;
         }
 
@@ -478,6 +521,7 @@ async function carregarPromocoesAdmin() {
                 <td>${p.titulo}</td>
                 <td>${periodo}</td>
                 <td>${p.status || 'Inativa'}</td>
+                <td>${siteBadge(p.site)}</td>
                 <td><button onclick="window.excluirPromocao('${p.id}')" style="background:#ffebee;color:#c62828;border:none;padding:0.5rem;border-radius:5px;cursor:pointer;">Excluir</button></td>
             `;
             tabelaPromocoes.appendChild(tr);
@@ -519,7 +563,8 @@ if (formPromocao) {
                 status,
                 dataInicio,
                 dataFim,
-                imagemUrl: imagemURL
+                imagemUrl: imagemURL,
+                site: document.getElementById('promo-site') ? document.getElementById('promo-site').value : 'ROSA_MODAS'
             };
 
             const saveRes = await fetch(`${API_URL}/promocoes`, {
@@ -570,7 +615,7 @@ async function carregarProcedimentosAdmin() {
         const procedimentos = await response.json();
 
         if (!procedimentos.length) {
-            tabelaProcedimentos.innerHTML = '<tr><td colspan="4" style="text-align:center;">Nenhum procedimento cadastrado.</td></tr>';
+            tabelaProcedimentos.innerHTML = '<tr><td colspan="5" style="text-align:center;">Nenhum procedimento cadastrado.</td></tr>';
             return;
         }
         tabelaProcedimentos.innerHTML = '';
@@ -580,6 +625,7 @@ async function carregarProcedimentosAdmin() {
                 <td><img src="${p.imagemUrl || 'img/procedimento4.jpg'}" alt="${p.nome}" style="width:50px;height:50px;object-fit:cover;border-radius:5px;"></td>
                 <td>${p.nome}</td>
                 <td>${p.status || 'Disponível'}</td>
+                <td>${siteBadge(p.site)}</td>
                 <td><button onclick="window.excluirProcedimento('${p.id}')" style="background:#ffebee;color:#c62828;border:none;padding:0.5rem;border-radius:5px;cursor:pointer;">Excluir</button></td>
             `;
             tabelaProcedimentos.appendChild(tr);
@@ -617,7 +663,8 @@ if (formProcedimento) {
                 nome,
                 descricao,
                 status,
-                imagemUrl: imagemURL
+                imagemUrl: imagemURL,
+                site: document.getElementById('proc-site') ? document.getElementById('proc-site').value : 'ROSA_MODAS'
             };
 
             const saveRes = await fetch(`${API_URL}/procedimentos`, {
@@ -668,16 +715,26 @@ async function carregarServicosAdmin() {
         const servicos = await response.json();
 
         if (!servicos.length) {
-            tabelaServicos.innerHTML = '<tr><td colspan="4" style="text-align:center;">Nenhum serviço cadastrado.</td></tr>';
+            tabelaServicos.innerHTML = '<tr><td colspan="7" style="text-align:center;">Nenhum serviço cadastrado.</td></tr>';
             return;
         }
         tabelaServicos.innerHTML = '';
         servicos.forEach(s => {
             const tr = document.createElement('tr');
+            const precoFmt = Number(s.preco) > 0
+                ? Number(s.preco).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+                : '—';
+            const modalidades = (s.modalidades || '').split(',').map(m => m.trim()).filter(Boolean);
+            const modalidadesFmt = modalidades.length
+                ? modalidades.map(m => m.toUpperCase() === 'PRESENCIAL' ? '🏠 Presencial' : m.toUpperCase() === 'ONLINE' ? '💻 Online' : m).join(' • ')
+                : 'Configurável';
             tr.innerHTML = `
                 <td><img src="${s.imagemUrl || 'img/atendimento_espiritual.png'}" alt="${s.nome}" style="width:50px;height:50px;object-fit:cover;border-radius:5px;"></td>
                 <td>${s.nome}</td>
+                <td>${precoFmt}</td>
+                <td>${modalidadesFmt}</td>
                 <td>${s.status || 'Disponível'}</td>
+                <td>${siteBadge(s.site)}</td>
                 <td><button onclick="window.excluirServico('${s.id}')" style="background:#ffebee;color:#c62828;border:none;padding:0.5rem;border-radius:5px;cursor:pointer;">Excluir</button></td>
             `;
             tabelaServicos.appendChild(tr);
@@ -696,8 +753,14 @@ if (formServico) {
         btn.textContent = 'Salvando...';
 
         const nome = document.getElementById('serv-nome').value;
+        const preco = document.getElementById('serv-preco').value;
         const descricao = document.getElementById('serv-descricao').value;
         const status = document.getElementById('serv-status').value;
+        const modalidadesSelecionadas = [];
+        const cbPresencial = document.getElementById('serv-modal-presencial');
+        const cbOnline = document.getElementById('serv-modal-online');
+        if (cbPresencial && cbPresencial.checked) modalidadesSelecionadas.push(cbPresencial.value);
+        if (cbOnline && cbOnline.checked) modalidadesSelecionadas.push(cbOnline.value);
         const fileInput = document.getElementById('serv-imagem');
         const file = fileInput.files[0];
 
@@ -713,9 +776,12 @@ if (formServico) {
 
             const novo = {
                 nome,
+                preco: Number(preco),
                 descricao,
                 status,
-                imagemUrl: imagemURL
+                modalidades: modalidadesSelecionadas.join(','),
+                imagemUrl: imagemURL,
+                site: document.getElementById('serv-site') ? document.getElementById('serv-site').value : 'UNIVERSO_ROSA'
             };
 
             const saveRes = await fetch(`${API_URL}/servicos`, {
@@ -758,22 +824,15 @@ const formConteudo = document.getElementById('form-conteudo');
 const conteudoAlert = document.getElementById('conteudo-alert');
 
 // Carrega os textos salvos no CMS para edição
-async function carregarConteudoCMS() {
+window.carregarConteudoCMS = async function () {
     try {
-        const res = await fetch(`${API_URL}/conteudo`);
+        const site = document.getElementById('cms-site') ? document.getElementById('cms-site').value : 'UNIVERSO_ROSA';
+        const res = await fetch(`${API_URL}/conteudo?site=${site}`);
         const content = await res.json();
 
         if (content) {
             document.getElementById('cms-hero-titulo').value = content.heroTitulo || '';
-            document.getElementById('cms-hero-desc').value = content.heroDescricao || '';
-            document.getElementById('cms-vant-titulo').value = content.vantagensTitulo || '';
-            document.getElementById('cms-vant-desc').value = content.vantagensDescricao || '';
-            document.getElementById('cms-v1-titulo').value = content.v1Titulo || '';
-            document.getElementById('cms-v1-desc').value = content.v1Desc || '';
-            document.getElementById('cms-v2-titulo').value = content.v2Titulo || '';
-            document.getElementById('cms-v2-desc').value = content.v2Desc || '';
-            document.getElementById('cms-v3-titulo').value = content.v3Titulo || '';
-            document.getElementById('cms-v3-desc').value = content.v3Desc || '';
+            document.getElementById('cms-hero-descricao').value = content.heroDescricao || '';
             document.getElementById('cms-footer-slogan').value = content.footerSlogan || '';
         }
     } catch (error) {
@@ -790,16 +849,9 @@ if (formConteudo) {
         btn.textContent = 'Salvando...';
 
         const payload = {
+            site: document.getElementById('cms-site') ? document.getElementById('cms-site').value : 'UNIVERSO_ROSA',
             heroTitulo: document.getElementById('cms-hero-titulo').value,
-            heroDescricao: document.getElementById('cms-hero-desc').value,
-            vantagensTitulo: document.getElementById('cms-vant-titulo').value,
-            vantagensDescricao: document.getElementById('cms-vant-desc').value,
-            v1Titulo: document.getElementById('cms-v1-titulo').value,
-            v1Desc: document.getElementById('cms-v1-desc').value,
-            v2Titulo: document.getElementById('cms-v2-titulo').value,
-            v2Desc: document.getElementById('cms-v2-desc').value,
-            v3Titulo: document.getElementById('cms-v3-titulo').value,
-            v3Desc: document.getElementById('cms-v3-desc').value,
+            heroDescricao: document.getElementById('cms-hero-descricao').value,
             footerSlogan: document.getElementById('cms-footer-slogan').value
         };
 
@@ -824,72 +876,255 @@ if (formConteudo) {
     });
 }
 
-// --- CONFIGURAÇÃO DE AGENDA (HORÁRIOS / DIAS BLOQUEADOS) ---
-const formConfig = document.getElementById('form-config-agenda');
-const configAlert = document.getElementById('config-alert');
+// --- CONFIGURAÇÃO DE AGENDA (HORÁRIOS / DIAS BLOQUEADOS / NÚMEROS ADMIN) ---
+const formConfigGeral = document.getElementById('form-config-agenda-geral');
+const configAlert = document.getElementById('config-agenda-alert');
+const numerosAdminAlert = document.getElementById('numeros-admin-alert');
+
+// Cache local da configuração atual para evitar múltiplas requisições
+let agendaConfigCache = null;
+
+// Busca (e cacheia) a configuração atual da agenda na REST API
+async function obterConfigAgenda() {
+    const res = await fetch(`${API_URL}/config-agenda`);
+    const config = await res.json();
+    agendaConfigCache = config;
+    return config;
+}
+
+// Salva a configuração completa na REST API
+async function salvarConfigAgenda(payload) {
+    const res = await fetch(`${API_URL}/config-agenda`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+    });
+    if (!res.ok) throw new Error();
+    agendaConfigCache = payload;
+}
+
+// Renderiza a lista de datas bloqueadas na tabela do painel
+function renderDatasBloqueadas(datasBloqueadas) {
+    const tabela = document.getElementById('tabela-datas-bloqueadas');
+    if (!tabela) return;
+
+    const datas = (datasBloqueadas || '').split(',').map(d => d.trim()).filter(Boolean);
+
+    if (!datas.length) {
+        tabela.innerHTML = '<tr><td colspan="2" style="text-align:center;">Nenhuma data bloqueada.</td></tr>';
+        return;
+    }
+
+    tabela.innerHTML = '';
+    datas.forEach(data => {
+        const [ano, mes, dia] = data.split('-');
+        const dataFmt = `${dia}/${mes}/${ano}`;
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td>${dataFmt}</td>
+            <td><button onclick="window.desbloquearData('${data}')" style="background:#ffebee;color:#c62828;border:none;padding:0.4rem 0.7rem;border-radius:5px;cursor:pointer;font-size:0.8rem;">Desbloquear</button></td>
+        `;
+        tabela.appendChild(tr);
+    });
+}
 
 // Carrega as configurações da agenda para edição
 async function carregarConfigAgenda() {
     try {
-        const res = await fetch(`${API_URL}/config-agenda`);
-        const config = await res.json();
+        const config = await obterConfigAgenda();
 
         if (config) {
-            document.getElementById('agenda-intervalo').value = config.intervalo || '60';
-            document.getElementById('agenda-hora-inicio').value = config.horaInicio || '09:00';
-            document.getElementById('agenda-hora-fim').value = config.horaFim || '18:00';
-            document.getElementById('agenda-nums-admin').value = config.numerosAdmin || '';
-            document.getElementById('agenda-datas-bloqueadas').value = config.datasBloqueadas || '';
+            document.getElementById('cfg-intervalo').value = config.intervalo || '60';
+            document.getElementById('cfg-inicio').value = config.horaInicio || '09:00';
+            document.getElementById('cfg-fim').value = config.horaFim || '18:00';
+            document.getElementById('cfg-numeros-admin').value = config.numerosAdmin || '';
 
             const diasList = (config.diasSemana || "1,2,3,4,5,6").split(',');
-            document.querySelectorAll('input[name="dias_semana"]').forEach(cb => {
-                cb.checked = diasList.includes(cb.value);
-            });
+            for (let i = 0; i <= 6; i++) {
+                const cb = document.getElementById(`cfg-dia-${i}`);
+                if (cb) cb.checked = diasList.includes(String(i));
+            }
+
+            renderDatasBloqueadas(config.datasBloqueadas);
         }
     } catch (error) {
         console.error("Erro ao carregar configurações da agenda:", error);
     }
 }
 
-// Salva as alterações da agenda na REST API
-if (formConfig) {
-    formConfig.addEventListener('submit', async (e) => {
+// Salva as configurações gerais (intervalo, expediente e dias de atendimento)
+if (formConfigGeral) {
+    formConfigGeral.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const btn = document.getElementById('btn-save-config');
+        const btn = document.getElementById('btn-save-cfg-geral');
         btn.disabled = true;
         btn.textContent = 'Salvando...';
 
         const diasSelecionados = [];
-        document.querySelectorAll('input[name="dias_semana"]:checked').forEach(cb => {
-            diasSelecionados.push(cb.value);
-        });
+        for (let i = 0; i <= 6; i++) {
+            const cb = document.getElementById(`cfg-dia-${i}`);
+            if (cb && cb.checked) diasSelecionados.push(String(i));
+        }
+
+        try {
+            const config = await obterConfigAgenda();
+            const payload = {
+                ...config,
+                intervalo: parseInt(document.getElementById('cfg-intervalo').value),
+                horaInicio: document.getElementById('cfg-inicio').value,
+                horaFim: document.getElementById('cfg-fim').value,
+                diasSemana: diasSelecionados.join(',')
+            };
+
+            await salvarConfigAgenda(payload);
+
+            if (configAlert) {
+                configAlert.className = 'alert success';
+                configAlert.textContent = 'Configurações de agenda salvas com sucesso!';
+            }
+        } catch (error) {
+            console.error(error);
+            if (configAlert) {
+                configAlert.className = 'alert error';
+                configAlert.textContent = 'Erro ao salvar configurações.';
+            }
+        } finally {
+            btn.disabled = false;
+            btn.textContent = 'Salvar Configurações Gerais';
+        }
+    });
+}
+
+// Bloqueia uma data (feriado/folga)
+const formBloquearData = document.getElementById('form-bloquear-data');
+if (formBloquearData) {
+    formBloquearData.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const input = document.getElementById('cfg-bloquear-data');
+        const data = input ? input.value : '';
+        if (!data) return;
+
+        try {
+            const config = await obterConfigAgenda();
+            const datas = (config.datasBloqueadas || '').split(',').map(d => d.trim()).filter(Boolean);
+            if (!datas.includes(data)) {
+                datas.push(data);
+            }
+
+            await salvarConfigAgenda({ ...config, datasBloqueadas: datas.join(',') });
+            renderDatasBloqueadas(datas.join(','));
+            if (input) input.value = '';
+
+            if (configAlert) {
+                configAlert.className = 'alert success';
+                configAlert.textContent = 'Data bloqueada com sucesso!';
+            }
+        } catch (error) {
+            console.error('Erro ao bloquear data:', error);
+            if (configAlert) {
+                configAlert.className = 'alert error';
+                configAlert.textContent = 'Erro ao bloquear a data.';
+            }
+        }
+    });
+}
+
+// Desbloqueia uma data previamente bloqueada
+window.desbloquearData = async function (data) {
+    try {
+        const config = await obterConfigAgenda();
+        const datas = (config.datasBloqueadas || '').split(',').map(d => d.trim()).filter(Boolean)
+            .filter(d => d !== data);
+
+        await salvarConfigAgenda({ ...config, datasBloqueadas: datas.join(',') });
+        renderDatasBloqueadas(datas.join(','));
+    } catch (error) {
+        console.error('Erro ao desbloquear data:', error);
+    }
+};
+
+// Salva os números de WhatsApp do administrador
+window.salvarNumerosAdmin = async function () {
+    const input = document.getElementById('cfg-numeros-admin');
+    const numeros = input ? input.value : '';
+
+    try {
+        const config = await obterConfigAgenda();
+        await salvarConfigAgenda({ ...config, numerosAdmin: numeros });
+
+        if (numerosAdminAlert) {
+            numerosAdminAlert.className = 'alert success';
+            numerosAdminAlert.textContent = 'Números de WhatsApp salvos com sucesso!';
+            numerosAdminAlert.style.display = 'block';
+            setTimeout(() => {
+                numerosAdminAlert.style.display = 'none';
+            }, 4000);
+        }
+    } catch (error) {
+        console.error('Erro ao salvar números:', error);
+        if (numerosAdminAlert) {
+            numerosAdminAlert.className = 'alert error';
+            numerosAdminAlert.textContent = 'Erro ao salvar os números.';
+            numerosAdminAlert.style.display = 'block';
+        }
+    }
+};
+
+// --- CONFIGURAÇÕES GERAIS (ENDEREÇO E CONTATOS) ---
+const formSiteConfig = document.getElementById('form-config-geral');
+const configGeralAlert = document.getElementById('config-geral-alert');
+
+// Carrega as configurações gerais para edição
+async function carregarConfigGeral() {
+    try {
+        const cfg = await obterSiteConfig();
+        if (!cfg) return;
+        const set = (id, v) => { const el = document.getElementById(id); if (el) el.value = v || ''; };
+        set('cfg-endereco', cfg.endereco);
+        set('cfg-telefone', cfg.telefone);
+        set('cfg-whatsapp', cfg.whatsapp);
+        set('cfg-email', cfg.email);
+        set('cfg-instagram', cfg.instagram);
+    } catch (error) {
+        console.error('Erro ao carregar configurações gerais:', error);
+    }
+}
+
+// Salva as configurações gerais na REST API
+if (formSiteConfig) {
+    formSiteConfig.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('btn-save-config-geral');
+        btn.disabled = true;
+        btn.textContent = 'Salvando...';
 
         const payload = {
-            intervalo: parseInt(document.getElementById('agenda-intervalo').value),
-            horaInicio: document.getElementById('agenda-hora-inicio').value,
-            horaFim: document.getElementById('agenda-hora-fim').value,
-            diasSemana: diasSelecionados.join(','),
-            numerosAdmin: document.getElementById('agenda-nums-admin').value,
-            datasBloqueadas: document.getElementById('agenda-datas-bloqueadas').value
+            id: 'main',
+            endereco: document.getElementById('cfg-endereco').value,
+            telefone: document.getElementById('cfg-telefone').value,
+            whatsapp: document.getElementById('cfg-whatsapp').value,
+            email: document.getElementById('cfg-email').value,
+            instagram: document.getElementById('cfg-instagram').value
         };
 
         try {
-            const res = await fetch(`${API_URL}/config-agenda`, {
+            const res = await fetch(`${API_URL}/site-config`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             });
             if (!res.ok) throw new Error();
-
-            configAlert.className = 'alert success';
-            configAlert.textContent = 'Configurações de agenda salvas com sucesso!';
+            siteConfigCache = payload;
+            configGeralAlert.className = 'alert success';
+            configGeralAlert.textContent = 'Configurações gerais salvas com sucesso!';
         } catch (error) {
             console.error(error);
-            configAlert.className = 'alert error';
-            configAlert.textContent = 'Erro ao salvar configurações.';
+            configGeralAlert.className = 'alert error';
+            configGeralAlert.textContent = 'Erro ao salvar configurações gerais.';
         } finally {
             btn.disabled = false;
-            btn.textContent = 'Salvar Configurações';
+            btn.textContent = 'Salvar Configurações Gerais';
         }
     });
 }
@@ -903,6 +1138,7 @@ function carregarAdminExtras() {
     carregarServicosAdmin();
     carregarConteudoCMS();
     carregarConfigAgenda();
+    carregarConfigGeral();
 }
 
 // Inicia checando a sessão

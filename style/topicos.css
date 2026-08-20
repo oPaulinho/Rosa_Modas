@@ -1,53 +1,69 @@
+/* topicos.css — Lista de principais serviços (tópicos). */
+
 .topicos {
     background: var(--rosa-degrade);
+    color: var(--branco);
     text-align: center;
-    padding: 1em 0;
-
+    padding: 3rem 1.5rem;
 }
 
 .topicos__titulo {
-    color: var(--branco);
-    font-weight: 300;
-    margin-bottom: 1em;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1.6rem;
 }
 
 .topicos__lista {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-
+    gap: 0.9rem;
+    list-style: none;
 }
 
 .topicos__item {
-    margin: 2em 0.5em;
+    margin: 0;
 }
 
 .topicos__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
     color: var(--branco);
-    padding: 1em;
-    background-color: var(--laranja);
+    padding: 0.75rem 1.6rem;
+    background: var(--rosa-degrade);
+    border: 1px solid rgba(255, 255, 255, 0.35);
     text-decoration: none;
-    font-size: 0.875rem;
-    font-weight: 700;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 999px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.16);
+    transition: var(--transicao);
 }
 
 .topicos__link:hover {
-    color: var(--laranja);
-    background-color: var(--branco);
+    background: var(--rosa-degrade-forte);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 26px rgba(0, 0, 0, 0.22);
 }
 
 @media screen and (min-width: 1024px) {
+    .topicos {
+        padding: 3.5rem 2rem;
+    }
+
     .topicos__titulo {
-        font-size: 1.5rem;
+        font-size: 1.8rem;
     }
 
     .topicos__link {
-        font-size: 1.5rem;
+        font-size: 1rem;
+        padding: 0.85rem 1.8rem;
     }
 }
 
 @media screen and (min-width: 1728px) {
     .topicos {
-        padding: 3em 30vw;
+        padding: 4rem 30vw;
     }
 }

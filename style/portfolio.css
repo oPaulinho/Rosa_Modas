@@ -1,0 +1,82 @@
+/* portfolio.css — Página de portfólio/catálogo (hair e fashion). */
+
+.container__portfolio {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 3rem;
+    margin: 2.5rem 5%;
+    padding: 2rem;
+    background: var(--branco);
+    border-radius: 28px;
+    box-shadow: var(--sombra-card);
+}
+
+.portfolio__apresentacao {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.titulo__portfolio {
+    font-size: 1.7rem;
+    font-weight: 800;
+    background: var(--rosa-degrade);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.texto__portfolio {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--cinza);
+}
+
+.imagem {
+    width: 40vw;
+    max-width: 400px;
+    height: auto;
+    border-radius: 22px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+    transition: var(--transicao);
+}
+
+.imagem:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.16);
+}
+
+.apresentacao__links__navegacao {
+    text-decoration: none;
+    align-self: flex-start;
+}
+
+/* === Responsivo para Mobile === */
+@media screen and (max-width: 900px) {
+    .container__portfolio {
+        flex-direction: column;
+        gap: 1.5rem;
+        margin: 1.5rem;
+        padding: 1.5rem;
+    }
+
+    .imagem {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .titulo__portfolio {
+        text-align: center;
+        font-size: 1.5rem;
+    }
+
+    .texto__portfolio {
+        text-align: center;
+    }
+
+    .apresentacao__links__navegacao {
+        align-self: center;
+    }
+}

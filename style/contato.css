@@ -1,41 +1,52 @@
+/* contato.css — Seção de contato (CTA) e botão flutuante do WhatsApp. */
+
 .contato {
-    background-color: var(--branco);
-    padding: 1em;
+    background: var(--cor-de-fundo);
+    padding: 3rem 1.5rem;
+    text-align: center;
 }
 
-.contato__titulo,
-.contato__texto {
-    color: var(--rosa-degrade);
-
-    background: var(--rosa-degrade);
-    -webkit-text-fill-color: transparent;
-    -webkit-background-clip: text;
-    background-clip: text;
+.contato__descrição {
+    margin: 0 auto 1.2rem;
 }
 
 .contato__titulo {
-    font-size: 1.12em;
-    font-weight: 500;
+    font-size: 1.5rem;
+    font-weight: 800;
+    background: var(--rosa-degrade);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .contato__texto {
-    font-weight: 300;
-    margin: 1em 0;
+    font-weight: 400;
+    color: var(--cinza);
+    margin: 0.8rem 0 1.4rem;
 }
 
 .contato__email {
-    padding: 1em;
-    border: 1 px solid var(--azul);
-    border-radius: 24px;
-    width: 90%;
-    color: var(--azul);
+    display: inline-block;
+    padding: 0.95rem 2rem;
+    border: none;
+    border-radius: 999px;
+    background: var(--rosa-degrade);
+    color: var(--branco);
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    box-shadow: 0 10px 22px rgba(216, 27, 96, 0.25);
+    transition: var(--transicao);
+}
+
+.contato__email:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 30px rgba(216, 27, 96, 0.35);
 }
 
 .contato__email::placeholder {
     font-family: var(--fonte-principal);
-    color: var(--azul);
-    background: url(../img/Email.svg)no-repeat;
-    padding-left: 2em;
+    color: var(--branco);
 }
 
 .whatsapp-fixo {
@@ -43,9 +54,35 @@
     bottom: 20px;
     right: 20px;
     z-index: 1000;
-    border-radiu s: 50%;
-    padding: 10px;
-    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #25d366;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    line-height: 0;
+}
+
+.whatsapp-fixo:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3);
+}
+
+.whatsapp-fixo img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: block;
+}
+
+@media screen and (max-width: 768px) {
+    .whatsapp-fixo {
+        bottom: 16px;
+        right: 16px;
+    }
 }
 
 @media screen and (min-width: 1024px) {
@@ -53,26 +90,30 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        gap: 3rem;
+        padding: 3.5rem 5%;
+        text-align: left;
+    }
+
+    .contato__descrição {
+        margin: 0;
     }
 
     .contato__titulo {
-        font-size: 1.5rem;
+        font-size: 1.6rem;
+    }
+
+    .contato__texto {
+        margin: 0.6rem 0 0;
     }
 
     .contato__email {
-        width: 30%;
+        white-space: nowrap;
     }
-
-    .contao__descrição {
-        margin: 1em;
-        width: 30%;
-    }
-
-
 }
 
 @media screen and (min-width: 1728px) {
-    .contato{
-        padding: 3em 20vw;
+    .contato {
+        padding: 4rem 20vw;
     }
 }

@@ -1,47 +1,78 @@
-#sobre-nos {
-    padding: 50px 20px;
-    background: #fff;
+/* about.css — Página Sobre Nós. */
+
+#sobre-nos,
+.sobre-nos {
+    padding: 3rem 5%;
+}
+
+.sobre-nos .container {
+    max-width: 1150px;
+    margin: 0 auto;
 }
 
 .titulo {
     text-align: center;
-    font-size: 2em;
-    margin-bottom: 30px;
-    color: #d63384;
-    margin-top: 1em;
-
-    /* rosa principal */
+    font-size: 2.2rem;
+    font-weight: 800;
+    margin-bottom: 2.2rem;
+    background: var(--rosa-degrade);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .conteudo-sobre {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 30px;
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 3rem;
     align-items: center;
-    justify-content: center;
 }
-.texto{
-    padding: 1em 0;
-}
+
 .texto-sobre {
-    padding: 1em;
-    font-size: 1.1em;
-    line-height: 1.6;
-    color: #333;
+    padding: 2rem;
+    background: var(--branco);
+    border-radius: 28px;
+    box-shadow: var(--sombra-card);
+}
+
+.texto {
+    padding: 0.6em 0;
+    font-size: 1.05rem;
+    line-height: 1.75;
+    color: var(--cinza);
 }
 
 .texto-sobre strong {
-    color: #d63384;
+    color: var(--laranja);
 }
 
 .foto-sobre {
-    flex: 1 1 300px;
     text-align: center;
 }
 
 .foto-sobre img {
-    max-width: 70%;
-    margin: 0 0 2em 0;
-    border-radius: 20px;
-    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+    max-width: 100%;
+    margin: 0;
+    border-radius: 28px;
+    box-shadow: 0 20px 44px rgba(216, 27, 96, 0.2);
+    transition: var(--transicao);
+}
+
+.foto-sobre img:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 24px 50px rgba(216, 27, 96, 0.24);
+}
+
+@media screen and (max-width: 900px) {
+    .conteudo-sobre {
+        grid-template-columns: 1fr;
+    }
+
+    .titulo {
+        font-size: 1.8rem;
+    }
+
+    .texto-sobre {
+        padding: 1.5rem;
+    }
 }

@@ -7,6 +7,13 @@ Universo_Rosa/DOCUMENTACAO.md
 .vscode/
 *.log
 *.env
+.env.*
+
+# Backend (Spring Boot) — build, uploads e dados locais
+backend/target/
+backend/uploads/
+backend/.mvn/
+backend/*.log
 
 # Ignorar arquivos de sistema
 .DS_Store

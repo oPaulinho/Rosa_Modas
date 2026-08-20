@@ -1,24 +1,45 @@
+/*
+ * Styles.css
+ *
+ * Arquivo principal de estilos do site ROSA MODAS.
+ * Importa o CSS de cada seção da página (header, banner, carrossel, etc.)
+ * e define as variáveis de tema (cores e fontes) usadas em todo o site.
+ *
+ * Fontes: Poppins (texto) + Playfair Display (títulos) via Google Fonts.
+ */
+
 @import url("header.css");
 @import url("banner.css");
 @import url("carrossel.css");
 @import url("topicos.css");
 @import url("contato.css");
 @import url("rodape.css");
-@import url("portfólio.css");
+@import url("portfolio.css");
 @import url("about.css");
-@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap');
 
 :root {
-    --cor-de-fundo: #F5F5F5;
-    --branco: #FFFFFF;
-    --preto: #000000;
-    --cinza: #474646;
-    --cinza-claro: #858585;
-    --laranja: #B71C1C;
-    --azul: #E91E63;
-    --rosa-degrade: linear-gradient(97.54deg, #8B1E5A 35.49%, #D462A6 165.37%);
-    --fonte-principal: "Poppins";
-    --fonte-secundaria: "Josefin Sans";
+    --cor-de-fundo: #fff5f8;
+    --branco: #ffffff;
+    --preto: #2b1d24;
+    --cinza: #6d5a63;
+    --cinza-claro: #a3909a;
+    --laranja: #d81b60;
+    --azul: #ff6f91;
+    --rosa: #e91e63;
+    --rosa-claro: #ff80ab;
+    --rosa-suave: #fce4ec;
+    --rosa-degrade: linear-gradient(120deg, #d81b60 0%, #ff6f91 100%);
+    --rosa-degrade-forte: linear-gradient(120deg, #ad1457 0%, #e91e63 100%);
+    --fonte-principal: "Poppins", sans-serif;
+    --fonte-secundaria: "Playfair Display", serif;
+    --raio-card: 22px;
+    --sombra-card: 0 14px 34px rgba(216, 27, 96, 0.10);
+    --transicao: all 0.3s ease;
+}
+
+* {
+    box-sizing: border-box;
 }
 
 body {
@@ -26,4 +47,334 @@ body {
     font-family: var(--fonte-principal);
     font-size: 1rem;
     font-weight: 400;
+    color: var(--preto);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+h1,
+h2,
+h3,
+h4 {
+    font-family: var(--fonte-secundaria);
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* ============================================================
+   BOTÃO DE TEMA CLARO/ESCURO (identidade rosa)
+   ============================================================ */
+.btn-dark-mode {
+    background: none;
+    border: 2px solid rgba(216, 27, 96, 0.35);
+    border-radius: 50%;
+    width: 42px;
+    height: 42px;
+    font-size: 1.15rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    padding: 0;
+    transition: var(--transicao);
+    font-variant-emoji: text;
+    color: #d81b60;
+}
+
+.btn-dark-mode:hover {
+    transform: scale(1.1);
+    background: rgba(216, 27, 96, 0.12);
+    border-color: #d81b60;
+}
+
+/* ============================================================
+   TEMA ESCURO ROSA MODAS
+   ============================================================ */
+body.dark-mode {
+    background: #1c1016;
+    color: #f4e6ec;
+}
+
+body.dark-mode .cabecalho {
+    background: rgba(28, 16, 22, 0.9);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
+}
+
+body.dark-mode .opções__link {
+    color: #f4e6ec;
+}
+
+body.dark-mode .lista-menu {
+    background: #2a1720;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode .lista-menu__item:hover {
+    background: rgba(216, 27, 96, 0.18);
+}
+
+body.dark-mode .banner {
+    background: linear-gradient(180deg, #2a1720 0%, #1c1016 100%);
+}
+
+body.dark-mode .banner__titulo {
+    color: #ffd1e1;
+}
+
+body.dark-mode .banner__texto {
+    color: #f0c8d8;
+}
+
+body.dark-mode .carrossel {
+    background: #22121a;
+}
+
+body.dark-mode .card {
+    background: #2f1a24;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+body.dark-mode .card__descricao,
+body.dark-mode .descricao__titulo,
+body.dark-mode .descricao__titulo-livro {
+    background: transparent;
+    -webkit-text-fill-color: initial;
+    background-clip: initial;
+}
+
+body.dark-mode .descricao__titulo,
+body.dark-mode .descricao__titulo-livro {
+    color: #ffd1e1;
+}
+
+body.dark-mode .descricao__texto {
+    color: #e8c8d4;
+}
+
+body.dark-mode .topicos {
+    background: #25141c;
+}
+
+body.dark-mode .topicos__link {
+    background: #351c28;
+    color: #ffc2d6;
+}
+
+body.dark-mode .contato {
+    background: linear-gradient(120deg, #ad1457, #e91e63);
+}
+
+body.dark-mode .rodape {
+    background: #150a10;
+}
+
+body.dark-mode .lista-rodape__titulo {
+    color: #ffd1e1;
+}
+
+body.dark-mode .lista-rodape__item {
+    color: #d9b9c6;
+}
+
+body.dark-mode .lista-rodape__link {
+    color: #ffd1e1;
+}
+
+body.dark-mode .lista-rodape__link:hover {
+    color: #ff80ab;
+}
+
+body.dark-mode .btn-dark-mode {
+    border-color: rgba(255, 128, 171, 0.4);
+    color: #ff80ab;
+}
+
+body.dark-mode .titulo__portfolio {
+    color: #ffd1e1;
+}
+
+body.dark-mode .texto__portfolio {
+    color: #e8c8d4;
+}
+
+body.dark-mode .section-portfolio,
+body.dark-mode .container__portfolio {
+    background: #22121a;
+}
+
+/* ============================================================
+   LEGENDA NOS SLIDES DO CARROSSEL DINÂMICO
+   ============================================================ */
+.swiper-slide {
+    position: relative;
+}
+
+.swiper-slide .slide-caption {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 0.6rem 1rem;
+    background: linear-gradient(transparent, rgba(28, 16, 22, 0.85));
+    color: #fff;
+    font-family: var(--fonte-secundaria);
+    font-weight: 600;
+    font-size: 0.95rem;
+    border-radius: 0 0 22px 22px;
+    text-align: center;
+}
+
+/* ============================================================
+   PROMOÇÕES ATIVAS (validade respeitada)
+   ============================================================ */
+.promo-destaques {
+    padding: 2.5rem 5%;
+    background: linear-gradient(120deg, #fff0f6, #ffe3ee);
+}
+
+body.dark-mode .promo-destaques {
+    background: linear-gradient(120deg, #2a1720, #331726);
+}
+
+.promo-destaques__titulo {
+    font-family: var(--fonte-secundaria);
+    font-size: 1.7rem;
+    text-align: center;
+    background: var(--rosa-degrade);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 1.5rem;
+}
+
+.promo-destaques__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.25rem;
+}
+
+.promo-destaques__card {
+    background: var(--branco);
+    border-radius: var(--raio-card);
+    overflow: hidden;
+    box-shadow: var(--sombra-card);
+    transition: var(--transicao);
+}
+
+.promo-destaques__card:hover {
+    transform: translateY(-6px);
+}
+
+body.dark-mode .promo-destaques__card {
+    background: #2f1a24;
+}
+
+.promo-destaques__card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.promo-destaques__info {
+    padding: 1.25rem 1.5rem 1.5rem;
+}
+
+.promo-destaques__info h3 {
+    font-family: var(--fonte-secundaria);
+    font-size: 1.25rem;
+    color: var(--preto);
+    margin-bottom: 0.4rem;
+}
+
+body.dark-mode .promo-destaques__info h3 {
+    color: #ffd1e1;
+}
+
+.promo-destaques__info p {
+    color: var(--cinza);
+    font-size: 0.95rem;
+}
+
+body.dark-mode .promo-destaques__info p {
+    color: #d9b9c6;
+}
+
+/* ============================================================
+   NOVIDADES (produtos disponíveis)
+   ============================================================ */
+.novidades {
+    padding: 2.5rem 5%;
+}
+
+.novidades__titulo {
+    font-family: var(--fonte-secundaria);
+    font-size: 1.7rem;
+    text-align: center;
+    background: var(--rosa-degrade);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 1.5rem;
+}
+
+.novidades__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.25rem;
+}
+
+.novidades__card {
+    background: var(--branco);
+    border-radius: var(--raio-card);
+    overflow: hidden;
+    box-shadow: var(--sombra-card);
+    transition: var(--transicao);
+}
+
+.novidades__card:hover {
+    transform: translateY(-6px);
+}
+
+body.dark-mode .novidades__card {
+    background: #2f1a24;
+}
+
+.novidades__card img {
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
+}
+
+.novidades__info {
+    padding: 1rem 1.25rem 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.novidades__info h3 {
+    font-family: var(--fonte-secundaria);
+    font-size: 1.05rem;
+    color: var(--preto);
+}
+
+body.dark-mode .novidades__info h3 {
+    color: #ffd1e1;
+}
+
+.novidades__preco {
+    font-family: var(--fonte-secundaria);
+    font-weight: 700;
+    color: var(--laranja);
+    white-space: nowrap;
+}
+
+body.dark-mode .novidades__preco {
+    color: #ff80ab;
 }

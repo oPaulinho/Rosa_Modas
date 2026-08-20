@@ -22,8 +22,10 @@
         <ul class="opções">
             <li class="opções__item"><a href="index.html" class="opções__link">INÍCIO</a></li>
             <li class="opções__item"><a href="fashion.html" class="opções__link">FASHION</a></li>
-            <li class="opções__item"><a href="contato.html" class="opções__link">CONTATOS</a></li>
+            <li class="opções__item"><a href="contato.html" class="opções__link">CONTATO</a></li>
             <li class="opções__item"><a href="about.html" class="opções__link">SOBRE NÓS</a></li>
+            <li class="opções__item"><a href="Universo_Rosa/index.html" id="link-universo-rosa" class="opções__link"
+                    title="Conheça nosso Espaço Espiritual">ESPIRITUAL</a></li>
         </ul>
 
         <div class="container left">
@@ -34,10 +36,15 @@
             <ul class="lista-menu">
                 <li class="lista-menu__item"><a href="index.html" class="lista-menu__Link">INÍCIO</a></li>
                 <li class="lista-menu__item"><a href="fashion.html" class="lista-menu__Link">FASHION</a></li>
-                <li class="lista-menu__item"><a href="contato.html" class="lista-menu__Link">CONTATOS</a></li>
+                <li class="lista-menu__item"><a href="contato.html" class="lista-menu__Link">CONTATO</a></li>
                 <li class="lista-menu__item"><a href="about.html" class="lista-menu__Link">SOBRE NÓS</a></li>
+                <li class="lista-menu__item"><a href="Universo_Rosa/index.html" id="link-universo-rosa-mobile"
+                        class="lista-menu__Link">ESPIRITUAL</a></li>
             </ul>
         </div>
+
+        <button id="btn-dark-mode" class="btn-dark-mode" aria-label="Alternar modo claro/escuro"
+            title="Modo claro/escuro">🌙</button>
     </header>
 
     <!-- Escova Moderna -->
@@ -177,7 +184,7 @@
         <ul class="lista-rodape">
             <li class="lista-rodape__titulo">Contato</li>
             <li class="lista-rodape__item">
-                <img src="/img/whatsappfooter.png" alt="Ícone WhatsApp">
+                <img src="img/whatsappfooter.png" alt="Ícone WhatsApp">
                 <a href="https://wa.me/5511958723409" class="lista-rodape__link" target="_blank">WhatsApp</a>
             </li>
             <li class="lista-rodape__item">
@@ -194,8 +201,11 @@
         <ul class="lista-rodape">
             <li class="lista-rodape__titulo">Loja</li>
             <li class="lista-rodape__item"><a href="about.html" class="lista-rodape__link">Sobre nós</a></li>
-            <li class="lista-rodape__item"><a href="#" class="lista-rodape__link">Serviços</a></li>
+            <li class="lista-rodape__item"><a href="Universo_Rosa/index.html" id="link-universo-rosa-footer"
+                    class="lista-rodape__link" target="_blank" rel="noopener noreferrer">Espaço Espiritual</a></li>
             <li class="lista-rodape__item"><a href="#" class="lista-rodape__link">Política de Troca</a></li>
+            <li class="lista-rodape__item"><a href="Universo_Rosa/admin.html" id="link-area-admin"
+                    class="lista-rodape__link">Área Administrativa</a></li>
         </ul>
 
         <ul class="lista-rodape">
@@ -210,10 +220,15 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script type="module" src="js/site.js"></script>
     <script>
         const swiperHair = new Swiper('.swiper-hair', {
-            spaceBetween: 10,
-            slidesPerView: 3,
+            slidesPerView: 1.3,
+            spaceBetween: 16,
+            breakpoints: {
+                768: { slidesPerView: 2, spaceBetween: 24 },
+                1200: { slidesPerView: 3, spaceBetween: 28 }
+            },
             pagination: {
                 el: '.swiper-pagination',
                 type: 'bullets',
@@ -225,8 +240,12 @@
         });
 
         const swiperFashion = new Swiper('.swiper-fashion', {
-            spaceBetween: 10,
-            slidesPerView: 3,
+            slidesPerView: 1.3,
+            spaceBetween: 16,
+            breakpoints: {
+                768: { slidesPerView: 2, spaceBetween: 24 },
+                1200: { slidesPerView: 3, spaceBetween: 28 }
+            },
             pagination: {
                 el: '.swiper-pagination',
                 type: 'bullets',
@@ -239,7 +258,7 @@
     </script>
 
     <a href="https://wa.me/5511958723409" class="whatsapp-fixo" target="_blank">
-        <img src="/img/whatsapp.png" alt="WhatsApp">
+        <img src="img/whatsapp.png" alt="WhatsApp">
     </a>
 
 </body>

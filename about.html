@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rosa Modas - Sobre Nós</title>
     <link rel="stylesheet" href="style/reset.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <link rel="stylesheet" href="style/Styles.css">
 </head>
 
@@ -23,7 +22,9 @@
             <li class="opções__item"><a href="index.html" class="opções__link">INÍCIO</a></li>
             <li class="opções__item"><a href="hair.html" class="opções__link">HAIR</a></li>
             <li class="opções__item"><a href="fashion.html" class="opções__link">FASHION</a></li>
-            <li class="opções__item"><a href="contato.html" class="opções__link">CONTATOS</a></li>
+            <li class="opções__item"><a href="contato.html" class="opções__link">CONTATO</a></li>
+            <li class="opções__item"><a href="Universo_Rosa/index.html" id="link-universo-rosa" class="opções__link"
+                    title="Conheça nosso Espaço Espiritual">ESPIRITUAL</a></li>
         </ul>
 
         <div class="container left">
@@ -36,9 +37,14 @@
                 <li class="lista-menu__item"><a href="index.html" class="lista-menu__Link">INÍCIO</a></li>
                 <li class="lista-menu__item"><a href="hair.html" class="lista-menu__Link">HAIR</a></li>
                 <li class="lista-menu__item"><a href="fashion.html" class="lista-menu__Link">FASHION</a></li>
-                <li class="lista-menu__item"><a href="contato.html" class="lista-menu__Link">CONTATOS</a></li>
+                <li class="lista-menu__item"><a href="contato.html" class="lista-menu__Link">CONTATO</a></li>
+                <li class="lista-menu__item"><a href="Universo_Rosa/index.html" id="link-universo-rosa-mobile"
+                        class="lista-menu__Link">ESPIRITUAL</a></li>
             </ul>
         </div>
+
+        <button id="btn-dark-mode" class="btn-dark-mode" aria-label="Alternar modo claro/escuro"
+            title="Modo claro/escuro">🌙</button>
     </header>
 
     <section class="banner">
@@ -120,7 +126,7 @@
         <ul class="lista-rodape">
             <li class="lista-rodape__titulo">Contato</li>
             <li class="lista-rodape__item">
-                <img src="/img/whatsappfooter.png" alt="Ícone WhatsApp">
+                <img src="img/whatsappfooter.png" alt="Ícone WhatsApp">
                 <a href="https://wa.me/5511958723409" class="lista-rodape__link" target="_blank">WhatsApp</a>
             </li>
             <li class="lista-rodape__item">
@@ -137,8 +143,11 @@
         <ul class="lista-rodape">
             <li class="lista-rodape__titulo">Loja</li>
             <li class="lista-rodape__item"><a href="about.html" class="lista-rodape__link">Sobre nós</a></li>
-            <li class="lista-rodape__item"><a href="contato.html" class="lista-rodape__link">Serviços</a></li>
+            <li class="lista-rodape__item"><a href="Universo_Rosa/index.html" id="link-universo-rosa-footer"
+                    class="lista-rodape__link" target="_blank" rel="noopener noreferrer">Espaço Espiritual</a></li>
             <li class="lista-rodape__item"><a href="#" class="lista-rodape__link">Política de Troca</a></li>
+            <li class="lista-rodape__item"><a href="Universo_Rosa/admin.html" id="link-area-admin"
+                    class="lista-rodape__link">Área Administrativa</a></li>
         </ul>
 
         <ul class="lista-rodape">
@@ -152,24 +161,10 @@
         </ul>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <script>
-        const swiperEquipe = new Swiper('.swiper-equipe', {
-            spaceBetween: 10,
-            slidesPerView: 2,
-            pagination: {
-                el: '.swiper-pagination',
-                type: 'bullets',
-            },
-            navigation: {
-                nextEl: '.swiper-button-next',
-                prevEl: '.swiper-button-prev',
-            }
-        });
-    </script>
+    <script type="module" src="js/site.js"></script>
 
     <a href="https://wa.me/5511958723409" class="whatsapp-fixo" target="_blank">
-        <img src="/img/whatsapp.png" alt="WhatsApp">
+        <img src="img/whatsapp.png" alt="WhatsApp">
     </a>
 
 </body>

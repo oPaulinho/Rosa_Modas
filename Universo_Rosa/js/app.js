@@ -1,5 +1,13 @@
-import { API_URL } from './api-config.js';
+// app.js
+// -------
+// Script do site público UNIVERSO ROSA (espaço espiritual).
+// - Carrega os atendimentos espirituais da API (GET /servicos)
+// - Agenda atendimentos (presencial/online) com validação de conflitos
+// - Textos editáveis da hero e rodapé (CMS, GET/POST /conteudo)
+// - Links cruzados com o Rosa Modas
+// - Modo noturno (preferência salva no localStorage)
 
+import { API_URL, ROSA_MODAS_URL } from './api-config.js';
 
 // ============================================================
 // MÁSCARA DE TELEFONE
@@ -37,14 +45,12 @@ if (telInput) {
 
 }
 
-
 // ============================================================
 // AGENDAMENTO
 // ============================================================
 
 const formAgendamento = document.getElementById('form-agendamento');
 const alertAgendamento = document.getElementById('agendamento-alert');
-
 
 if (formAgendamento) {
 
@@ -54,7 +60,6 @@ if (formAgendamento) {
 
         const btnSubmit =
             document.getElementById('btn-submit-agendamento');
-
 
         // ----------------------------------------------------
         // COLETA DOS DADOS
@@ -79,7 +84,6 @@ if (formAgendamento) {
         const modalidade =
             document.querySelector('input[name="modalidade"]:checked')?.value || '';
 
-
         // ----------------------------------------------------
         // VALIDAÇÕES
         // ----------------------------------------------------
@@ -94,7 +98,6 @@ if (formAgendamento) {
             return;
         }
 
-
         if (!modalidade) {
 
             alertAgendamento.className = "alert error";
@@ -104,7 +107,6 @@ if (formAgendamento) {
 
             return;
         }
-
 
         if (!nome) {
 
@@ -116,10 +118,8 @@ if (formAgendamento) {
             return;
         }
 
-
         const telNumeros =
             telefone.replace(/\D/g, '');
-
 
         if (
             telNumeros.length < 10 ||
@@ -134,7 +134,6 @@ if (formAgendamento) {
             return;
         }
 
-
         if (!dataStr) {
 
             alertAgendamento.className = "alert error";
@@ -145,7 +144,6 @@ if (formAgendamento) {
             return;
         }
 
-
         // ----------------------------------------------------
         // BLOQUEIA O BOTÃO
         // ----------------------------------------------------
@@ -153,7 +151,6 @@ if (formAgendamento) {
         btnSubmit.disabled = true;
 
         btnSubmit.textContent = "Aguarde...";
-
 
         try {
 
@@ -167,12 +164,10 @@ if (formAgendamento) {
             const agendamentosExistentes =
                 await responseDocs.json();
 
-
             const agora = new Date();
 
             const telefoneNormalizado =
                 telNumeros;
-
 
             const temDuplicado =
                 agendamentosExistentes.some(ag => {
@@ -181,20 +176,16 @@ if (formAgendamento) {
                         (ag.telefone || '')
                             .replace(/\D/g, '');
 
-
                     if (agTel !== telefoneNormalizado) {
                         return false;
                     }
 
-
                     const agDataHora =
                         new Date(ag.dataHora);
-
 
                     const statusAtivo =
                         !ag.status ||
                         ag.status.toLowerCase() !== 'cancelado';
-
 
                     return (
                         statusAtivo &&
@@ -202,7 +193,6 @@ if (formAgendamento) {
                     );
 
                 });
-
 
             if (temDuplicado) {
 
@@ -219,7 +209,6 @@ if (formAgendamento) {
 
                 return;
             }
-
 
             // =================================================
             // OBJETO DO AGENDAMENTO
@@ -244,7 +233,6 @@ if (formAgendamento) {
 
             };
 
-
             // =================================================
             // ENVIA PARA O BACKEND
             // =================================================
@@ -262,7 +250,6 @@ if (formAgendamento) {
 
                 });
 
-
             if (!saveRes.ok) {
 
                 throw new Error(
@@ -270,7 +257,6 @@ if (formAgendamento) {
                 );
 
             }
-
 
             // =================================================
             // SUCESSO
@@ -282,9 +268,7 @@ if (formAgendamento) {
             alertAgendamento.textContent =
                 "Agendamento pré-registrado com sucesso! Aguarde nossa confirmação.";
 
-
             formAgendamento.reset();
-
 
             // Mantém a área espiritual mesmo depois do reset
             const areaInput =
@@ -293,7 +277,6 @@ if (formAgendamento) {
             if (areaInput) {
                 areaInput.value = 'espiritual';
             }
-
 
             // Limpa data e horário selecionados
 
@@ -306,7 +289,6 @@ if (formAgendamento) {
                 selectedDateTime.value = '';
             }
 
-
             document
                 .querySelectorAll('.date-card')
                 .forEach(card => {
@@ -315,10 +297,8 @@ if (formAgendamento) {
 
                 });
 
-
             const timeSlotsContainer =
                 document.getElementById('time-slots');
-
 
             if (timeSlotsContainer) {
 
@@ -330,24 +310,20 @@ if (formAgendamento) {
 
             }
 
-
             // Atualiza os horários disponíveis
 
             inicializarAgenda();
-
 
             // Abre o modal
 
             const modal =
                 document.getElementById('modal-aviso');
 
-
             if (modal) {
 
                 modal.style.display = 'flex';
 
             }
-
 
         } catch (error) {
 
@@ -356,13 +332,11 @@ if (formAgendamento) {
                 error
             );
 
-
             alertAgendamento.className =
                 "alert error";
 
             alertAgendamento.textContent =
                 "Erro ao realizar agendamento. Tente novamente mais tarde.";
-
 
         } finally {
 
@@ -376,357 +350,6 @@ if (formAgendamento) {
     });
 
 }
-
-
-// ============================================================
-// PROMOÇÕES
-// ============================================================
-
-let promoAtualIdx = 0;
-
-let promoAtivas = [];
-
-
-// Renderiza o carrossel
-
-function renderizarCarrossel() {
-
-    const banner =
-        document.getElementById('promo-banner');
-
-    const slidesContainer =
-        document.getElementById('promo-slides');
-
-    const dotsContainer =
-        document.getElementById('promo-dots');
-
-    const prevBtn =
-        document.getElementById('promo-prev-btn');
-
-    const nextBtn =
-        document.getElementById('promo-next-btn');
-
-
-    if (!banner || !slidesContainer) {
-        return;
-    }
-
-
-    if (promoAtivas.length === 0) {
-
-        banner.style.display = 'none';
-
-        return;
-
-    }
-
-
-    banner.style.display = 'block';
-
-    slidesContainer.innerHTML = '';
-
-    if (dotsContainer) {
-        dotsContainer.innerHTML = '';
-    }
-
-
-    promoAtivas.forEach((p, idx) => {
-
-        const [iY, iM, iD] =
-            p.dataInicio.split('-').map(Number);
-
-        const [fY, fM, fD] =
-            p.dataFim.split('-').map(Number);
-
-
-        const dtInicioFmt =
-            `${String(iD).padStart(2, '0')}/${String(iM).padStart(2, '0')}/${iY}`;
-
-
-        const dtFimFmt =
-            `${String(fD).padStart(2, '0')}/${String(fM).padStart(2, '0')}/${fY}`;
-
-
-        const imageSrc =
-            p.imagemUrl || 'img/Rosa.png';
-
-
-        const slide =
-            document.createElement('div');
-
-
-        slide.className =
-            'promo-slide';
-
-
-        slide.innerHTML = `
-
-            <div class="promo-slide-header">
-
-                <span class="promo-badge">
-                    🌟 Promoção
-                </span>
-
-                <h2 class="promo-slide-title">
-                    ${p.titulo || 'Promoção Especial'}
-                </h2>
-
-            </div>
-
-
-            <img
-                class="promo-slide-img"
-                src="${imageSrc}"
-                alt="${p.titulo || 'Promoção'}"
-                onerror="this.src='img/Rosa.png'"
-            >
-
-
-            <div class="promo-slide-body">
-
-                <p class="promo-slide-desc">
-                    ${p.descricao || ''}
-                </p>
-
-                <p class="promo-slide-validade">
-                    📅 Válido de ${dtInicioFmt} até ${dtFimFmt}
-                </p>
-
-            </div>
-
-        `;
-
-
-        slidesContainer.appendChild(slide);
-
-
-        if (dotsContainer) {
-
-            const dot =
-                document.createElement('button');
-
-
-            dot.className =
-                'promo-dot' +
-                (idx === 0 ? ' active' : '');
-
-
-            dot.setAttribute(
-                'aria-label',
-                `Promoção ${idx + 1}`
-            );
-
-
-            dot.addEventListener(
-                'click',
-                () => irParaSlide(idx)
-            );
-
-
-            dotsContainer.appendChild(dot);
-
-        }
-
-    });
-
-
-    const multiSlide =
-        promoAtivas.length > 1;
-
-
-    if (prevBtn) {
-
-        prevBtn.style.display =
-            multiSlide ? 'flex' : 'none';
-
-    }
-
-
-    if (nextBtn) {
-
-        nextBtn.style.display =
-            multiSlide ? 'flex' : 'none';
-
-    }
-
-
-    if (dotsContainer) {
-
-        dotsContainer.style.display =
-            multiSlide ? 'flex' : 'none';
-
-    }
-
-
-    if (multiSlide) {
-
-        setInterval(
-            () => window.mudarPromoSlide(1),
-            6000
-        );
-
-    }
-
-
-    irParaSlide(0);
-
-}
-
-
-// Muda o slide
-
-function irParaSlide(idx) {
-
-    if (!promoAtivas.length) {
-        return;
-    }
-
-
-    promoAtualIdx =
-        (idx + promoAtivas.length) %
-        promoAtivas.length;
-
-
-    const slidesContainer =
-        document.getElementById('promo-slides');
-
-
-    if (slidesContainer) {
-
-        slidesContainer.style.transform =
-            `translateX(-${promoAtualIdx * 100}%)`;
-
-    }
-
-
-    document
-        .querySelectorAll('.promo-dot')
-        .forEach((dot, i) => {
-
-            dot.classList.toggle(
-                'active',
-                i === promoAtualIdx
-            );
-
-        });
-
-}
-
-
-// Função global dos botões
-
-window.mudarPromoSlide =
-    function (direction) {
-
-        irParaSlide(
-            promoAtualIdx + direction
-        );
-
-    };
-
-
-// Carrega promoções
-
-async function carregarPromocao() {
-
-    try {
-
-        const response =
-            await fetch(`${API_URL}/promocoes`);
-
-
-        const todas =
-            await response.json();
-
-
-        const agora =
-            new Date();
-
-
-        promoAtivas =
-            todas.filter(p => {
-
-                if (
-                    !p.dataInicio ||
-                    !p.dataFim
-                ) {
-                    return false;
-                }
-
-
-                try {
-
-                    const [iY, iM, iD] =
-                        p.dataInicio
-                            .split('-')
-                            .map(Number);
-
-
-                    const [fY, fM, fD] =
-                        p.dataFim
-                            .split('-')
-                            .map(Number);
-
-
-                    const inicio =
-                        new Date(
-                            iY,
-                            iM - 1,
-                            iD,
-                            0,
-                            0,
-                            0
-                        );
-
-
-                    const fim =
-                        new Date(
-                            fY,
-                            fM - 1,
-                            fD,
-                            23,
-                            59,
-                            59
-                        );
-
-
-                    const statusMatch =
-                        p.status &&
-                        p.status
-                            .trim()
-                            .toLowerCase() === 'ativa';
-
-
-                    return (
-                        statusMatch &&
-                        agora >= inicio &&
-                        agora <= fim
-                    );
-
-
-                } catch {
-
-                    return false;
-
-                }
-
-            });
-
-
-        renderizarCarrossel();
-
-
-    } catch (error) {
-
-        console.error(
-            'Erro ao carregar promoções:',
-            error
-        );
-
-    }
-
-}
-
 
 // ============================================================
 // SERVIÇOS ESPIRITUAIS
@@ -745,6 +368,114 @@ async function carregarPromocao() {
 
 let servicosEspirituais = [];
 
+// Formata o preço do serviço em Real (ex: R$ 200,00)
+function formatarPreco(valor) {
+
+    const num = Number(valor);
+
+    if (isNaN(num) || num <= 0) {
+        return null;
+    }
+
+    return num.toLocaleString(
+        'pt-BR',
+        {
+            style: 'currency',
+            currency: 'BRL'
+        }
+    );
+
+}
+
+// Converte a lista de modalidades ("PRESENCIAL,ONLINE")
+// em um rótulo amigável (ex: 🏠 Presencial • 💻 Online)
+function labelModalidades(modalidades) {
+
+    const lista =
+        (modalidades || '')
+            .split(',')
+            .map(m => m.trim().toLowerCase())
+            .filter(Boolean);
+
+    if (!lista.length) {
+        return null;
+    }
+
+    const nomes = {
+        presencial: '🏠 Presencial',
+        online: '💻 Online'
+    };
+
+    return lista.map(
+        m => nomes[m] || m
+    ).join(' • ');
+
+}
+
+// Exibe apenas as modalidades permitidas do serviço selecionado.
+// Se o serviço não define modalidades (campo vazio = configurável
+// pelo administrador), as duas opções continuam disponíveis.
+function atualizarModalidadesDoServico() {
+
+    const selectServico =
+        document.getElementById('servico');
+
+    if (!selectServico) {
+        return;
+    }
+
+    const servicoSelecionado =
+        servicosEspirituais.find(
+            s => s.nome === selectServico.value
+        );
+
+    const lista =
+        servicoSelecionado &&
+        servicoSelecionado.modalidades
+            ? servicoSelecionado.modalidades
+                .split(',')
+                .map(m => m.trim().toLowerCase())
+                .filter(Boolean)
+            : [];
+
+    document
+        .querySelectorAll('.modalidade-label')
+        .forEach(lbl => {
+
+            const radio =
+                lbl.querySelector(
+                    'input[name="modalidade"]'
+                );
+
+            if (!radio) {
+                return;
+            }
+
+            const permitido =
+                !lista.length ||
+                lista.includes(radio.value);
+
+            lbl.style.display =
+                permitido ? '' : 'none';
+
+        });
+
+    const checked =
+        document.querySelector(
+            'input[name="modalidade"]:checked'
+        );
+
+    if (
+        checked &&
+        checked.closest('.modalidade-label')
+            .style.display === 'none'
+    ) {
+
+        checked.checked = false;
+
+    }
+
+}
 
 async function carregarServicos() {
 
@@ -752,7 +483,6 @@ async function carregarServicos() {
 
         const response =
             await fetch(`${API_URL}/servicos`);
-
 
         if (!response.ok) {
 
@@ -762,10 +492,33 @@ async function carregarServicos() {
 
         }
 
-
         servicosEspirituais =
             await response.json();
 
+        // ----------------------------------------------------
+        // SOMENTE SERVIÇOS "DISPONÍVEL" NO SITE PÚBLICO
+        // ----------------------------------------------------
+        // O administrador controla o status no painel.
+        // Se um serviço for marcado como "Indisponível",
+        // ele deixa de aparecer nos cards e no agendamento.
+        // ----------------------------------------------------
+
+        servicosEspirituais =
+            servicosEspirituais.filter(serv => {
+
+                const status =
+                    (serv.status || '')
+                        .trim()
+                        .toLowerCase()
+                        .normalize('NFD')
+                        .replace(/[\u0300-\u036f]/g, '');
+
+                return (
+                    !status ||
+                    status === 'disponivel'
+                );
+
+            });
 
         // ----------------------------------------------------
         // CARDS DOS SERVIÇOS
@@ -775,7 +528,6 @@ async function carregarServicos() {
             document.getElementById(
                 'servicos-container'
             );
-
 
         if (container) {
 
@@ -800,16 +552,19 @@ async function carregarServicos() {
 
                 container.innerHTML = '';
 
-
                 servicosEspirituais.forEach(serv => {
 
                     const card =
                         document.createElement('div');
 
-
                     card.className =
                         'product-card';
 
+                    const precoFmt =
+                        formatarPreco(serv.preco);
+
+                    const modalidadesFmt =
+                        labelModalidades(serv.modalidades);
 
                     card.innerHTML = `
 
@@ -819,25 +574,30 @@ async function carregarServicos() {
                             class="product-img"
                         >
 
-
                         <div class="product-info">
 
                             <h3 class="product-title">
                                 ${serv.nome}
                             </h3>
 
-
                             <p
-                                style="
-                                    font-size:0.95rem;
-                                    color:#555;
-                                    margin-bottom:1rem;
-                                "
+                                class="product-desc"
                             >
                                 ${serv.descricao ||
                                 'Atendimento espiritual disponível.'}
                             </p>
 
+                            ${
+                                precoFmt
+                                ? `<p class="product-price">${precoFmt}</p>`
+                                : ''
+                            }
+
+                            ${
+                                modalidadesFmt
+                                ? `<p class="product-modalities">${modalidadesFmt}</p>`
+                                : ''
+                            }
 
                             <a
                                 href="#agendamento"
@@ -855,13 +615,11 @@ async function carregarServicos() {
 
                     `;
 
-
                     // Botão Agendar
                     const botao =
                         card.querySelector(
                             '[data-servico]'
                         );
-
 
                     if (botao) {
 
@@ -878,7 +636,6 @@ async function carregarServicos() {
 
                     }
 
-
                     container.appendChild(card);
 
                 });
@@ -887,13 +644,11 @@ async function carregarServicos() {
 
         }
 
-
         // ----------------------------------------------------
         // SELECT DO AGENDAMENTO
         // ----------------------------------------------------
 
         carregarServicosNoAgendamento();
-
 
     } catch (error) {
 
@@ -902,12 +657,10 @@ async function carregarServicos() {
             error
         );
 
-
         const container =
             document.getElementById(
                 'servicos-container'
             );
-
 
         if (container) {
 
@@ -933,7 +686,6 @@ async function carregarServicos() {
 
 }
 
-
 // ============================================================
 // SERVIÇOS NO SELECT DO AGENDAMENTO
 // ============================================================
@@ -943,11 +695,9 @@ function carregarServicosNoAgendamento() {
     const selectServico =
         document.getElementById('servico');
 
-
     if (!selectServico) {
         return;
     }
-
 
     selectServico.innerHTML = `
 
@@ -956,7 +706,6 @@ function carregarServicosNoAgendamento() {
         </option>
 
     `;
-
 
     if (!servicosEspirituais.length) {
 
@@ -972,27 +721,36 @@ function carregarServicosNoAgendamento() {
 
     }
 
-
     servicosEspirituais.forEach(servico => {
 
         const option =
             document.createElement('option');
 
-
         option.value =
             servico.nome;
 
-
         option.textContent =
             servico.nome;
-
 
         selectServico.appendChild(option);
 
     });
 
-}
+    // Filtra as modalidades conforme o serviço escolhido
+    atualizarModalidadesDoServico();
 
+    if (!selectServico.dataset.modalListener) {
+
+        selectServico.dataset.modalListener = '1';
+
+        selectServico.addEventListener(
+            'change',
+            atualizarModalidadesDoServico
+        );
+
+    }
+
+}
 
 // ============================================================
 // SELECIONAR SERVIÇO A PARTIR DO CARD
@@ -1003,89 +761,32 @@ function selecionarServicoEspiritual(nomeServico) {
     const selectServico =
         document.getElementById('servico');
 
-
     if (!selectServico) {
         return;
     }
 
-
     selectServico.value =
         nomeServico;
-
 
     // Garante que a área seja espiritual
 
     const areaInput =
         document.getElementById('area');
 
-
     if (areaInput) {
         areaInput.value = 'espiritual';
     }
 
-}
+    // Filtra as modalidades conforme o serviço escolhido
 
+    atualizarModalidadesDoServico();
+
+}
 
 // Disponibiliza caso alguma parte antiga do site precise
 
 window.selecionarServicoEspiritual =
     selecionarServicoEspiritual;
-
-
-// ============================================================
-// CÓDIGO ANTIGO DE ESTÉTICA
-// ============================================================
-// NÃO É UTILIZADO PELO NOVO SITE ESPIRITUAL.
-//
-// Mantido aqui para referência futura.
-//
-// Se um dia você quiser voltar a utilizar estética/cabelo,
-// a função original pode ser recuperada.
-//
-// ------------------------------------------------------------
-//
-// async function carregarProcedimentos() {
-//     const container =
-//         document.getElementById('procedimentos-container');
-//
-//     if (!container) return;
-//
-//     const response =
-//         await fetch(`${API_URL}/procedimentos`);
-//
-//     const procedimentos =
-//         await response.json();
-//
-//     // ... código original ...
-// }
-//
-// ============================================================
-
-
-// ============================================================
-// CÓDIGO ANTIGO DE CATÁLOGO
-// ============================================================
-// NÃO É UTILIZADO PELO NOVO SITE ESPIRITUAL.
-//
-// Mantido apenas como referência.
-//
-// O catálogo de roupas continua pertencendo ao site
-// principal Rosa Modas.
-//
-// ============================================================
-
-
-// ============================================================
-// CÓDIGO ANTIGO DO CMS
-// ============================================================
-// NÃO É NECESSÁRIO NO NOVO SITE ESPIRITUAL.
-//
-// O site espiritual possui textos próprios.
-//
-// Mantido comentado conceitualmente para preservação.
-//
-// ============================================================
-
 
 // ============================================================
 // CONFIGURAÇÃO DA AGENDA
@@ -1107,7 +808,6 @@ let agendaConfig = {
 
 };
 
-
 // ============================================================
 // INICIALIZAÇÃO DA AGENDA
 // ============================================================
@@ -1119,11 +819,9 @@ async function inicializarAgenda() {
             'date-carousel'
         );
 
-
     if (!dateCarousel) {
         return;
     }
-
 
     try {
 
@@ -1136,10 +834,8 @@ async function inicializarAgenda() {
                 `${API_URL}/config-agenda`
             );
 
-
         const config =
             await resConfig.json();
-
 
         if (config) {
 
@@ -1148,16 +844,13 @@ async function inicializarAgenda() {
                     config.intervalo || "60"
                 );
 
-
             agendaConfig.horaInicio =
                 config.horaInicio ||
                 "09:00";
 
-
             agendaConfig.horaFim =
                 config.horaFim ||
                 "18:00";
-
 
             agendaConfig.diasSemana =
                 (
@@ -1167,14 +860,12 @@ async function inicializarAgenda() {
                     .split(',')
                     .map(d => parseInt(d));
 
-
             agendaConfig.datasBloqueadas =
                 config.datasBloqueadas
                     ? config.datasBloqueadas.split(',')
                     : [];
 
         }
-
 
         // ----------------------------------------------------
         // AGENDAMENTOS EXISTENTES
@@ -1185,10 +876,8 @@ async function inicializarAgenda() {
                 `${API_URL}/agendamentos`
             );
 
-
         const agendamentos =
             await resAg.json();
-
 
         // ----------------------------------------------------
         // LIMPA A AGENDA
@@ -1196,17 +885,13 @@ async function inicializarAgenda() {
 
         dateCarousel.innerHTML = '';
 
-
         const hoje =
             new Date();
 
-
         let diasGerados = 0;
-
 
         let diaCorrente =
             new Date(hoje);
-
 
         // ----------------------------------------------------
         // GERA OS PRÓXIMOS DIAS
@@ -1221,25 +906,20 @@ async function inicializarAgenda() {
             const diaSemana =
                 diaCorrente.getDay();
 
-
             const dataStr =
                 diaCorrente
                     .toISOString()
                     .split('T')[0];
 
-
             const diaTrabalhado =
                 agendaConfig.diasSemana
                     .includes(diaSemana);
-
 
             const diaBloqueado =
                 agendaConfig.datasBloqueadas
                     .includes(dataStr);
 
-
             let hojeValido = true;
-
 
             if (i === 0) {
 
@@ -1248,10 +928,8 @@ async function inicializarAgenda() {
                         .split(':')
                         .map(Number);
 
-
                 const limiteHoje =
                     new Date(hoje);
-
 
                 limiteHoje.setHours(
                     fimH,
@@ -1259,7 +937,6 @@ async function inicializarAgenda() {
                     0,
                     0
                 );
-
 
                 if (hoje >= limiteHoje) {
 
@@ -1269,7 +946,6 @@ async function inicializarAgenda() {
 
             }
 
-
             if (
                 diaTrabalhado &&
                 !diaBloqueado &&
@@ -1278,7 +954,6 @@ async function inicializarAgenda() {
 
                 const dayNum =
                     diaCorrente.getDate();
-
 
                 const dayName =
                     diaCorrente
@@ -1290,20 +965,16 @@ async function inicializarAgenda() {
                         )
                         .replace('.', '');
 
-
                 const card =
                     document.createElement(
                         'div'
                     );
 
-
                 card.className =
                     'date-card';
 
-
                 card.dataset.date =
                     dataStr;
-
 
                 card.innerHTML = `
 
@@ -1316,7 +987,6 @@ async function inicializarAgenda() {
                     </span>
 
                 `;
-
 
                 card.addEventListener(
                     'click',
@@ -1331,11 +1001,9 @@ async function inicializarAgenda() {
                                     .remove('active')
                             );
 
-
                         card.classList.add(
                             'active'
                         );
-
 
                         carregarHorariosDoDia(
                             dataStr,
@@ -1345,23 +1013,19 @@ async function inicializarAgenda() {
                     }
                 );
 
-
                 dateCarousel.appendChild(
                     card
                 );
 
-
                 diasGerados++;
 
             }
-
 
             diaCorrente.setDate(
                 diaCorrente.getDate() + 1
             );
 
         }
-
 
         if (diasGerados === 0) {
 
@@ -1375,7 +1039,6 @@ async function inicializarAgenda() {
 
         }
 
-
     } catch (error) {
 
         console.error(
@@ -1386,7 +1049,6 @@ async function inicializarAgenda() {
     }
 
 }
-
 
 // ============================================================
 // HORÁRIOS DISPONÍVEIS
@@ -1402,30 +1064,24 @@ function carregarHorariosDoDia(
             'time-slots'
         );
 
-
     if (!timeSlotsContainer) {
         return;
     }
 
-
     timeSlotsContainer.innerHTML = '';
-
 
     const [startH, startM] =
         agendaConfig.horaInicio
             .split(':')
             .map(Number);
 
-
     const [endH, endM] =
         agendaConfig.horaFim
             .split(':')
             .map(Number);
 
-
     const dataAtual =
         new Date();
-
 
     const selecionadaHoje =
         (
@@ -1435,10 +1091,8 @@ function carregarHorariosDoDia(
                 .split('T')[0]
         );
 
-
     let slot =
         new Date();
-
 
     slot.setHours(
         startH,
@@ -1447,10 +1101,8 @@ function carregarHorariosDoDia(
         0
     );
 
-
     const limiteFim =
         new Date();
-
 
     limiteFim.setHours(
         endH,
@@ -1459,9 +1111,7 @@ function carregarHorariosDoDia(
         0
     );
 
-
     let slotsCount = 0;
-
 
     // --------------------------------------------------------
     // GERA OS HORÁRIOS
@@ -1475,13 +1125,10 @@ function carregarHorariosDoDia(
                 .split(' ')[0]
                 .substring(0, 5);
 
-
         const dateTimeString =
             `${dataStr}T${horaStr}`;
 
-
         let horarioPassou = false;
-
 
         if (selecionadaHoje) {
 
@@ -1489,7 +1136,6 @@ function carregarHorariosDoDia(
                 new Date(
                     `${dataStr}T${horaStr}`
                 );
-
 
             if (
                 dataAtual >= slotCompleto
@@ -1500,7 +1146,6 @@ function carregarHorariosDoDia(
             }
 
         }
-
 
         // ----------------------------------------------------
         // VERIFICA SE ESTÁ OCUPADO
@@ -1515,7 +1160,6 @@ function carregarHorariosDoDia(
                         ''
                     ).toLowerCase();
 
-
                 return (
                     ag.dataHora ===
                     dateTimeString &&
@@ -1524,7 +1168,6 @@ function carregarHorariosDoDia(
 
             });
 
-
         if (!horarioPassou) {
 
             const btnSlot =
@@ -1532,16 +1175,13 @@ function carregarHorariosDoDia(
                     'div'
                 );
 
-
             btnSlot.className =
                 'time-slot';
-
 
             if (isBooked) {
 
                 btnSlot.className +=
                     ' booked';
-
 
                 btnSlot.innerHTML = `
 
@@ -1563,7 +1203,6 @@ function carregarHorariosDoDia(
                 btnSlot.textContent =
                     horaStr;
 
-
                 btnSlot.addEventListener(
                     'click',
                     () => {
@@ -1577,17 +1216,14 @@ function carregarHorariosDoDia(
                                     .remove('active')
                             );
 
-
                         btnSlot.classList.add(
                             'active'
                         );
-
 
                         const input =
                             document.getElementById(
                                 'selected-date-time'
                             );
-
 
                         if (input) {
 
@@ -1601,16 +1237,13 @@ function carregarHorariosDoDia(
 
             }
 
-
             timeSlotsContainer.appendChild(
                 btnSlot
             );
 
-
             slotsCount++;
 
         }
-
 
         slot.setMinutes(
             slot.getMinutes() +
@@ -1618,7 +1251,6 @@ function carregarHorariosDoDia(
         );
 
     }
-
 
     if (slotsCount === 0) {
 
@@ -1634,6 +1266,35 @@ function carregarHorariosDoDia(
 
 }
 
+// ============================================================
+// CONTEÚDO CMS (TEXTOS EDITÁVEIS PELO PAINEL ADMINISTRATIVO)
+// ============================================================
+
+async function carregarConteudoCMS() {
+    try {
+        const response = await fetch(`${API_URL}/conteudo?site=UNIVERSO_ROSA`);
+        const content = await response.json();
+        if (!content) return;
+
+        // Aplica os textos dinâmicos na Hero Section
+        const heroTitle = document.querySelector('.hero-spiritual-only .hero-title');
+        const heroDesc = document.querySelector('.hero-spiritual-only .hero-description');
+        if (heroTitle && content.heroTitulo) heroTitle.textContent = content.heroTitulo;
+        if (heroDesc && content.heroDescricao) heroDesc.textContent = content.heroDescricao;
+
+        // Aplica o slogan editável no Rodapé do site
+        const footerSlogan = document.querySelector('footer p:nth-of-type(1)');
+        if (footerSlogan && content.footerSlogan) footerSlogan.textContent = content.footerSlogan;
+    } catch (error) {
+        console.error("Erro ao carregar conteúdo CMS do site:", error);
+    }
+}
+
+// Aplica os links cruzados entre os dois sites (Universo Rosa ↔ Rosa Modas)
+function aplicarLinksRosaModas() {
+    const links = document.querySelectorAll('#link-rosa-modas, #link-rosa-modas-footer');
+    links.forEach(link => { if (link) link.href = ROSA_MODAS_URL; });
+}
 
 // ============================================================
 // INICIALIZAÇÃO DO SITE
@@ -1643,27 +1304,25 @@ window.addEventListener(
     'DOMContentLoaded',
     () => {
 
-        // Promoções continuam disponíveis,
-        // caso você queira utilizá-las no futuro.
-        carregarPromocao();
-
-
         // PRINCIPAL:
         // Carrega os serviços espirituais
         // e preenche também o agendamento.
         carregarServicos();
 
+        // Textos editáveis (hero e rodapé) pelo painel
+        carregarConteudoCMS();
+
+        // Links cruzados entre os dois sites
+        aplicarLinksRosaModas();
 
         // Inicializa a agenda.
         inicializarAgenda();
-
 
         // MODO NOTURNO
         inicializarModoNoturno();
 
     }
 );
-
 
 // ============================================================
 // MODO NOTURNO

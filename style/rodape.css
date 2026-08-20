@@ -1,64 +1,80 @@
-/* Linha separadora */
+/* Linha separadora decorativa */
 hr {
     margin: 0;
+    border: 0;
+    height: 4px;
+    background: var(--rosa-degrade);
 }
 
-/* Estilo base do rodapé */
+/* Rodapé escuro */
 .rodape {
-    background-color: var(--branco);
-    padding: 1em;
+    background: #241220;
+    color: #e7d4de;
+    padding: 2.5rem 1.5rem;
+    display: grid;
+    gap: 2rem;
+    text-align: center;
 }
 
-/* Oculta a lista no mobile */
+.rodape__titulo {
+    font-size: 1.6rem;
+    font-weight: 800;
+    background: var(--rosa-degrade);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Listas visíveis também no mobile (empilhadas) */
 .lista-rodape {
-    display: none;
+    list-style: none;
+    margin: 0;
+    padding: 0;
 }
 
-/* Hover dos links */
+.lista-rodape__titulo {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--rosa-claro);
+    padding-bottom: 1rem;
+}
+
+.lista-rodape__item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    margin: 0.6em 0;
+    color: #cfa9bd;
+}
+
+.lista-rodape__item img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+}
+
+.lista-rodape__link {
+    text-decoration: none;
+    color: #e7d4de;
+    transition: var(--transicao);
+}
+
 .lista-rodape__link:hover {
-    color: var(--laranja);
+    color: var(--rosa-claro);
 }
 
-/* Estilos a partir de 1024px (desktop/tablet grande) */
+/* Rodapé em colunas no desktop */
 @media screen and (min-width: 1024px) {
     .rodape {
-        display: flex;
-        justify-content: space-around;
-        padding: 3.4rem 0;
-    }
-
-    .lista-rodape {
-        display: block;
-    }
-
-    .lista-rodape__titulo {
-        font-size: 0.87rem;
-        color: var(--cinza-claro);
-        padding-bottom: 1.56em;
-        align-items: first baseline;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 2rem;
+        padding: 3.5rem 5%;
+        text-align: left;
     }
 
     .lista-rodape__item {
-        display: flex;
-        align-items: center;
-        margin: 0.6em 0;
-    }
-
-    .lista-rodape__link {
-        text-decoration: none;
-        color: var(--cinza);
-        margin-left: 0.6em;
-    }
-
-    .rodape__titulo {
-        font-size: 1.5rem;
-    }
-}
-
-/* Estilo para telas muito grandes (monitor) */
-@media screen and (min-width: 1728px) {
-    .lista-rodape {
-        border-left: 1px solid var(--cinza-claro);
-        padding-left: 1em;
+        justify-content: flex-start;
     }
 }

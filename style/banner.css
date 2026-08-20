@@ -1,92 +1,102 @@
+/* banner.css — Seção de abertura (hero) da home com gradiente rosa e botão de destaque. */
+
 .banner {
-    background: var(--rosa-degrade);
+    position: relative;
+    background: var(--rosa-degrade-forte);
     color: var(--branco);
     text-align: center;
-    padding: 2.5em 2em;
+    padding: 5rem 1.5rem;
+    overflow: hidden;
+}
+
+.banner::before,
+.banner::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.banner::before {
+    width: 360px;
+    height: 360px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.22), transparent 70%);
+    top: -140px;
+    left: -100px;
+}
+
+.banner::after {
+    width: 320px;
+    height: 320px;
+    background: radial-gradient(circle, rgba(255, 182, 193, 0.3), transparent 70%);
+    bottom: -140px;
+    right: -80px;
 }
 
 .banner__titulo {
-    font-size: 1.125rem;
-    font-weight: 700;
+    position: relative;
+    font-size: 1.8rem;
+    font-weight: 800;
+    line-height: 1.25;
+    text-shadow: 0 4px 18px rgba(0, 0, 0, 0.18);
 }
 
 .banner__texto {
-    font-weight: 500;
-    margin: 1em 0;
+    position: relative;
+    font-weight: 400;
+    font-size: 1.05rem;
+    margin: 1rem 0 1.6rem;
+    opacity: 0.96;
 }
 
 .banner__botao {
+    position: relative;
     display: inline-block;
-    margin-top: 0.5rem;
-    padding: 0.9rem 1.4rem;
+    padding: 0.95rem 2rem;
     border-radius: 999px;
     background-color: var(--branco);
-    color: var(--roxo-escuro, #7b2cbf);
+    color: var(--laranja);
     font-weight: 700;
     text-decoration: none;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 12px 26px rgba(0, 0, 0, 0.18);
+    transition: var(--transicao);
 }
 
 .banner__botao:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
-}
-
-.banner__pesquisa {
-    background-color: transparent;
-    border: 1px solid var(--branco);
-    color: var(--branco);
-    border-radius: 24px;
-    padding: 1em;
-    width: 100%;
-}
-
-.banner__pesquisa::placeholder {
-    font-family: var(--fonte-principal);
-    font-size: 0.87rem;
-    font-weight: 400px;
-    text-align: center;
-    color: var(--branco);
-    background: url(../img/Lupa.svg)no-repeat;
-    background-position: 1em;
+    transform: translateY(-3px);
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.24);
 }
 
 .descricao__imagem {
     width: 30vw;
+    border-radius: 16px;
+    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.14);
 }
 
 @media screen and (min-width: 1024px) {
+    .banner {
+        padding: 6.5rem 2rem;
+    }
+
     .banner__titulo {
-        font-size: 2.25rem;
+        font-size: 3rem;
     }
 
-    .banner__pesquisa {
-        width: 50%;
-    }
-
-    .banner__pesquisa::placeholder {
-        background-position: 7em;
+    .banner__texto {
+        font-size: 1.15rem;
     }
 
     .descricao__imagem {
         width: 15vw;
     }
 }
-    @media screen and (min-width: 1728px) {
-        .banner__pesquisa {
-            width: 38%;
-        }
 
-        .banner__pesquisa::placeholder {
-            background-position: 12em;
-        }
-
-        .banner {
-            padding: 5em 0;
-        }
-
-        .descricao__imagem {
-            width: 15vw;
-        }
+@media screen and (min-width: 1728px) {
+    .banner {
+        padding: 7rem 0;
     }
+
+    .descricao__imagem {
+        width: 15vw;
+    }
+}
