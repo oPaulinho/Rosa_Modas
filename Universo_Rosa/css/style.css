@@ -215,6 +215,32 @@ section {
   object-fit: cover;
 }
 
+/* Ícone padrão do atendimento (sem imagem cadastrada) */
+.product-icon {
+  width: 100%;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4.5rem;
+  line-height: 1;
+  background: linear-gradient(135deg, rgba(126, 87, 194, 0.10), rgba(179, 157, 219, 0.20));
+  border-bottom: 1px solid rgba(126, 87, 194, 0.08);
+}
+
+/* Ícone nas tabelas do painel administrativo */
+.admin-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  font-size: 1.4rem;
+  line-height: 1;
+  border-radius: 12px;
+  background: rgba(126, 87, 194, 0.10);
+}
+
 .product-info {
   padding: 1.5rem;
   display: flex;
@@ -1561,6 +1587,11 @@ body.dark-mode .product-card {
   background: rgba(42, 26, 64, 0.90);
   border-color: rgba(126, 87, 194, 0.20);
   color: #e8ddff;
+}
+
+body.dark-mode .product-icon {
+  background: linear-gradient(135deg, rgba(126, 87, 194, 0.22), rgba(179, 157, 219, 0.15));
+  border-bottom-color: rgba(126, 87, 194, 0.25);
 }
 
 body.dark-mode .product-card:hover {

@@ -322,6 +322,7 @@
                     <h4>Adicionar Procedimento</h4>
                     <form id="form-procedimento"
                         style="margin-top: 1rem; display: grid; gap: 1rem; grid-template-columns: 1fr 1fr;">
+                        <input type="hidden" id="proc-id">
                         <div class="input-group" style="margin: 0;">
                             <label>Nome do Procedimento</label>
                             <input type="text" id="proc-nome" required>
@@ -345,10 +346,24 @@
                             <textarea id="proc-descricao" rows="3" required
                                 style="width: 100%; padding: 1rem; border-radius: 10px; border: 2px solid var(--color-gray);"></textarea>
                         </div>
-                        <div class="input-group" style="margin: 0; grid-column: 1 / -1;">
-                            <label>Imagem do Procedimento</label>
-                            <input type="file" id="proc-imagem" accept="image/*">
+                        <div class="input-group" style="margin: 0;">
+                            <label>Ícone</label>
+                            <select id="proc-icone" style="font-size: 1.2rem;">
+                                <option value="✦">✦  Padrão</option>
+                                <option value="💇‍♀️">💇‍♀️  Escova</option>
+                                <option value="💆‍♀️">💆‍♀️  Botox/Hidratação</option>
+                                <option value="💁‍♀️">💁‍♀️  Progressiva/Alisamento</option>
+                                <option value="💧">💧  Hidratação/Nutrição</option>
+                                <option value="🎨">🎨  Tintura/Mechas</option>
+                                <option value="✂️">✂️  Corte</option>
+                                <option value="🔬">🔬  Reconstrução</option>
+                                <option value="🧴">🧴  Limpeza/Selagem</option>
+                                <option value="💎">💎  Brilho/Cauterização</option>
+                                <option value="🌿">🌿  Natural/Orgânico</option>
+                                <option value="✨">✨  Genérico</option>
+                            </select>
                         </div>
+                        <input type="hidden" id="proc-id">
                         <button type="submit" class="btn-submit" id="btn-add-proc" style="grid-column: 1 / -1;">Salvar
                             Procedimento</button>
                     </form>
@@ -358,7 +373,7 @@
                 <table class="data-table">
                     <thead>
                         <tr>
-                            <th>Imagem</th>
+                            <th>Ícone</th>
                             <th>Nome</th>
                             <th>Status</th>
                             <th>Site</th>
@@ -418,10 +433,22 @@
                             <textarea id="serv-descricao" rows="3" required
                                 style="width: 100%; padding: 1rem; border-radius: 10px; border: 2px solid var(--color-gray);"></textarea>
                         </div>
-                        <div class="input-group" style="margin: 0; grid-column: 1 / -1;">
-                            <label>Imagem do Serviço</label>
-                            <input type="file" id="serv-imagem" accept="image/*">
+                        <div class="input-group" style="margin: 0;">
+                            <label>Ícone</label>
+                            <select id="serv-icone" style="font-size: 1.2rem;">
+                                <option value="✦">✦  Padrão</option>
+                                <option value="🔮">🔮  Consulta</option>
+                                <option value="🃏">🃏  Cartas/Jogo</option>
+                                <option value="✨">✨  Orientação/Energia</option>
+                                <option value="🕊️">🕊️  Espiritual/Vida</option>
+                                <option value="🕯️">🕯️  Mediunidade</option>
+                                <option value="🤲">🤲  Acolhimento</option>
+                                <option value="🙏">🙏  Oração</option>
+                                <option value="🖐️">🖐️  Reiki/Imposição</option>
+                                <option value="💫">💫  Energia</option>
+                            </select>
                         </div>
+                        <input type="hidden" id="serv-id">
                         <button type="submit" class="btn-submit" id="btn-add-serv" style="grid-column: 1 / -1;">Salvar
                             Serviço</button>
                     </form>
@@ -431,7 +458,7 @@
                 <table class="data-table">
                     <thead>
                         <tr>
-                            <th>Imagem</th>
+                            <th>Ícone</th>
                             <th>Nome</th>
                             <th>Preço</th>
                             <th>Modalidades</th>

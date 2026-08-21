@@ -20,6 +20,7 @@ public class Servico {
     private String status; // Disponível, Indisponível
     private String modalidades; // "PRESENCIAL,ONLINE" (vazio = configurável pelo administrador)
     private String site = "UNIVERSO_ROSA"; // ROSA_MODAS | UNIVERSO_ROSA
+    private String icone; // emoji/ícone escolhido pelo admin (ex: 🔮, 🃏, ✦)
 
     public Servico() {
     }
@@ -109,5 +110,13 @@ public class Servico {
 
     public void setSite(String site) {
         this.site = site;
+    }
+
+    public String getIcone() {
+        return icone;
+    }
+
+    public void setIcone(String icone) {
+        this.icone = icone;
     }
 }

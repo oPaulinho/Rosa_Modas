@@ -40,6 +40,48 @@ function siteBadge(site) {
     return `<span style="display:inline-block;padding:0.2rem 0.6rem;border-radius:999px;background:${cor}1a;color:${cor};font-weight:600;font-size:0.8rem;white-space:nowrap;">${label}</span>`;
 }
 
+// Ícone visual padrão para serviços e procedimentos (sem depender de imagem).
+// Cada registro ganha um ícone diferente conforme o nome, mantendo o visual bonito.
+function iconeVisual(nome) {
+    const n = (nome || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    const mapa = [
+        ['cartas', '🃏'],
+        ['consulta', '🔮'],
+        ['orientacao', '✨'],
+        ['energia', '💫'],
+        ['vida', '🕊️'],
+        ['mediunidade', '🕯️'],
+        ['espiritual', '🕊️'],
+        ['escova', '💇‍♀️'],
+        ['botox', '💆‍♀️'],
+        ['progressiva', '💁‍♀️'],
+        ['hidratacao', '💧'],
+        ['alisamento', '🧖‍♀️'],
+        ['tintura', '🎨'],
+        ['mechas', '✨'],
+        ['luzes', '✨'],
+        ['corte', '✂️'],
+        ['manicure', '💅'],
+        ['massagem', '💆'],
+        ['limpeza', '🧴'],
+        ['reconstrucao', '🔬']
+    ];
+    for (const [palavra, icone] of mapa) {
+        if (n.includes(palavra)) return icone;
+    }
+    return '✦';
+}
+
+// Lê a mensagem de erro real retornada pela API (se existir)
+async function lerErroResposta(response) {
+    try {
+        const data = await response.json();
+        return (data && data.message) || null;
+    } catch (e) {
+        return null;
+    }
+}
+
 // --- ELEMENTOS DO DOM ---
 const loginSection = document.getElementById('login-section');
 const adminDashboard = document.getElementById('admin-dashboard');
@@ -621,12 +663,16 @@ async function carregarProcedimentosAdmin() {
         tabelaProcedimentos.innerHTML = '';
         procedimentos.forEach(p => {
             const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td><img src="${p.imagemUrl || 'img/procedimento4.jpg'}" alt="${p.nome}" style="width:50px;height:50px;object-fit:cover;border-radius:5px;"></td>
+            const icone = p.icone || iconeVisual(p.nome);
+tr.innerHTML = `
+                <td><span class="admin-icon">${icone}</span></td>
                 <td>${p.nome}</td>
                 <td>${p.status || 'Disponível'}</td>
                 <td>${siteBadge(p.site)}</td>
-                <td><button onclick="window.excluirProcedimento('${p.id}')" style="background:#ffebee;color:#c62828;border:none;padding:0.5rem;border-radius:5px;cursor:pointer;">Excluir</button></td>
+                <td style="white-space:nowrap;">
+                    <button onclick="window.editarProcedimento('${p.id}', '${(p.nome || '').replace(/'/g, "\\'")}', '${(p.descricao || '').replace(/'/g, "\\'")}', '${p.status || 'Disponível'}', '${p.icone || ''}', '${p.site || 'ROSA_MODAS'}')" style="background:#e3f2fd;color:#1565c0;border:none;padding:0.5rem;border-radius:5px;cursor:pointer;margin-right:4px;">✏️ Editar</button>
+                    <button onclick="window.excluirProcedimento('${p.id}')" style="background:#ffebee;color:#c62828;border:none;padding:0.5rem;border-radius:5px;cursor:pointer;">🗑 Excluir</button>
+                </td>
             `;
             tabelaProcedimentos.appendChild(tr);
         });
@@ -635,59 +681,66 @@ async function carregarProcedimentosAdmin() {
     }
 }
 
-// Adiciona novo procedimento capilar com upload físico da foto
+// Adiciona/edita procedimento capilar (sem upload de imagem)
 if (formProcedimento) {
     formProcedimento.addEventListener('submit', async (e) => {
         e.preventDefault();
         const btn = document.getElementById('btn-add-proc');
+        const procId = document.getElementById('proc-id').value; // hidden field for edit
+        const isEdit = !!procId;
+
         btn.disabled = true;
-        btn.textContent = 'Salvando...';
+        btn.textContent = isEdit ? 'Atualizando...' : 'Salvando...';
 
         const nome = document.getElementById('proc-nome').value;
         const descricao = document.getElementById('proc-descricao').value;
         const status = document.getElementById('proc-status').value;
-        const fileInput = document.getElementById('proc-imagem');
-        const file = fileInput.files[0];
+        const icone = document.getElementById('proc-icone').value;
 
         try {
-            let imagemURL = '';
-            if (file) {
-                const formData = new FormData();
-                formData.append('file', file);
-                const uploadRes = await fetch(`${API_URL}/upload`, { method: 'POST', body: formData });
-                const uploadData = await uploadRes.json();
-                imagemURL = uploadData.url;
-            }
+            const payload = { nome, descricao, status, icone, site: document.getElementById('proc-site') ? document.getElementById('proc-site').value : 'ROSA_MODAS' };
 
-            const novo = {
-                nome,
-                descricao,
-                status,
-                imagemUrl: imagemURL,
-                site: document.getElementById('proc-site') ? document.getElementById('proc-site').value : 'ROSA_MODAS'
-            };
+            const url = isEdit ? `${API_URL}/procedimentos/${procId}` : `${API_URL}/procedimentos`;
+            const method = isEdit ? 'PUT' : 'POST';
 
-            const saveRes = await fetch(`${API_URL}/procedimentos`, {
-                method: 'POST',
+            const saveRes = await fetch(url, {
+                method,
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(novo)
+                body: JSON.stringify(payload)
             });
-            if (!saveRes.ok) throw new Error();
+
+            const errorMsg = await lerErroResposta(saveRes);
+            if (!saveRes.ok) throw new Error(errorMsg || (isEdit ? 'Erro ao atualizar procedimento.' : 'Erro ao salvar procedimento.'));
 
             procAlert.className = 'alert success';
-            procAlert.textContent = 'Procedimento salvo com sucesso!';
+            procAlert.textContent = isEdit ? 'Procedimento atualizado com sucesso!' : 'Procedimento salvo com sucesso!';
             formProcedimento.reset();
+            document.getElementById('proc-id').value = '';
+            btn.textContent = 'Salvar Procedimento';
             carregarProcedimentosAdmin();
         } catch (error) {
-            console.error('Erro ao salvar procedimento:', error);
+            console.error('Erro ao salvar/atualizar procedimento:', error);
             procAlert.className = 'alert error';
-            procAlert.textContent = 'Erro ao salvar procedimento.';
+            procAlert.textContent = error.message || (isEdit ? 'Erro ao atualizar procedimento.' : 'Erro ao salvar procedimento.');
         } finally {
             btn.disabled = false;
-            btn.textContent = 'Salvar Procedimento';
+            if (!isEdit) btn.textContent = 'Salvar Procedimento';
         }
     });
 }
+
+// Preenche o formulário para edição de procedimento
+window.editarProcedimento = function (id, nome, descricao, status, icone, site) {
+    document.getElementById('proc-id').value = id;
+    document.getElementById('proc-nome').value = nome;
+    document.getElementById('proc-descricao').value = descricao;
+    document.getElementById('proc-status').value = status;
+    if (icone) document.getElementById('proc-icone').value = icone;
+    if (site) document.getElementById('proc-site').value = site;
+    const btn = document.getElementById('btn-add-proc');
+    btn.textContent = 'Atualizar Procedimento';
+    btn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+};
 
 // Exclui um procedimento capilar
 window.excluirProcedimento = async function (id) {
@@ -728,14 +781,19 @@ async function carregarServicosAdmin() {
             const modalidadesFmt = modalidades.length
                 ? modalidades.map(m => m.toUpperCase() === 'PRESENCIAL' ? '🏠 Presencial' : m.toUpperCase() === 'ONLINE' ? '💻 Online' : m).join(' • ')
                 : 'Configurável';
+            const icone = s.icone || iconeVisual(s.nome);
+            const modalidadesStr = s.modalidades || '';
             tr.innerHTML = `
-                <td><img src="${s.imagemUrl || 'img/atendimento_espiritual.png'}" alt="${s.nome}" style="width:50px;height:50px;object-fit:cover;border-radius:5px;"></td>
+                <td><span class="admin-icon">${icone}</span></td>
                 <td>${s.nome}</td>
                 <td>${precoFmt}</td>
                 <td>${modalidadesFmt}</td>
                 <td>${s.status || 'Disponível'}</td>
                 <td>${siteBadge(s.site)}</td>
-                <td><button onclick="window.excluirServico('${s.id}')" style="background:#ffebee;color:#c62828;border:none;padding:0.5rem;border-radius:5px;cursor:pointer;">Excluir</button></td>
+                <td style="white-space:nowrap;">
+                    <button onclick="window.editarServico('${s.id}', '${(s.nome || '').replace(/'/g, "\\'")}', '${Number(s.preco) || 0}', '${(s.descricao || '').replace(/'/g, "\\'")}', '${s.status || 'Disponível'}', '${modalidadesStr}', '${s.icone || ''}')" style="background:#e3f2fd;color:#1565c0;border:none;padding:0.5rem;border-radius:5px;cursor:pointer;margin-right:4px;">✏️ Editar</button>
+                    <button onclick="window.excluirServico('${s.id}')" style="background:#ffebee;color:#c62828;border:none;padding:0.5rem;border-radius:5px;cursor:pointer;">Excluir</button>
+                </td>
             `;
             tabelaServicos.appendChild(tr);
         });
@@ -744,64 +802,64 @@ async function carregarServicosAdmin() {
     }
 }
 
-// Adiciona novo serviço espiritual com upload físico de imagem
+// Adiciona/edita serviço espiritual (sem upload de imagem)
 if (formServico) {
     formServico.addEventListener('submit', async (e) => {
         e.preventDefault();
         const btn = document.getElementById('btn-add-serv');
+        const servId = document.getElementById('serv-id').value;
+        const isEdit = !!servId;
+
         btn.disabled = true;
-        btn.textContent = 'Salvando...';
+        btn.textContent = isEdit ? 'Atualizando...' : 'Salvando...';
 
         const nome = document.getElementById('serv-nome').value;
         const preco = document.getElementById('serv-preco').value;
         const descricao = document.getElementById('serv-descricao').value;
         const status = document.getElementById('serv-status').value;
+        const icone = document.getElementById('serv-icone').value;
         const modalidadesSelecionadas = [];
         const cbPresencial = document.getElementById('serv-modal-presencial');
         const cbOnline = document.getElementById('serv-modal-online');
         if (cbPresencial && cbPresencial.checked) modalidadesSelecionadas.push(cbPresencial.value);
         if (cbOnline && cbOnline.checked) modalidadesSelecionadas.push(cbOnline.value);
-        const fileInput = document.getElementById('serv-imagem');
-        const file = fileInput.files[0];
 
         try {
-            let imagemURL = '';
-            if (file) {
-                const formData = new FormData();
-                formData.append('file', file);
-                const uploadRes = await fetch(`${API_URL}/upload`, { method: 'POST', body: formData });
-                const uploadData = await uploadRes.json();
-                imagemURL = uploadData.url;
-            }
-
-            const novo = {
+            const payload = {
                 nome,
                 preco: Number(preco),
                 descricao,
                 status,
                 modalidades: modalidadesSelecionadas.join(','),
-                imagemUrl: imagemURL,
+                icone,
                 site: document.getElementById('serv-site') ? document.getElementById('serv-site').value : 'UNIVERSO_ROSA'
             };
 
-            const saveRes = await fetch(`${API_URL}/servicos`, {
-                method: 'POST',
+            const url = isEdit ? `${API_URL}/servicos/${servId}` : `${API_URL}/servicos`;
+            const method = isEdit ? 'PUT' : 'POST';
+
+            const saveRes = await fetch(url, {
+                method,
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(novo)
+                body: JSON.stringify(payload)
             });
-            if (!saveRes.ok) throw new Error();
+
+            const errorMsg = await lerErroResposta(saveRes);
+            if (!saveRes.ok) throw new Error(errorMsg || (isEdit ? 'Erro ao atualizar serviço.' : 'Erro ao salvar serviço.'));
 
             servAlert.className = 'alert success';
-            servAlert.textContent = 'Serviço salvo com sucesso!';
+            servAlert.textContent = isEdit ? 'Serviço atualizado com sucesso!' : 'Serviço salvo com sucesso!';
             formServico.reset();
+            document.getElementById('serv-id').value = '';
+            btn.textContent = 'Salvar Serviço';
             carregarServicosAdmin();
         } catch (error) {
-            console.error('Erro ao salvar serviço espiritual:', error);
+            console.error('Erro ao salvar/atualizar serviço:', error);
             servAlert.className = 'alert error';
-            servAlert.textContent = 'Erro ao salvar serviço.';
+            servAlert.textContent = error.message || (isEdit ? 'Erro ao atualizar serviço.' : 'Erro ao salvar serviço.');
         } finally {
             btn.disabled = false;
-            btn.textContent = 'Salvar Serviço';
+            if (!isEdit) btn.textContent = 'Salvar Serviço';
         }
     });
 }
@@ -818,6 +876,26 @@ window.excluirServico = async function (id) {
         alert('Erro ao excluir serviço.');
     }
 }
+
+// Preenche o formulário para edição de serviço
+window.editarServico = function (id, nome, preco, descricao, status, modalidades, icone) {
+    document.getElementById('serv-id').value = id;
+    document.getElementById('serv-nome').value = nome;
+    document.getElementById('serv-preco').value = preco;
+    document.getElementById('serv-descricao').value = descricao;
+    document.getElementById('serv-status').value = status;
+    if (modalidades) {
+        const mods = modalidades.split(',');
+        const cbPresencial = document.getElementById('serv-modal-presencial');
+        const cbOnline = document.getElementById('serv-modal-online');
+        if (cbPresencial) cbPresencial.checked = mods.includes('PRESENCIAL');
+        if (cbOnline) cbOnline.checked = mods.includes('ONLINE');
+    }
+    if (icone) document.getElementById('serv-icone').value = icone;
+    const btn = document.getElementById('btn-add-serv');
+    btn.textContent = 'Atualizar Serviço';
+    btn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+};
 
 // --- CONTEÚDO CMS (TÍTULOS E TEXTOS DO SITE) ---
 const formConteudo = document.getElementById('form-conteudo');

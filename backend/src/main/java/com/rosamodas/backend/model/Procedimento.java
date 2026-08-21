@@ -17,6 +17,7 @@ public class Procedimento {
     private String imagemUrl;
     private String status; // Disponível, Indisponível
     private String site = "ROSA_MODAS"; // ROSA_MODAS | UNIVERSO_ROSA
+    private String icone; // emoji/ícone escolhido pelo admin (ex: 💇‍♀️, 💧, ✦)
 
     public Procedimento() {
     }
@@ -74,5 +75,13 @@ public class Procedimento {
 
     public void setSite(String site) {
         this.site = site;
+    }
+
+    public String getIcone() {
+        return icone;
+    }
+
+    public void setIcone(String icone) {
+        this.icone = icone;
     }
 }

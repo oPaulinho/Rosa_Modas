@@ -1,10 +1,12 @@
 package com.rosamodas.backend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.rosamodas.backend.model.Procedimento;
 import com.rosamodas.backend.repository.ProcedimentoRepository;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/procedimentos")
@@ -25,25 +27,45 @@ public class ProcedimentoController {
     }
 
     @PostMapping
-    public Procedimento create(@RequestBody Procedimento procedimento) {
+    public ResponseEntity<?> create(@RequestBody Procedimento procedimento) {
+        if (procedimento.getNome() == null || procedimento.getNome().isBlank()) {
+            return ResponseEntity.badRequest().body(Map.of("message", "Informe o nome do procedimento."));
+        }
         if (procedimento.getSite() == null || procedimento.getSite().isBlank()) {
             procedimento.setSite("ROSA_MODAS");
         }
-        return repository.save(procedimento);
+        if (procedimento.getStatus() == null || procedimento.getStatus().isBlank()) {
+            procedimento.setStatus("Disponível");
+        }
+        if (procedimento.getIcone() == null || procedimento.getIcone().isBlank()) {
+            procedimento.setIcone("✦");
+        }
+        try {
+            return ResponseEntity.ok(repository.save(procedimento));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body(Map.of("message", "Erro ao salvar procedimento: " + e.getMessage()));
+        }
     }
 
     @PutMapping("/{id}")
-    public Procedimento update(@PathVariable Long id, @RequestBody Procedimento updated) {
-        return repository.findById(id).map(p -> {
-            p.setNome(updated.getNome());
-            p.setDescricao(updated.getDescricao());
-            if (updated.getImagemUrl() != null) p.setImagemUrl(updated.getImagemUrl());
-            p.setStatus(updated.getStatus());
-            return repository.save(p);
-        }).orElseGet(() -> {
-            updated.setId(id);
-            return repository.save(updated);
-        });
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Procedimento updated) {
+        try {
+            return ResponseEntity.ok(repository.findById(id).map(p -> {
+                if (updated.getNome() != null) p.setNome(updated.getNome());
+                if (updated.getDescricao() != null) p.setDescricao(updated.getDescricao());
+                if (updated.getStatus() != null) p.setStatus(updated.getStatus());
+                if (updated.getSite() != null && !updated.getSite().isBlank()) p.setSite(updated.getSite());
+                if (updated.getIcone() != null) p.setIcone(updated.getIcone());
+                return repository.save(p);
+            }).orElseGet(() -> {
+                updated.setId(id);
+                return repository.save(updated);
+            }));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body(Map.of("message", "Erro ao atualizar procedimento: " + e.getMessage()));
+        }
     }
 
     @DeleteMapping("/{id}")

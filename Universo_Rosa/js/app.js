@@ -412,6 +412,42 @@ function labelModalidades(modalidades) {
 
 }
 
+// Ícone do serviço: usa o ícone customizado do admin (serv.icone) se existir,
+// senão detecta automaticamente pelo nome.
+function iconeServico(serv) {
+
+    // Se tem ícone customizado salvo, usa ele
+    if (serv.icone && serv.icone.trim()) {
+        return serv.icone;
+    }
+
+    // Senão, detecta automaticamente pelo nome
+    const n = (serv.nome || '')
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '');
+
+    const mapa = [
+        ['cartas', '🃏'],
+        ['consulta', '🔮'],
+        ['orientacao', '✨'],
+        ['energia', '💫'],
+        ['vida', '🕊️'],
+        ['mediunidade', '🕯️'],
+        ['espiritual', '🕊️'],
+        ['acolhimento', '🤲'],
+        ['oracao', '🙏'],
+        ['reiki', '🖐️']
+    ];
+
+    for (const [palavra, icone] of mapa) {
+        if (n.includes(palavra)) return icone;
+    }
+
+    return '✦';
+
+}
+
 // Exibe apenas as modalidades permitidas do serviço selecionado.
 // Se o serviço não define modalidades (campo vazio = configurável
 // pelo administrador), as duas opções continuam disponíveis.
@@ -568,11 +604,9 @@ async function carregarServicos() {
 
                     card.innerHTML = `
 
-                        <img
-                            src="${serv.imagemUrl || 'img/atendimento_espiritual.png'}"
-                            alt="${serv.nome}"
-                            class="product-img"
-                        >
+                        <div class="product-icon" aria-hidden="true">
+                            ${iconeServico(serv)}
+                        </div>
 
                         <div class="product-info">
 

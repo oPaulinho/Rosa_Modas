@@ -42,6 +42,38 @@ function precoBRL(valor) {
     return Number(valor || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 }
 
+// Ícone padrão dos procedimentos capilares (sem depender de imagem)
+// Se o procedimento tem ícone customizado (i.icone), usa ele; senão detecta pelo nome.
+function iconeProcedimento(item) {
+    // Se tem ícone customizado salvo, usa ele
+    if (item.icone && item.icone.trim()) {
+        return item.icone;
+    }
+    // Senão, detecta automaticamente pelo nome
+    const n = (item.nome || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    const mapa = [
+        ['escova', '💇‍♀️'],
+        ['botox', '💆‍♀️'],
+        ['progressiva', '💁‍♀️'],
+        ['hidratacao', '💧'],
+        ['alisamento', '🧖‍♀️'],
+        ['tintura', '🎨'],
+        ['mechas', '✨'],
+        ['luzes', '✨'],
+        ['corte', '✂️'],
+        ['reconstrucao', '🔬'],
+        ['nutricao', '🧴'],
+        ['cauterizacao', '🧪'],
+        ['balayage', '🎀'],
+        ['selagem', '🌿'],
+        ['brilho', '💎']
+    ];
+    for (const [palavra, icone] of mapa) {
+        if (n.includes(palavra)) return icone;
+    }
+    return '💇';
+}
+
 // ------------------------------------------------------------
 // TEMA CLARO/ESCURO (rosa)
 // ------------------------------------------------------------
@@ -195,9 +227,16 @@ async function carregarCarrossel(selector, tipo, fallbackImg) {
         disponiveis.forEach(i => {
             const slide = document.createElement('div');
             slide.className = 'swiper-slide';
-            slide.innerHTML = `
-                <img src="${i.imagemUrl || fallbackImg}" alt="${i.nome}" onerror="this.src='${fallbackImg}'">
-                <div class="slide-caption">${i.nome}</div>`;
+            if (tipo === 'procedimentos') {
+                slide.innerHTML = `
+                    <div class="slide-icon">${iconeProcedimento(i)}</div>
+                    <div class="slide-caption">${i.nome}</div>
+                    ${i.descricao ? `<p class="slide-desc">${i.descricao}</p>` : ''}`;
+            } else {
+                slide.innerHTML = `
+                    <img src="${i.imagemUrl || fallbackImg}" alt="${i.nome}" onerror="this.src='${fallbackImg}'">
+                    <div class="slide-caption">${i.nome}</div>`;
+            }
             wrapper.appendChild(slide);
         });
 
