@@ -170,7 +170,6 @@
                         <tr>
                             <th>Data/Hora</th>
                             <th>Cliente</th>
-                            <th>Área</th>
                             <th>Serviço</th>
                             <th>Modalidade</th>
                             <th>Telefone</th>
@@ -180,7 +179,7 @@
                     </thead>
                     <tbody id="tabela-agendamentos">
                         <tr>
-                            <td colspan="8">Carregando agendamentos...</td>
+                            <td colspan="7">Carregando agendamentos...</td>
                         </tr>
                     </tbody>
                 </table>
@@ -189,7 +188,7 @@
             <!-- Painel de Promoções -->
             <section id="panel-promocoes" class="admin-panel">
                 <h3>Gerenciar Promoções</h3>
-                <p>Cadastre promoções com imagem, texto e período de validade. A promoção aparece no topo do site apenas
+                <p>Cadastre promoções com texto e período de validade. A promoção aparece no topo do site apenas
                     durante a data escolhida.</p>
 
                 <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0;">
@@ -227,10 +226,6 @@
                             <label>Data Fim</label>
                             <input type="date" id="promo-data-fim" required>
                         </div>
-                        <div class="input-group" style="margin: 0; grid-column: 1 / -1;">
-                            <label>Imagem da Promoção</label>
-                            <input type="file" id="promo-imagem" accept="image/*">
-                        </div>
                         <button type="submit" class="btn-submit" id="btn-add-promocao"
                             style="grid-column: 1 / -1;">Salvar Promoção</button>
                     </form>
@@ -265,6 +260,8 @@
                     <form id="form-produto"
                         style="margin-top: 1rem; display: grid; gap: 1rem; grid-template-columns: 1fr 1fr;">
 
+                        <input type="hidden" id="prod-id">
+
                         <div class="input-group" style="margin: 0;">
                             <label>Nome da Peça</label>
                             <input type="text" id="prod-nome" required>
@@ -283,9 +280,31 @@
                             </select>
                         </div>
 
-                        <div class="input-group" style="margin: 0; grid-column: 1 / -1;">
-                            <label>Foto da Roupa (Upload)</label>
-                            <input type="file" id="prod-imagem" accept="image/*" required>
+                        <div class="input-group" style="margin: 0;">
+                            <label>Status</label>
+                            <select id="prod-status" required>
+                                <option value="Disponível">Disponível</option>
+                                <option value="Esgotado">Esgotado</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group" style="margin: 0;">
+                            <label>Ícone (Emoji)</label>
+                            <select id="prod-icone" style="font-size: 1.2rem;">
+                                <option value="🌹">🌹  Rosa (padrão)</option>
+                                <option value="👗">👗  Vestido</option>
+                                <option value="👚">👚  Blusa</option>
+                                <option value="👖">👖  Calça</option>
+                                <option value="👠">👠  Sapato</option>
+                                <option value="👜">👜  Bolsa</option>
+                                <option value="🧣">🧣  Cachecol</option>
+                                <option value="🧥">🧥  Jaqueta</option>
+                                <option value="👕">👕  Camiseta</option>
+                                <option value="🩳">🩳  Shorts</option>
+                                <option value="👙">👙  Moda Praia</option>
+                                <option value="🎀">🎀  Acessório</option>
+                                <option value="✨">✨  Genérico</option>
+                            </select>
                         </div>
 
                         <button type="submit" class="btn-submit" id="btn-add-produto"
@@ -297,7 +316,7 @@
                 <table class="data-table">
                     <thead>
                         <tr>
-                            <th>Foto</th>
+                            <th>Ícone</th>
                             <th>Nome</th>
                             <th>Preço</th>
                             <th>Status</th>
@@ -614,25 +633,6 @@
                                 </tbody>
                             </table>
                         </div>
-                    </div>
-
-                    <!-- Números de WhatsApp do Administrador -->
-                    <div
-                        style="background: #f0fdf4; padding: 1.5rem; border-radius: 8px; margin-top: 1rem; border: 1px solid #bbf7d0;">
-                        <h4 style="margin-bottom: 0.5rem; color: #166534;">📱 Números WhatsApp do Administrador</h4>
-                        <p style="font-size: 0.88rem; color: #555; margin-bottom: 1rem;">Informe os números que
-                            receberão notificação quando um agendamento for confirmado. Separe múltiplos números com
-                            vírgula (ex: 11999990000, 11988887777).</p>
-                        <div class="input-group">
-                            <label for="cfg-numeros-admin">Números (somente dígitos, com DDD):</label>
-                            <input type="text" id="cfg-numeros-admin" placeholder="Ex: 11999990000, 21988887777"
-                                style="font-family: monospace;">
-                        </div>
-                        <button type="button" id="btn-save-numeros-admin" class="btn-submit"
-                            style="margin-top: 0.5rem; background: #16a34a;"
-                            onclick="window.salvarNumerosAdmin()">Salvar Números</button>
-                        <div id="numeros-admin-alert" class="alert" style="display:none; margin-top: 0.5rem;"></div>
-                    </div>
 
                 </div>
             </section>

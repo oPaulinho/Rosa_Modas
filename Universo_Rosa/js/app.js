@@ -1,1394 +1,384 @@
-// app.js
-// -------
-// Script do site público UNIVERSO ROSA (espaço espiritual).
-// - Carrega os atendimentos espirituais da API (GET /servicos)
-// - Agenda atendimentos (presencial/online) com validação de conflitos
-// - Textos editáveis da hero e rodapé (CMS, GET/POST /conteudo)
-// - Links cruzados com o Rosa Modas
-// - Modo noturno (preferência salva no localStorage)
+// app.js — site público do Universo Rosa
+// Carrega serviços, agenda, CMS, links pro Rosa Modas e modo noturno
 
 import { API_URL, ROSA_MODAS_URL } from './api-config.js';
 
-// ============================================================
-// MÁSCARA DE TELEFONE
-// ============================================================
-
+// --- Máscara de telefone (formato (11) 99999-9999) ---
 const telInput = document.getElementById('telefone');
-
 if (telInput) {
-
     telInput.addEventListener('input', () => {
-
         let v = telInput.value.replace(/\D/g, '');
-
-        if (v.length > 11) {
-            v = v.slice(0, 11);
-        }
-
-        if (v.length > 6) {
-
-            v = `(${v.slice(0, 2)}) ${v.slice(2, 7)}-${v.slice(7)}`;
-
-        } else if (v.length > 2) {
-
-            v = `(${v.slice(0, 2)}) ${v.slice(2)}`;
-
-        } else if (v.length > 0) {
-
-            v = `(${v}`;
-
-        }
-
+        if (v.length > 11) v = v.slice(0, 11);
+        if (v.length > 6) v = `(${v.slice(0, 2)}) ${v.slice(2, 7)}-${v.slice(7)}`;
+        else if (v.length > 2) v = `(${v.slice(0, 2)}) ${v.slice(2)}`;
+        else if (v.length > 0) v = `(${v}`;
         telInput.value = v;
-
     });
-
 }
 
-// ============================================================
-// AGENDAMENTO
-// ============================================================
-
+// --- Agendamento ---
 const formAgendamento = document.getElementById('form-agendamento');
 const alertAgendamento = document.getElementById('agendamento-alert');
 
 if (formAgendamento) {
-
     formAgendamento.addEventListener('submit', async (e) => {
-
         e.preventDefault();
 
-        const btnSubmit =
-            document.getElementById('btn-submit-agendamento');
+        const btnSubmit = document.getElementById('btn-submit-agendamento');
 
-        // ----------------------------------------------------
-        // COLETA DOS DADOS
-        // ----------------------------------------------------
+        // Pega dados do formulário
+        const servico = document.getElementById('servico').value;
+        const nome = document.getElementById('nome').value.trim();
+        const telefone = document.getElementById('telefone').value.trim();
+        const dataStr = document.getElementById('selected-date-time').value;
+        const modalidade = document.querySelector('input[name="modalidade"]:checked')?.value || '';
 
-        // Este site é exclusivamente espiritual.
-        // Não existe mais seleção de área para o cliente.
-        const area = 'espiritual';
+        // Validações básicas
+        if (!servico) return mostrarErro('Selecione o atendimento desejado.');
+        if (!modalidade) return mostrarErro('Escolha Presencial ou Online.');
+        if (!nome) return mostrarErro('Informe seu nome completo.');
+        const telNumeros = telefone.replace(/\D/g, '');
+        if (telNumeros.length < 10 || telNumeros.length > 11) return mostrarErro('Telefone inválido. Use DDD.');
+        if (!dataStr) return mostrarErro('Escolha data e horário.');
 
-        const servico =
-            document.getElementById('servico').value;
-
-        const nome =
-            document.getElementById('nome').value.trim();
-
-        const telefone =
-            document.getElementById('telefone').value.trim();
-
-        const dataStr =
-            document.getElementById('selected-date-time').value;
-
-        const modalidade =
-            document.querySelector('input[name="modalidade"]:checked')?.value || '';
-
-        // ----------------------------------------------------
-        // VALIDAÇÕES
-        // ----------------------------------------------------
-
-        if (!servico) {
-
-            alertAgendamento.className = "alert error";
-
-            alertAgendamento.textContent =
-                "Por favor, selecione o atendimento espiritual desejado.";
-
-            return;
+        function mostrarErro(msg) {
+            alertAgendamento.className = 'alert error';
+            alertAgendamento.textContent = msg;
         }
-
-        if (!modalidade) {
-
-            alertAgendamento.className = "alert error";
-
-            alertAgendamento.textContent =
-                "Por favor, selecione a modalidade: Presencial ou Online.";
-
-            return;
-        }
-
-        if (!nome) {
-
-            alertAgendamento.className = "alert error";
-
-            alertAgendamento.textContent =
-                "Por favor, informe seu nome completo.";
-
-            return;
-        }
-
-        const telNumeros =
-            telefone.replace(/\D/g, '');
-
-        if (
-            telNumeros.length < 10 ||
-            telNumeros.length > 11
-        ) {
-
-            alertAgendamento.className = "alert error";
-
-            alertAgendamento.textContent =
-                "Informe um telefone válido com DDD (ex: (11) 99999-9999).";
-
-            return;
-        }
-
-        if (!dataStr) {
-
-            alertAgendamento.className = "alert error";
-
-            alertAgendamento.textContent =
-                "Por favor, escolha uma data e horário.";
-
-            return;
-        }
-
-        // ----------------------------------------------------
-        // BLOQUEIA O BOTÃO
-        // ----------------------------------------------------
 
         btnSubmit.disabled = true;
-
-        btnSubmit.textContent = "Aguarde...";
+        btnSubmit.textContent = 'Aguarde...';
 
         try {
-
-            // =================================================
-            // VERIFICA AGENDAMENTOS DUPLICADOS
-            // =================================================
-
-            const responseDocs =
-                await fetch(`${API_URL}/agendamentos`);
-
-            const agendamentosExistentes =
-                await responseDocs.json();
-
+            // Evita agendamento duplicado pro mesmo telefone
+            const resp = await fetch(`${API_URL}/agendamentos`);
+            const existentes = await resp.json();
             const agora = new Date();
 
-            const telefoneNormalizado =
-                telNumeros;
-
-            const temDuplicado =
-                agendamentosExistentes.some(ag => {
-
-                    const agTel =
-                        (ag.telefone || '')
-                            .replace(/\D/g, '');
-
-                    if (agTel !== telefoneNormalizado) {
-                        return false;
-                    }
-
-                    const agDataHora =
-                        new Date(ag.dataHora);
-
-                    const statusAtivo =
-                        !ag.status ||
-                        ag.status.toLowerCase() !== 'cancelado';
-
-                    return (
-                        statusAtivo &&
-                        agDataHora > agora
-                    );
-
-                });
+            const temDuplicado = existentes.some(ag => {
+                const tel = (ag.telefone || '').replace(/\D/g, '');
+                if (tel !== telNumeros) return false;
+                const dataAg = new Date(ag.dataHora);
+                const ativo = !ag.status || ag.status.toLowerCase() !== 'cancelado';
+                return ativo && dataAg > agora;
+            });
 
             if (temDuplicado) {
-
-                alertAgendamento.className =
-                    "alert error";
-
-                alertAgendamento.textContent =
-                    "⚠️ Já existe um agendamento ativo para este número de telefone. Aguarde a data/hora do seu agendamento anterior ou entre em contato conosco.";
-
+                mostrarErro('⚠️ Já existe agendamento ativo pra este telefone.');
                 btnSubmit.disabled = false;
-
-                btnSubmit.textContent =
-                    "Confirmar Agendamento";
-
+                btnSubmit.textContent = 'Confirmar Agendamento';
                 return;
             }
 
-            // =================================================
-            // OBJETO DO AGENDAMENTO
-            // =================================================
+            // Envia agendamento pro backend
+            const novo = { servico, modalidade, nomeCliente: nome, telefone, dataHora: dataStr, status: 'pendente' };
+            const saveRes = await fetch(`${API_URL}/agendamentos`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(novo)
+            });
 
-            const novoAgendamento = {
+            if (!saveRes.ok) throw new Error('Erro ao salvar.');
 
-                // Sempre espiritual neste site
-                area: 'espiritual',
-
-                servico: servico,
-
-                modalidade: modalidade,
-
-                nomeCliente: nome,
-
-                telefone: telefone,
-
-                dataHora: dataStr,
-
-                status: 'pendente'
-
-            };
-
-            // =================================================
-            // ENVIA PARA O BACKEND
-            // =================================================
-
-            const saveRes =
-                await fetch(`${API_URL}/agendamentos`, {
-
-                    method: 'POST',
-
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-
-                    body: JSON.stringify(novoAgendamento)
-
-                });
-
-            if (!saveRes.ok) {
-
-                throw new Error(
-                    "Erro ao salvar no servidor."
-                );
-
-            }
-
-            // =================================================
-            // SUCESSO
-            // =================================================
-
-            alertAgendamento.className =
-                "alert success";
-
-            alertAgendamento.textContent =
-                "Agendamento pré-registrado com sucesso! Aguarde nossa confirmação.";
-
+            // Sucesso — limpa form e recarrega agenda
+            alertAgendamento.className = 'alert success';
+            alertAgendamento.textContent = 'Agendamento enviado! Aguarde confirmação.';
             formAgendamento.reset();
-
-            // Mantém a área espiritual mesmo depois do reset
-            const areaInput =
-                document.getElementById('area');
-
-            if (areaInput) {
-                areaInput.value = 'espiritual';
-            }
-
-            // Limpa data e horário selecionados
-
-            const selectedDateTime =
-                document.getElementById(
-                    'selected-date-time'
-                );
-
-            if (selectedDateTime) {
-                selectedDateTime.value = '';
-            }
-
-            document
-                .querySelectorAll('.date-card')
-                .forEach(card => {
-
-                    card.classList.remove('active');
-
-                });
-
-            const timeSlotsContainer =
-                document.getElementById('time-slots');
-
-            if (timeSlotsContainer) {
-
-                timeSlotsContainer.innerHTML = `
-                    <p style="color:#888; font-size:0.95rem;">
-                        Por favor, selecione um dia acima para visualizar os horários.
-                    </p>
-                `;
-
-            }
-
-            // Atualiza os horários disponíveis
-
+            document.getElementById('selected-date-time').value = '';
+            document.querySelectorAll('.date-card').forEach(c => c.classList.remove('active'));
+            const slots = document.getElementById('time-slots');
+            if (slots) slots.innerHTML = '<p style="color:#888;font-size:.95rem">Selecione um dia acima para ver horários.</p>';
             inicializarAgenda();
+            document.getElementById('modal-aviso').style.display = 'flex';
 
-            // Abre o modal
-
-            const modal =
-                document.getElementById('modal-aviso');
-
-            if (modal) {
-
-                modal.style.display = 'flex';
-
-            }
-
-        } catch (error) {
-
-            console.error(
-                "Erro ao agendar:",
-                error
-            );
-
-            alertAgendamento.className =
-                "alert error";
-
-            alertAgendamento.textContent =
-                "Erro ao realizar agendamento. Tente novamente mais tarde.";
-
+        } catch (err) {
+            console.error('Erro ao agendar:', err);
+            mostrarErro('Erro ao agendar. Tente novamente.');
         } finally {
-
             btnSubmit.disabled = false;
-
-            btnSubmit.textContent =
-                "Confirmar Agendamento";
-
+            btnSubmit.textContent = 'Confirmar Agendamento';
         }
-
     });
-
 }
 
-// ============================================================
-// SERVIÇOS ESPIRITUAIS
-// ============================================================
-// Esta é agora a principal listagem do site.
-//
-// A mesma API:
-//     GET /servicos
-//
-// alimenta:
-// 1. Os cards de atendimentos espirituais
-// 2. O campo "Atendimento desejado" do agendamento
-//
-// Assim, o administrador controla tudo.
-// ============================================================
-
+// --- Serviços espirituais ---
 let servicosEspirituais = [];
 
-// Formata o preço do serviço em Real (ex: R$ 200,00)
-function formatarPreco(valor) {
-
-    const num = Number(valor);
-
-    if (isNaN(num) || num <= 0) {
-        return null;
-    }
-
-    return num.toLocaleString(
-        'pt-BR',
-        {
-            style: 'currency',
-            currency: 'BRL'
-        }
-    );
-
+// Formata preço pra Real
+function formatarPreco(v) {
+    const n = Number(v);
+    if (isNaN(n) || n <= 0) return null;
+    return n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 }
 
-// Converte a lista de modalidades ("PRESENCIAL,ONLINE")
-// em um rótulo amigável (ex: 🏠 Presencial • 💻 Online)
-function labelModalidades(modalidades) {
-
-    const lista =
-        (modalidades || '')
-            .split(',')
-            .map(m => m.trim().toLowerCase())
-            .filter(Boolean);
-
-    if (!lista.length) {
-        return null;
-    }
-
-    const nomes = {
-        presencial: '🏠 Presencial',
-        online: '💻 Online'
-    };
-
-    return lista.map(
-        m => nomes[m] || m
-    ).join(' • ');
-
+// Converte "PRESENCIAL,ONLINE" pra "🏠 Presencial • 💻 Online"
+function labelModalidades(m) {
+    const lista = (m || '').split(',').map(x => x.trim().toLowerCase()).filter(Boolean);
+    if (!lista.length) return null;
+    const nomes = { presencial: '🏠 Presencial', online: '💻 Online' };
+    return lista.map(x => nomes[x] || x).join(' • ');
 }
 
-// Ícone do serviço: usa o ícone customizado do admin (serv.icone) se existir,
-// senão detecta automaticamente pelo nome.
-function iconeServico(serv) {
-
-    // Se tem ícone customizado salvo, usa ele
-    if (serv.icone && serv.icone.trim()) {
-        return serv.icone;
-    }
-
-    // Senão, detecta automaticamente pelo nome
-    const n = (serv.nome || '')
-        .toLowerCase()
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '');
-
+// Ícone do serviço: usa o do admin ou detecta pelo nome
+function iconeServico(s) {
+    if (s.icone?.trim()) return s.icone;
+    const n = (s.nome || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
     const mapa = [
-        ['cartas', '🃏'],
-        ['consulta', '🔮'],
-        ['orientacao', '✨'],
-        ['energia', '💫'],
-        ['vida', '🕊️'],
-        ['mediunidade', '🕯️'],
-        ['espiritual', '🕊️'],
-        ['acolhimento', '🤲'],
-        ['oracao', '🙏'],
-        ['reiki', '🖐️']
+        ['cartas', '🃏'], ['consulta', '🔮'], ['orientacao', '✨'],
+        ['energia', '💫'], ['vida', '🕊️'], ['mediunidade', '🕯️'],
+        ['espiritual', '🕊️'], ['acolhimento', '🤲'], ['oracao', '🙏'], ['reiki', '🖐️']
     ];
-
-    for (const [palavra, icone] of mapa) {
-        if (n.includes(palavra)) return icone;
-    }
-
+    for (const [p, i] of mapa) if (n.includes(p)) return i;
     return '✦';
-
 }
 
-// Exibe apenas as modalidades permitidas do serviço selecionado.
-// Se o serviço não define modalidades (campo vazio = configurável
-// pelo administrador), as duas opções continuam disponíveis.
+// Mostra/oculta modalidades conforme serviço escolhido
 function atualizarModalidadesDoServico() {
+    const sel = document.getElementById('servico');
+    if (!sel) return;
+    const s = servicosEspirituais.find(x => x.nome === sel.value);
+    const permitidas = s?.modalidades?.split(',').map(x => x.trim().toLowerCase()).filter(Boolean) || [];
+    document.querySelectorAll('.modalidade-label').forEach(lbl => {
+        const radio = lbl.querySelector('input[name="modalidade"]');
+        if (!radio) return;
+        const ok = !permitidas.length || permitidas.includes(radio.value);
+        lbl.style.display = ok ? '' : 'none';
+    });
+    const checked = document.querySelector('input[name="modalidade"]:checked');
+    if (checked && checked.closest('.modalidade-label').style.display === 'none') checked.checked = false;
+}
 
-    const selectServico =
-        document.getElementById('servico');
+// Carrega serviços da API e monta cards + select
+async function carregarServicos() {
+    try {
+        const resp = await fetch(`${API_URL}/servicos?site=UNIVERSO_ROSA`);
+        if (!resp.ok) throw new Error('Falha ao buscar serviços.');
+        servicosEspirituais = await resp.json();
 
-    if (!selectServico) {
-        return;
-    }
-
-    const servicoSelecionado =
-        servicosEspirituais.find(
-            s => s.nome === selectServico.value
-        );
-
-    const lista =
-        servicoSelecionado &&
-        servicoSelecionado.modalidades
-            ? servicoSelecionado.modalidades
-                .split(',')
-                .map(m => m.trim().toLowerCase())
-                .filter(Boolean)
-            : [];
-
-    document
-        .querySelectorAll('.modalidade-label')
-        .forEach(lbl => {
-
-            const radio =
-                lbl.querySelector(
-                    'input[name="modalidade"]'
-                );
-
-            if (!radio) {
-                return;
-            }
-
-            const permitido =
-                !lista.length ||
-                lista.includes(radio.value);
-
-            lbl.style.display =
-                permitido ? '' : 'none';
-
+        // Só mostra "Disponível"
+        servicosEspirituais = servicosEspirituais.filter(s => {
+            const st = (s.status || '').trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+            return !st || st === 'disponivel';
         });
 
-    const checked =
-        document.querySelector(
-            'input[name="modalidade"]:checked'
-        );
+        const container = document.getElementById('servicos-container');
+        if (!container) return;
 
-    if (
-        checked &&
-        checked.closest('.modalidade-label')
-            .style.display === 'none'
-    ) {
-
-        checked.checked = false;
-
-    }
-
-}
-
-async function carregarServicos() {
-
-    try {
-
-        const response =
-            await fetch(`${API_URL}/servicos`);
-
-        if (!response.ok) {
-
-            throw new Error(
-                'Erro ao buscar serviços espirituais.'
-            );
-
-        }
-
-        servicosEspirituais =
-            await response.json();
-
-        // ----------------------------------------------------
-        // SOMENTE SERVIÇOS "DISPONÍVEL" NO SITE PÚBLICO
-        // ----------------------------------------------------
-        // O administrador controla o status no painel.
-        // Se um serviço for marcado como "Indisponível",
-        // ele deixa de aparecer nos cards e no agendamento.
-        // ----------------------------------------------------
-
-        servicosEspirituais =
-            servicosEspirituais.filter(serv => {
-
-                const status =
-                    (serv.status || '')
-                        .trim()
-                        .toLowerCase()
-                        .normalize('NFD')
-                        .replace(/[\u0300-\u036f]/g, '');
-
-                return (
-                    !status ||
-                    status === 'disponivel'
-                );
-
+        if (!servicosEspirituais.length) {
+            container.innerHTML = '<p style="text-align:center;width:100%;grid-column:1/-1">Nenhum atendimento cadastrado.</p>';
+        } else {
+            container.innerHTML = '';
+            servicosEspirituais.forEach(s => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                const preco = formatarPreco(s.preco);
+                const mods = labelModalidades(s.modalidades);
+                card.innerHTML = `
+                    <div class="product-icon" aria-hidden="true">${iconeServico(s)}</div>
+                    <div class="product-info">
+                        <h3 class="product-title">${s.nome}</h3>
+                        <p class="product-desc">${s.descricao || 'Atendimento espiritual disponível.'}</p>
+                        ${preco ? `<p class="product-price">${preco}</p>` : ''}
+                        ${mods ? `<p class="product-modalities">${mods}</p>` : ''}
+                        <a href="#agendamento" class="hero-btn btn-spiritual" style="padding:.6rem 1.5rem;font-size:.95rem" data-servico="${s.nome}">Agendar</a>
+                    </div>`;
+                card.querySelector('[data-servico]').addEventListener('click', () => selecionarServicoEspiritual(s.nome));
+                container.appendChild(card);
             });
-
-        // ----------------------------------------------------
-        // CARDS DOS SERVIÇOS
-        // ----------------------------------------------------
-
-        const container =
-            document.getElementById(
-                'servicos-container'
-            );
-
-        if (container) {
-
-            if (!servicosEspirituais.length) {
-
-                container.innerHTML = `
-
-                    <p
-                        style="
-                            text-align:center;
-                            width:100%;
-                            grid-column:1/-1;
-                        "
-                    >
-                        Nenhum atendimento espiritual
-                        cadastrado no momento.
-                    </p>
-
-                `;
-
-            } else {
-
-                container.innerHTML = '';
-
-                servicosEspirituais.forEach(serv => {
-
-                    const card =
-                        document.createElement('div');
-
-                    card.className =
-                        'product-card';
-
-                    const precoFmt =
-                        formatarPreco(serv.preco);
-
-                    const modalidadesFmt =
-                        labelModalidades(serv.modalidades);
-
-                    card.innerHTML = `
-
-                        <div class="product-icon" aria-hidden="true">
-                            ${iconeServico(serv)}
-                        </div>
-
-                        <div class="product-info">
-
-                            <h3 class="product-title">
-                                ${serv.nome}
-                            </h3>
-
-                            <p
-                                class="product-desc"
-                            >
-                                ${serv.descricao ||
-                                'Atendimento espiritual disponível.'}
-                            </p>
-
-                            ${
-                                precoFmt
-                                ? `<p class="product-price">${precoFmt}</p>`
-                                : ''
-                            }
-
-                            ${
-                                modalidadesFmt
-                                ? `<p class="product-modalities">${modalidadesFmt}</p>`
-                                : ''
-                            }
-
-                            <a
-                                href="#agendamento"
-                                class="hero-btn btn-spiritual"
-                                style="
-                                    padding:0.6rem 1.5rem;
-                                    font-size:0.95rem;
-                                "
-                                data-servico="${serv.nome}"
-                            >
-                                Agendar
-                            </a>
-
-                        </div>
-
-                    `;
-
-                    // Botão Agendar
-                    const botao =
-                        card.querySelector(
-                            '[data-servico]'
-                        );
-
-                    if (botao) {
-
-                        botao.addEventListener(
-                            'click',
-                            () => {
-
-                                selecionarServicoEspiritual(
-                                    serv.nome
-                                );
-
-                            }
-                        );
-
-                    }
-
-                    container.appendChild(card);
-
-                });
-
-            }
-
         }
-
-        // ----------------------------------------------------
-        // SELECT DO AGENDAMENTO
-        // ----------------------------------------------------
-
         carregarServicosNoAgendamento();
-
-    } catch (error) {
-
-        console.error(
-            'Erro ao carregar serviços espirituais:',
-            error
-        );
-
-        const container =
-            document.getElementById(
-                'servicos-container'
-            );
-
-        if (container) {
-
-            container.innerHTML = `
-
-                <p
-                    style="
-                        text-align:center;
-                        width:100%;
-                        grid-column:1/-1;
-                        color:#c62828;
-                    "
-                >
-                    Erro ao carregar os atendimentos.
-                    Tente novamente mais tarde.
-                </p>
-
-            `;
-
-        }
-
+    } catch (err) {
+        console.error('Erro ao carregar serviços:', err);
+        const c = document.getElementById('servicos-container');
+        if (c) c.innerHTML = '<p style="text-align:center;color:#c62828">Erro ao carregar. Tente depois.</p>';
     }
-
 }
 
-// ============================================================
-// SERVIÇOS NO SELECT DO AGENDAMENTO
-// ============================================================
-
+// Preenche select do agendamento
 function carregarServicosNoAgendamento() {
-
-    const selectServico =
-        document.getElementById('servico');
-
-    if (!selectServico) {
-        return;
-    }
-
-    selectServico.innerHTML = `
-
-        <option value="">
-            Selecione o atendimento
-        </option>
-
-    `;
-
+    const sel = document.getElementById('servico');
+    if (!sel) return;
+    sel.innerHTML = '<option value="">Selecione o atendimento</option>';
     if (!servicosEspirituais.length) {
-
-        selectServico.innerHTML = `
-
-            <option value="">
-                Nenhum atendimento disponível
-            </option>
-
-        `;
-
+        sel.innerHTML = '<option value="">Nenhum disponível</option>';
         return;
-
     }
-
-    servicosEspirituais.forEach(servico => {
-
-        const option =
-            document.createElement('option');
-
-        option.value =
-            servico.nome;
-
-        option.textContent =
-            servico.nome;
-
-        selectServico.appendChild(option);
-
+    servicosEspirituais.forEach(s => {
+        const opt = document.createElement('option');
+        opt.value = s.nome;
+        opt.textContent = s.nome;
+        sel.appendChild(opt);
     });
-
-    // Filtra as modalidades conforme o serviço escolhido
     atualizarModalidadesDoServico();
-
-    if (!selectServico.dataset.modalListener) {
-
-        selectServico.dataset.modalListener = '1';
-
-        selectServico.addEventListener(
-            'change',
-            atualizarModalidadesDoServico
-        );
-
+    if (!sel.dataset.modalListener) {
+        sel.dataset.modalListener = '1';
+        sel.addEventListener('change', atualizarModalidadesDoServico);
     }
-
 }
 
-// ============================================================
-// SELECIONAR SERVIÇO A PARTIR DO CARD
-// ============================================================
-
-function selecionarServicoEspiritual(nomeServico) {
-
-    const selectServico =
-        document.getElementById('servico');
-
-    if (!selectServico) {
-        return;
-    }
-
-    selectServico.value =
-        nomeServico;
-
-    // Garante que a área seja espiritual
-
-    const areaInput =
-        document.getElementById('area');
-
-    if (areaInput) {
-        areaInput.value = 'espiritual';
-    }
-
-    // Filtra as modalidades conforme o serviço escolhido
-
+// Quando clica em "Agendar" no card
+function selecionarServicoEspiritual(nome) {
+    const sel = document.getElementById('servico');
+    if (!sel) return;
+    sel.value = nome;
     atualizarModalidadesDoServico();
-
 }
+window.selecionarServicoEspiritual = selecionarServicoEspiritual;
 
-// Disponibiliza caso alguma parte antiga do site precise
+// --- Config da agenda (intervalo, horários, dias, bloqueios) ---
+let agendaConfig = { intervalo: 60, horaInicio: '09:00', horaFim: '18:00', diasSemana: [1,2,3,4,5,6], datasBloqueadas: [] };
 
-window.selecionarServicoEspiritual =
-    selecionarServicoEspiritual;
-
-// ============================================================
-// CONFIGURAÇÃO DA AGENDA
-// ============================================================
-
-let agendaConfig = {
-
-    intervalo: 60,
-
-    horaInicio: "09:00",
-
-    horaFim: "18:00",
-
-    diasSemana: [
-        1, 2, 3, 4, 5, 6
-    ],
-
-    datasBloqueadas: []
-
-};
-
-// ============================================================
-// INICIALIZAÇÃO DA AGENDA
-// ============================================================
-
+// Inicializa carrossel de datas e carrega horários
 async function inicializarAgenda() {
-
-    const dateCarousel =
-        document.getElementById(
-            'date-carousel'
-        );
-
-    if (!dateCarousel) {
-        return;
-    }
+    const carousel = document.getElementById('date-carousel');
+    if (!carousel) return;
 
     try {
-
-        // ----------------------------------------------------
-        // CONFIGURAÇÃO
-        // ----------------------------------------------------
-
-        const resConfig =
-            await fetch(
-                `${API_URL}/config-agenda`
-            );
-
-        const config =
-            await resConfig.json();
-
-        if (config) {
-
-            agendaConfig.intervalo =
-                parseInt(
-                    config.intervalo || "60"
-                );
-
-            agendaConfig.horaInicio =
-                config.horaInicio ||
-                "09:00";
-
-            agendaConfig.horaFim =
-                config.horaFim ||
-                "18:00";
-
-            agendaConfig.diasSemana =
-                (
-                    config.diasSemana ||
-                    "1,2,3,4,5,6"
-                )
-                    .split(',')
-                    .map(d => parseInt(d));
-
-            agendaConfig.datasBloqueadas =
-                config.datasBloqueadas
-                    ? config.datasBloqueadas.split(',')
-                    : [];
-
+        // Config
+        const cfgResp = await fetch(`${API_URL}/config-agenda`);
+        const cfg = await cfgResp.json();
+        if (cfg) {
+            agendaConfig.intervalo = parseInt(cfg.intervalo || '60');
+            agendaConfig.horaInicio = cfg.horaInicio || '09:00';
+            agendaConfig.horaFim = cfg.horaFim || '18:00';
+            agendaConfig.diasSemana = (cfg.diasSemana || '1,2,3,4,5,6').split(',').map(Number);
+            agendaConfig.datasBloqueadas = cfg.datasBloqueadas ? cfg.datasBloqueadas.split(',') : [];
         }
 
-        // ----------------------------------------------------
-        // AGENDAMENTOS EXISTENTES
-        // ----------------------------------------------------
+        // Agendamentos existentes
+        const agResp = await fetch(`${API_URL}/agendamentos`);
+        const agendamentos = await agResp.json();
 
-        const resAg =
-            await fetch(
-                `${API_URL}/agendamentos`
-            );
+        carousel.innerHTML = '';
+        const hoje = new Date();
+        let gerados = 0, dia = new Date(hoje);
 
-        const agendamentos =
-            await resAg.json();
-
-        // ----------------------------------------------------
-        // LIMPA A AGENDA
-        // ----------------------------------------------------
-
-        dateCarousel.innerHTML = '';
-
-        const hoje =
-            new Date();
-
-        let diasGerados = 0;
-
-        let diaCorrente =
-            new Date(hoje);
-
-        // ----------------------------------------------------
-        // GERA OS PRÓXIMOS DIAS
-        // ----------------------------------------------------
-
-        for (
-            let i = 0;
-            i < 30 && diasGerados < 14;
-            i++
-        ) {
-
-            const diaSemana =
-                diaCorrente.getDay();
-
-            const dataStr =
-                diaCorrente
-                    .toISOString()
-                    .split('T')[0];
-
-            const diaTrabalhado =
-                agendaConfig.diasSemana
-                    .includes(diaSemana);
-
-            const diaBloqueado =
-                agendaConfig.datasBloqueadas
-                    .includes(dataStr);
-
-            let hojeValido = true;
+        // Próximos 14 dias úteis (até 30 dias à frente)
+        for (let i = 0; i < 30 && gerados < 14; i++) {
+            const ds = dia.getDay();
+            const dataStr = dia.toISOString().split('T')[0];
+            const trabalhado = agendaConfig.diasSemana.includes(ds);
+            const bloqueado = agendaConfig.datasBloqueadas.includes(dataStr);
+            let valido = true;
 
             if (i === 0) {
-
-                const [fimH, fimM] =
-                    agendaConfig.horaFim
-                        .split(':')
-                        .map(Number);
-
-                const limiteHoje =
-                    new Date(hoje);
-
-                limiteHoje.setHours(
-                    fimH,
-                    fimM,
-                    0,
-                    0
-                );
-
-                if (hoje >= limiteHoje) {
-
-                    hojeValido = false;
-
-                }
-
+                const [fh, fm] = agendaConfig.horaFim.split(':').map(Number);
+                const limite = new Date(hoje);
+                limite.setHours(fh, fm, 0, 0);
+                if (hoje >= limite) valido = false;
             }
 
-            if (
-                diaTrabalhado &&
-                !diaBloqueado &&
-                hojeValido
-            ) {
-
-                const dayNum =
-                    diaCorrente.getDate();
-
-                const dayName =
-                    diaCorrente
-                        .toLocaleDateString(
-                            'pt-BR',
-                            {
-                                weekday: 'short'
-                            }
-                        )
-                        .replace('.', '');
-
-                const card =
-                    document.createElement(
-                        'div'
-                    );
-
-                card.className =
-                    'date-card';
-
-                card.dataset.date =
-                    dataStr;
-
-                card.innerHTML = `
-
-                    <span class="day-name">
-                        ${dayName}
-                    </span>
-
-                    <span class="day-num">
-                        ${dayNum}
-                    </span>
-
-                `;
-
-                card.addEventListener(
-                    'click',
-                    () => {
-
-                        document
-                            .querySelectorAll(
-                                '.date-card'
-                            )
-                            .forEach(c =>
-                                c.classList
-                                    .remove('active')
-                            );
-
-                        card.classList.add(
-                            'active'
-                        );
-
-                        carregarHorariosDoDia(
-                            dataStr,
-                            agendamentos
-                        );
-
-                    }
-                );
-
-                dateCarousel.appendChild(
-                    card
-                );
-
-                diasGerados++;
-
+            if (trabalhado && !bloqueado && valido) {
+                const card = document.createElement('div');
+                card.className = 'date-card';
+                card.dataset.date = dataStr;
+                card.innerHTML = `<span class="day-name">${dia.toLocaleDateString('pt-BR',{weekday:'short'}).replace('.','')}</span><span class="day-num">${dia.getDate()}</span>`;
+                card.addEventListener('click', () => {
+                    document.querySelectorAll('.date-card').forEach(c => c.classList.remove('active'));
+                    card.classList.add('active');
+                    carregarHorariosDoDia(dataStr, agendamentos);
+                });
+                carousel.appendChild(card);
+                gerados++;
             }
-
-            diaCorrente.setDate(
-                diaCorrente.getDate() + 1
-            );
-
+            dia.setDate(dia.getDate() + 1);
         }
 
-        if (diasGerados === 0) {
-
-            dateCarousel.innerHTML = `
-
-                <p style="color:#c62828;">
-                    Sem dias de atendimento disponíveis no momento.
-                </p>
-
-            `;
-
-        }
-
-    } catch (error) {
-
-        console.error(
-            "Erro ao inicializar agenda:",
-            error
-        );
-
+        if (!gerados) carousel.innerHTML = '<p style="color:#c62828">Sem dias disponíveis no momento.</p>';
+    } catch (err) {
+        console.error('Erro ao iniciar agenda:', err);
     }
-
 }
 
-// ============================================================
-// HORÁRIOS DISPONÍVEIS
-// ============================================================
+// Gera grade de horários pro dia selecionado
+function carregarHorariosDoDia(dataStr, agendamentos) {
+    const container = document.getElementById('time-slots');
+    if (!container) return;
+    container.innerHTML = '';
 
-function carregarHorariosDoDia(
-    dataStr,
-    agendamentos
-) {
+    const [sh, sm] = agendaConfig.horaInicio.split(':').map(Number);
+    const [eh, em] = agendaConfig.horaFim.split(':').map(Number);
+    const hoje = new Date();
+    const ehHoje = dataStr === hoje.toISOString().split('T')[0];
 
-    const timeSlotsContainer =
-        document.getElementById(
-            'time-slots'
-        );
+    let slot = new Date(); slot.setHours(sh, sm, 0, 0);
+    const fim = new Date(); fim.setHours(eh, em, 0, 0);
+    let count = 0;
 
-    if (!timeSlotsContainer) {
-        return;
-    }
-
-    timeSlotsContainer.innerHTML = '';
-
-    const [startH, startM] =
-        agendaConfig.horaInicio
-            .split(':')
-            .map(Number);
-
-    const [endH, endM] =
-        agendaConfig.horaFim
-            .split(':')
-            .map(Number);
-
-    const dataAtual =
-        new Date();
-
-    const selecionadaHoje =
-        (
-            dataStr ===
-            dataAtual
-                .toISOString()
-                .split('T')[0]
-        );
-
-    let slot =
-        new Date();
-
-    slot.setHours(
-        startH,
-        startM,
-        0,
-        0
-    );
-
-    const limiteFim =
-        new Date();
-
-    limiteFim.setHours(
-        endH,
-        endM,
-        0,
-        0
-    );
-
-    let slotsCount = 0;
-
-    // --------------------------------------------------------
-    // GERA OS HORÁRIOS
-    // --------------------------------------------------------
-
-    while (slot < limiteFim) {
-
-        const horaStr =
-            slot
-                .toTimeString()
-                .split(' ')[0]
-                .substring(0, 5);
-
-        const dateTimeString =
-            `${dataStr}T${horaStr}`;
-
-        let horarioPassou = false;
-
-        if (selecionadaHoje) {
-
-            const slotCompleto =
-                new Date(
-                    `${dataStr}T${horaStr}`
-                );
-
-            if (
-                dataAtual >= slotCompleto
-            ) {
-
-                horarioPassou = true;
-
-            }
-
+    while (slot < fim) {
+        const hora = slot.toTimeString().split(' ')[0].slice(0, 5);
+        const dt = `${dataStr}T${hora}`;
+        let passou = false;
+        if (ehHoje) {
+            const completo = new Date(dt);
+            if (hoje >= completo) passou = true;
         }
 
-        // ----------------------------------------------------
-        // VERIFICA SE ESTÁ OCUPADO
-        // ----------------------------------------------------
+        const ocupado = agendamentos.some(a => a.dataHora === dt && (a.status || '').toLowerCase() !== 'cancelado');
 
-        const isBooked =
-            agendamentos.some(ag => {
-
-                const status =
-                    (
-                        ag.status ||
-                        ''
-                    ).toLowerCase();
-
-                return (
-                    ag.dataHora ===
-                    dateTimeString &&
-                    status !== 'cancelado'
-                );
-
-            });
-
-        if (!horarioPassou) {
-
-            const btnSlot =
-                document.createElement(
-                    'div'
-                );
-
-            btnSlot.className =
-                'time-slot';
-
-            if (isBooked) {
-
-                btnSlot.className +=
-                    ' booked';
-
-                btnSlot.innerHTML = `
-
-                    ${horaStr}
-
-                    <span
-                        style="
-                            font-size:0.7rem;
-                            display:block;
-                        "
-                    >
-                        Ocupado
-                    </span>
-
-                `;
-
+        if (!passou) {
+            const btn = document.createElement('div');
+            btn.className = 'time-slot';
+            if (ocupado) {
+                btn.className += ' booked';
+                btn.innerHTML = `${hora}<span style="font-size:.7rem;display:block">Ocupado</span>`;
             } else {
-
-                btnSlot.textContent =
-                    horaStr;
-
-                btnSlot.addEventListener(
-                    'click',
-                    () => {
-
-                        document
-                            .querySelectorAll(
-                                '.time-slot'
-                            )
-                            .forEach(s =>
-                                s.classList
-                                    .remove('active')
-                            );
-
-                        btnSlot.classList.add(
-                            'active'
-                        );
-
-                        const input =
-                            document.getElementById(
-                                'selected-date-time'
-                            );
-
-                        if (input) {
-
-                            input.value =
-                                dateTimeString;
-
-                        }
-
-                    }
-                );
-
+                btn.textContent = hora;
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('active'));
+                    btn.classList.add('active');
+                    document.getElementById('selected-date-time').value = dt;
+                });
             }
-
-            timeSlotsContainer.appendChild(
-                btnSlot
-            );
-
-            slotsCount++;
-
+            container.appendChild(btn);
+            count++;
         }
-
-        slot.setMinutes(
-            slot.getMinutes() +
-            agendaConfig.intervalo
-        );
-
+        slot.setMinutes(slot.getMinutes() + agendaConfig.intervalo);
     }
-
-    if (slotsCount === 0) {
-
-        timeSlotsContainer.innerHTML = `
-
-            <p style="color:#c62828;">
-                Não há horários disponíveis para hoje.
-            </p>
-
-        `;
-
-    }
-
+    if (!count) container.innerHTML = '<p style="color:#c62828">Sem horários hoje.</p>';
 }
 
-// ============================================================
-// CONTEÚDO CMS (TEXTOS EDITÁVEIS PELO PAINEL ADMINISTRATIVO)
-// ============================================================
-
+// --- CMS (textos editáveis pelo painel) ---
 async function carregarConteudoCMS() {
     try {
-        const response = await fetch(`${API_URL}/conteudo?site=UNIVERSO_ROSA`);
-        const content = await response.json();
-        if (!content) return;
-
-        // Aplica os textos dinâmicos na Hero Section
-        const heroTitle = document.querySelector('.hero-spiritual-only .hero-title');
-        const heroDesc = document.querySelector('.hero-spiritual-only .hero-description');
-        if (heroTitle && content.heroTitulo) heroTitle.textContent = content.heroTitulo;
-        if (heroDesc && content.heroDescricao) heroDesc.textContent = content.heroDescricao;
-
-        // Aplica o slogan editável no Rodapé do site
-        const footerSlogan = document.querySelector('footer p:nth-of-type(1)');
-        if (footerSlogan && content.footerSlogan) footerSlogan.textContent = content.footerSlogan;
-    } catch (error) {
-        console.error("Erro ao carregar conteúdo CMS do site:", error);
+        const resp = await fetch(`${API_URL}/conteudo?site=UNIVERSO_ROSA`);
+        const c = await resp.json();
+        if (!c) return;
+        const ht = document.querySelector('.hero-spiritual-only .hero-title');
+        const hd = document.querySelector('.hero-spiritual-only .hero-description');
+        if (ht && c.heroTitulo) ht.textContent = c.heroTitulo;
+        if (hd && c.heroDescricao) hd.textContent = c.heroDescricao;
+        const fs = document.querySelector('footer p:nth-of-type(1)');
+        if (fs && c.footerSlogan) fs.textContent = c.footerSlogan;
+    } catch (e) {
+        console.error('Erro CMS:', e);
     }
 }
 
-// Aplica os links cruzados entre os dois sites (Universo Rosa ↔ Rosa Modas)
+// Links pro Rosa Modas
 function aplicarLinksRosaModas() {
-    const links = document.querySelectorAll('#link-rosa-modas, #link-rosa-modas-footer');
-    links.forEach(link => { if (link) link.href = ROSA_MODAS_URL; });
+    document.querySelectorAll('#link-rosa-modas, #link-rosa-modas-footer').forEach(l => { if (l) l.href = ROSA_MODAS_URL; });
 }
 
-// ============================================================
-// INICIALIZAÇÃO DO SITE
-// ============================================================
+// --- Inicialização ---
+window.addEventListener('DOMContentLoaded', () => {
+    carregarServicos();
+    carregarConteudoCMS();
+    aplicarLinksRosaModas();
+    inicializarAgenda();
+    inicializarModoNoturno();
+});
 
-window.addEventListener(
-    'DOMContentLoaded',
-    () => {
-
-        // PRINCIPAL:
-        // Carrega os serviços espirituais
-        // e preenche também o agendamento.
-        carregarServicos();
-
-        // Textos editáveis (hero e rodapé) pelo painel
-        carregarConteudoCMS();
-
-        // Links cruzados entre os dois sites
-        aplicarLinksRosaModas();
-
-        // Inicializa a agenda.
-        inicializarAgenda();
-
-        // MODO NOTURNO
-        inicializarModoNoturno();
-
-    }
-);
-
-// ============================================================
-// MODO NOTURNO
-// ============================================================
-
+// --- Modo noturno ---
 function inicializarModoNoturno() {
-
     const btn = document.getElementById('btn-dark-mode');
     if (!btn) return;
-
-    // Restaura preferência salva
-    const preferencia = localStorage.getItem('modoNoturno');
-    if (preferencia === 'ativo') {
-        document.body.classList.add('dark-mode');
-        btn.textContent = '☀️';
-        btn.setAttribute('aria-label', 'Desativar modo noturno');
-    }
-
+    const pref = localStorage.getItem('modoNoturno');
+    if (pref === 'ativo') { document.body.classList.add('dark-mode'); btn.textContent = '☀️'; btn.setAttribute('aria-label', 'Desativar modo noturno'); }
     btn.addEventListener('click', () => {
-
-        const ativo = document.body.classList.toggle('dark-mode');
-
-        if (ativo) {
-            btn.textContent = '☀️';
-            btn.setAttribute('aria-label', 'Desativar modo noturno');
-            localStorage.setItem('modoNoturno', 'ativo');
-        } else {
-            btn.textContent = '🌙';
-            btn.setAttribute('aria-label', 'Ativar modo noturno');
-            localStorage.setItem('modoNoturno', 'inativo');
-        }
-
+        const on = document.body.classList.toggle('dark-mode');
+        btn.textContent = on ? '☀️' : '🌙';
+        btn.setAttribute('aria-label', on ? 'Desativar modo noturno' : 'Ativar modo noturno');
+        localStorage.setItem('modoNoturno', on ? 'ativo' : 'inativo');
     });
-
 }

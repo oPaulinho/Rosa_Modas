@@ -199,34 +199,12 @@ body.dark-mode .titulo__portfolio {
 }
 
 body.dark-mode .texto__portfolio {
-    color: #e8c8d4;
+    color: #e8c8d4.
 }
 
 body.dark-mode .section-portfolio,
 body.dark-mode .container__portfolio {
     background: #22121a;
-}
-
-/* ============================================================
-   LEGENDA NOS SLIDES DO CARROSSEL DINÂMICO
-   ============================================================ */
-.swiper-slide {
-    position: relative;
-}
-
-.swiper-slide .slide-caption {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    padding: 0.6rem 1rem;
-    background: linear-gradient(transparent, rgba(28, 16, 22, 0.85));
-    color: #fff;
-    font-family: var(--fonte-secundaria);
-    font-weight: 600;
-    font-size: 0.95rem;
-    border-radius: 0 0 22px 22px;
-    text-align: center;
 }
 
 /* ============================================================
@@ -274,12 +252,6 @@ body.dark-mode .promo-destaques__card {
     background: #2f1a24;
 }
 
-.promo-destaques__card img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-}
-
 .promo-destaques__info {
     padding: 1.25rem 1.5rem 1.5rem;
 }
@@ -305,7 +277,87 @@ body.dark-mode .promo-destaques__info p {
 }
 
 /* ============================================================
-   NOVIDADES (produtos disponíveis)
+   GRADE DE CARDS (procedimentos, moda, novidades)
+   ============================================================ */
+.catalog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.8rem;
+    align-items: start;
+}
+
+.product-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: var(--branco);
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+    transition: var(--transicao);
+    min-height: 380px;
+}
+
+.product-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 18px 35px rgba(0, 0, 0, 0.12);
+}
+
+/* Ícone do card (emoji) */
+.product-icon {
+    width: 100%;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4.5rem;
+    line-height: 1;
+    background: linear-gradient(135deg, rgba(216, 27, 96, 0.10), rgba(255, 111, 145, 0.20));
+    border-bottom: 1px solid rgba(216, 27, 96, 0.08);
+}
+
+.product-info {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.product-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--preto);
+}
+
+body.dark-mode .product-title {
+    color: #ffd1e1;
+}
+
+.product-desc {
+    font-size: 0.95rem;
+    color: var(--cinza);
+    margin-bottom: 1rem;
+    flex: 1;
+}
+
+body.dark-mode .product-desc {
+    color: #d9b9c6.
+}
+
+.product-price {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--laranja);
+    margin: 0 0 0.5rem;
+}
+
+body.dark-mode .product-price {
+    color: #ff80ab;
+}
+
+/* ============================================================
+   NOVIDADES (cards com emoji)
    ============================================================ */
 .novidades {
     padding: 2.5rem 5%;
@@ -334,6 +386,8 @@ body.dark-mode .promo-destaques__info p {
     overflow: hidden;
     box-shadow: var(--sombra-card);
     transition: var(--transicao);
+    display: flex;
+    flex-direction: column;
 }
 
 .novidades__card:hover {
@@ -344,17 +398,24 @@ body.dark-mode .novidades__card {
     background: #2f1a24;
 }
 
-.novidades__card img {
+.novidades__icone {
     width: 100%;
-    height: 240px;
-    object-fit: cover;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4.5rem;
+    line-height: 1;
+    background: linear-gradient(135deg, rgba(216, 27, 96, 0.10), rgba(255, 111, 145, 0.20));
+    border-bottom: 1px solid rgba(216, 27, 96, 0.08);
 }
 
 .novidades__info {
     padding: 1rem 1.25rem 1.25rem;
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     gap: 0.75rem;
 }
 
@@ -378,3 +439,57 @@ body.dark-mode .novidades__info h3 {
 body.dark-mode .novidades__preco {
     color: #ff80ab;
 }
+
+/* ============================================================
+   CARROSSEL / SEÇÕES DE PROCEDIMENTOS E MODA
+   ============================================================ */
+.carrossel {
+    padding: 5rem 5%;
+    background: var(--branco);
+}
+
+body.dark-mode .carrossel {
+    background: #1e1230.
+}
+
+.carrossel__titulo {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+    font-weight: 700;
+    color: var(--rosa);
+}
+
+body.dark-mode .carrossel__titulo {
+    color: var(--rosa-claro).
+}
+
+/* Remove estilos antigos do Swiper que não usamos mais */
+/* .swiper-slide, .swiper-button-*, .swiper-pagination não são mais necessários */
+
+/* ============================================================
+   LEGENDA NOS SLIDES DO CARROSSEL DINÂMICO (mantido pra compat)
+   ============================================================ */
+.swiper-slide {
+    position: relative;
+}
+
+.swiper-slide .slide-caption {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 0.6rem 1rem;
+    background: linear-gradient(transparent, rgba(28, 16, 22, 0.85));
+    color: #fff;
+    font-family: var(--fonte-secundaria);
+    font-weight: 600;
+    font-size: 0.95rem;
+    border-radius: 0 0 22px 22px;
+    text-align: center;
+}
+
+/* ============================================================
+   SEÇÕES EXISTENTES (portfolio, about, etc) - mantidas
+   ============================================================ */
+/* ... existentes ... */

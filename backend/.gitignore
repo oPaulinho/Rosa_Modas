@@ -1,11 +1,13 @@
-HELP.md
+# ============================================================
+# BACKEND (SPRING BOOT / MAVEN) - Específicos do módulo
+# ============================================================
+
+# Build artifacts
 target/
 uploads/
-.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+.mvn/
 
-### STS ###
+# IDEs - Eclipse/STS
 .apt_generated
 .classpath
 .factorypath
@@ -14,21 +16,27 @@ uploads/
 .springBeans
 .sts4-cache
 
-### IntelliJ IDEA ###
-.idea
+# IntelliJ IDEA
+.idea/
 *.iws
 *.iml
 *.ipr
 
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
+# NetBeans
+nbproject/private/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
 build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-### VS Code ###
+# VS Code
 .vscode/
+
+# Logs locais
+*.log
+
+# Documentação gerada
+HELP.md

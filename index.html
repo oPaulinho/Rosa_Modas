@@ -4,24 +4,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rosa Modas - Home</title>
-    <link rel="stylesheet" href="style/reset.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <title>Rosa Modas — Hair & Fashion</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- CSS -->
     <link rel="stylesheet" href="style/Styles.css">
 </head>
 
 <body>
+
+    <!-- HEADER -->
     <header class="cabecalho">
         <div class="container">
-            <a href="index.html" class="opções__link"><img src="img/Logo.svg" alt="Logo da Rosa Modas"
-                    class="container__imagem"></a>
-            <a href="index.html" class="opções__link"><img src="img/Rosa Modas.svg" alt="Logo Rosa Modas Escrita"
-                    class="container__imagem desktop"></a>
+            <a href="index.html" class="opções__link">
+                <img src="img/Logo.svg" alt="Logo da Rosa Modas" class="container__imagem">
+            </a>
+            <a href="index.html" class="opções__link">
+                <img src="img/Rosa Modas.svg" alt="Logo Rosa Modas Escrita" class="container__imagem desktop">
+            </a>
         </div>
 
         <ul class="opções">
             <li class="opções__item"><a href="hair.html" class="opções__link">HAIR</a></li>
-            <li class="opções__item"><a href="fashion.html" class="opções__link">FASHION</a></li>
             <li class="opções__item"><a href="contato.html" class="opções__link">CONTATO</a></li>
             <li class="opções__item"><a href="about.html" class="opções__link">SOBRE NÓS</a></li>
             <li class="opções__item"><a href="Universo_Rosa/index.html" id="link-universo-rosa" class="opções__link"
@@ -36,7 +44,6 @@
 
             <ul class="lista-menu">
                 <li class="lista-menu__item"><a href="hair.html" class="lista-menu__Link">HAIR</a></li>
-                <li class="lista-menu__item"><a href="fashion.html" class="lista-menu__Link">FASHION</a></li>
                 <li class="lista-menu__item"><a href="contato.html" class="lista-menu__Link">CONTATO</a></li>
                 <li class="lista-menu__item"><a href="about.html" class="lista-menu__Link">SOBRE NÓS</a></li>
                 <li class="lista-menu__item"><a href="Universo_Rosa/index.html" id="link-universo-rosa-mobile"
@@ -48,6 +55,7 @@
             title="Modo claro/escuro">🌙</button>
     </header>
 
+    <!-- HERO / BANNER -->
     <section class="banner">
         <h2 class="banner__titulo">Rosa Modas <br>Hair & Fashion</h2>
         <p class="banner__texto">Da comunidade para o mundo, com força e beleza</p>
@@ -56,233 +64,104 @@
         </a>
     </section>
 
+    <!-- PROMOÇÕES DA SEMANA -->
     <section class="promo-destaques" id="promo-destaques">
         <h2 class="promo-destaques__titulo">Promoções da Semana</h2>
         <div class="promo-destaques__grid"><!-- preenchido dinamicamente pelo site.js --></div>
     </section>
 
-        <section class="carrossel">
-            <h2 class="carrossel__titulo">Procedimentos Capilares</h2>
-            <div class="carrossel__container">
-                <div class="swiper swiper-hair">
-                    <div class="swiper-pagination"></div>
-                    <div class="swiper-wrapper">
-                        <div class="swiper-slide">
-                            <img src="img/procedimento1.jpg" alt="Mulher com cabelo finalizado após escova">
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="img/procedimento2.jpg" alt="Aplicação de botox capilar">
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="img/procedimento3.jpg" alt="Resultado após progressiva">
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="img/procedimento4.jpg" alt="Finalização com escova moderna">
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="img/procedimento5.jpg" alt="Aplicação de tintura e mechas">
-                        </div>
-                    </div>
-                    <div class="swiper-button-prev"></div>
-                    <div class="swiper-button-next"></div>
-                </div>
+    <!-- PROCEDIMENTOS CAPILARES (cards com emoji) -->
+    <section class="carrossel" id="procedimentos-section">
+        <h2 class="carrossel__titulo">Procedimentos Capilares</h2>
+        <div class="catalog-grid" id="procedimentos-grid"><!-- preenchido pelo site.js --></div>
+    </section>
 
-                <div class="card">
-                    <div class="card__descricao">
-                        <div class="descricao">
-                            <h3 class="descricao__titulo">Talvez você também goste de</h3>
-                            <h2 class="descricao__titulo-livro">Kit Reconstrução Capilar</h2>
-                            <p class="descricao__texto">Ideal para cabelos danificados, esse kit oferece hidratação
-                                profunda
-                                e brilho intenso.</p>
-                        </div>
-                        <img src="img/produto1.jpg" class="descricao__imagem" alt="Kit de reconstrução capilar">
-                    </div>
-                    <div class="card__botoes">
-                        <ul class="botoes">
-                            <li class="botoes__item">
-                                <img src="img/Favoritos.svg" alt="Favoritar Produto" aria-label="Favoritar Produto">
-                            </li>
-                            <li class="botoes__item">
-                                <img src="img/Compras.svg" alt="Adicionar ao Carrinho"
-                                    aria-label="Adicionar ao Carrinho">
-                            </li>
-                        </ul>
-                        <a href="hair.html" class="botoes__ancora">Saiba mais</a>
-                    </div>
-                </div>
-            </div>
-        </section>
+    <!-- MODA FEMININA (cards com emoji) -->
+    <section class="carrossel" id="moda-section">
+        <h2 class="carrossel__titulo">Moda Feminina</h2>
+        <div class="catalog-grid" id="moda-grid"><!-- preenchido pelo site.js --></div>
+    </section>
 
-        <section class="carrossel">
-            <h2 class="carrossel__titulo">Moda Feminina</h2>
-            <div class="carrossel__container">
+    <!-- NOVIDADES (produtos disponíveis) -->
+    <section class="novidades" id="novidades">
+        <h2 class="novidades__titulo">Novidades</h2>
+        <div class="catalog-grid" id="novidades-grid"><!-- preenchido pelo site.js --></div>
+    </section>
 
-                <!-- Swiper com novos produtos -->
-                <div class="swiper swiper-fashion">
-                    <div class="swiper-pagination"></div>
-                    <div class="swiper-wrapper">
-                        <div class="swiper-slide">
-                            <img src="img/roupa.jpg" alt="Body feminino para comunidade">
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="img/roupa2.jpg" alt="Cropped feminino moderno">
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="img/roupa3.jpg" alt="Short curto feminino casual">
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="img/roupa4.jpg" alt="Calça jeans feminina">
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="img/roupa5.jpg" alt="Blusinha leve feminina">
-                        </div>
-                    </div>
-                    <div class="swiper-button-prev"></div>
-                    <div class="swiper-button-next"></div>
-                </div>
+    <!-- PRINCIPAIS SERVIÇOS -->
+    <section class="topicos">
+        <h2 class="topicos__titulo">Principais Serviços</h2>
+        <ul class="topicos__lista">
+            <li class="topicos__item"><a href="hair.html" class="topicos__link">Progressiva</a></li>
+            <li class="topicos__item"><a href="hair.html" class="topicos__link">Botox</a></li>
+            <li class="topicos__item"><a href="hair.html" class="topicos__link">Escova</a></li>
+            <li class="topicos__item"><a href="hair.html" class="topicos__link">Hidratação</a></li>
+            <li class="topicos__item"><a href="fashion.html" class="topicos__link">Vestidos Femininos</a></li>
+            <li class="topicos__item"><a href="fashion.html" class="topicos__link">Conjuntos & Jeans</a></li>
+        </ul>
+    </section>
 
-                <!-- Card de Destaque -->
-                <div class="card">
-                    <div class="card__descricao">
-                        <div class="descricao">
-                            <h3 class="descricao__titulo">Look do Mês</h3>
-                            <h2 class="descricao__titulo-livro">Cropped Floral com Short Jeans</h2>
-                            <p class="descricao__texto">Conjunto queridinho da comunidade: leve, ousado e perfeito para
-                                o
-                                verão.</p>
-                        </div>
-                        <img src="img/conjunto.jpg" class="descricao__imagem" alt="Look do mês com cropped floral">
-                    </div>
-                    <div class="card__botoes">
-                        <ul class="botoes">
-                            <li class="botoes__item">
-                                <img src="img/Favoritos.svg" alt="Favoritar Produto" aria-label="Favoritar Produto">
-                            </li>
-                            <li class="botoes__item">
-                                <img src="img/Compras.svg" alt="Adicionar ao Carrinho"
-                                    aria-label="Adicionar ao Carrinho">
-                            </li>
-                        </ul>
-                        <a href="fashion.html" class="botoes__ancora">Ver detalhes</a>
-                    </div>
-                </div>
+    <!-- CONTATO / NEWSLETTER -->
+    <section class="contato">
+        <div class="contato__descrição">
+            <h2 class="contato__titulo">Fique por dentro das novidades!</h2>
+            <p class="contato__texto">Atualizações de novos produtos, novos looks, promoções e outros.</p>
+        </div>
+        <a href="https://api.whatsapp.com/send/?phone=5511958723409&text&type=phone_number&app_absent=0"
+            class="contato__email">Acompanhe-nos no WhatsApp</a>
+    </section>
 
-            </div>
-        </section>
+    <hr />
 
+    <!-- FOOTER -->
+    <footer class="rodape">
+        <h2 class="rodape__titulo">Rosa Modas</h2>
 
-        <section class="novidades" id="novidades">
-            <h2 class="novidades__titulo">Novidades</h2>
-            <div class="novidades__grid"><!-- preenchido dinamicamente pelo site.js --></div>
-        </section>
+        <ul class="lista-rodape">
+            <li class="lista-rodape__titulo">Contato</li>
+            <li class="lista-rodape__item">
+                <img src="img/whatsappfooter.png" alt="Ícone WhatsApp">
+                <a href="https://wa.me/5511958723409" class="lista-rodape__link" target="_blank">WhatsApp</a>
+            </li>
+            <li class="lista-rodape__item">
+                <img src="img/instagram.png" alt="Ícone Instagram">
+                <a href="https://instagram.com/bela_rosasalao" class="lista-rodape__link" target="_blank">Instagram</a>
+            </li>
+            <li class="lista-rodape__item">
+                <img src="img/email.png" alt="Ícone Email">
+                <a href="https://mail.google.com/mail/?view=cm&fs=1&to=roseaneamarasilvaa@gmail.com" target="_blank"
+                    class="lista-rodape__link">roseaneamarasilvaa@gmail.com</a>
+            </li>
+        </ul>
 
+        <ul class="lista-rodape">
+            <li class="lista-rodape__titulo">Loja</li>
+            <li class="lista-rodape__item"><a href="about.html" class="lista-rodape__link">Sobre nós</a></li>
+            <li class="lista-rodape__item"><a href="Universo_Rosa/index.html" id="link-universo-rosa-footer"
+                    class="lista-rodape__link" target="_blank" rel="noopener noreferrer">Espaço Espiritual</a></li>
+            <li class="lista-rodape__item"><a href="#" class="lista-rodape__link">Política de Troca</a></li>
+            <li class="lista-rodape__item"><a href="Universo_Rosa/admin.html" id="link-area-admin"
+                    class="lista-rodape__link">Área Administrativa</a></li>
+        </ul>
 
-        <section class="topicos">
-            <h2 class="topicos__titulo">Principais Serviços</h2>
-            <ul class="topicos__lista">
-                <li class="topicos__item"><a href="hair.html" class="topicos__link">Progressiva</a></li>
-                <li class="topicos__item"><a href="hair.html" class="topicos__link">Botox</a></li>
-                <li class="topicos__item"><a href="hair.html" class="topicos__link">Escova</a></li>
-                <li class="topicos__item"><a href="hair.html" class="topicos__link">Hidratação</a></li>
-                <li class="topicos__item"><a href="fashion.html" class="topicos__link">Vestidos Femininos</a></li>
-                <li class="topicos__item"><a href="fashion.html" class="topicos__link">Conjuntos & Jeans</a></li>
-            </ul>
-        </section>
+        <ul class="lista-rodape">
+            <li class="lista-rodape__titulo">Endereço</li>
+            <li class="lista-rodape__item">
+                Rua Nova Esperança, 402<br>
+                Bairro da Inamar<br>
+                Diadema - SP<br>
+                CEP 09981-130
+            </li>
+        </ul>
+    </footer>
 
-        <section class="contato">
-            <div class="contato__descrição">
-                <h2 class="contato__titulo">Fique por dentro das novidades!</h2>
-                <p class="contato__texto">Atualizações de novos produtos, novos looks, promoções e outros.</p>
-            </div>
-            <a href="https://api.whatsapp.com/send/?phone=5511958723409&text&type=phone_number&app_absent=0"
-                class="contato__email">Acompanhe-nos no WhatsApp</a>
-        </section>
+    <!-- JS -->
+    <script type="module" src="js/site.js"></script>
 
-        <hr />
-
-        <footer class="rodape">
-            <h2 class="rodape__titulo">Rosa Modas</h2>
-
-            <ul class="lista-rodape">
-                <li class="lista-rodape__titulo">Contato</li>
-                <li class="lista-rodape__item">
-                    <img src="img/whatsappfooter.png" alt="Ícone WhatsApp">
-                    <a href="https://wa.me/5511958723409" class="lista-rodape__link" target="_blank">WhatsApp</a>
-                </li>
-                <li class="lista-rodape__item">
-                    <img src="img/instagram.png" alt="Ícone Instagram">
-                    <a href="https://instagram.com/bela_rosasalao" class="lista-rodape__link" target="_blank">Instagram</a>
-                </li>
-                <li class="lista-rodape__item">
-                    <img src="img/email.png" alt="Ícone Email">
-                    <a href="https://mail.google.com/mail/?view=cm&fs=1&to=roseaneamarasilvaa@gmail.com" target="_blank"
-                        class="lista-rodape__link">roseaneamarasilvaa@gmail.com</a>
-                </li>
-            </ul>
-
-            <ul class="lista-rodape">
-                <li class="lista-rodape__titulo">Loja</li>
-                <li class="lista-rodape__item"><a href="about.html" class="lista-rodape__link">Sobre nós</a></li>
-                <li class="lista-rodape__item"><a href="Universo_Rosa/index.html" id="link-universo-rosa-footer"
-                        class="lista-rodape__link" target="_blank" rel="noopener noreferrer">Espaço Espiritual</a></li>
-                <li class="lista-rodape__item"><a href="#" class="lista-rodape__link">Política de Troca</a></li>
-                <li class="lista-rodape__item"><a href="Universo_Rosa/admin.html" id="link-area-admin"
-                        class="lista-rodape__link">Área Administrativa</a></li>
-            </ul>
-
-            <ul class="lista-rodape">
-                <li class="lista-rodape__titulo">Endereço</li>
-                <li class="lista-rodape__item">
-                    Rua Nova Esperança, 402<br>
-                    Bairro da Inamar<br>
-                    Diadema - SP<br>
-                    CEP 09981-130
-                </li>
-            </ul>
-        </footer>
-
-        <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-        <script type="module" src="js/site.js"></script>
-        <script>
-            const swiperHair = new Swiper('.swiper-hair', {
-                slidesPerView: 1.3,
-                spaceBetween: 16,
-                breakpoints: {
-                    768: { slidesPerView: 2, spaceBetween: 24 },
-                    1200: { slidesPerView: 3, spaceBetween: 28 }
-                },
-                pagination: {
-                    el: '.swiper-pagination',
-                    type: 'bullets',
-                },
-                navigation: {
-                    nextEl: '.swiper-button-next',
-                    prevEl: '.swiper-button-prev',
-                }
-            });
-
-            const swiperFashion = new Swiper('.swiper-fashion', {
-                slidesPerView: 1.3,
-                spaceBetween: 16,
-                breakpoints: {
-                    768: { slidesPerView: 2, spaceBetween: 24 },
-                    1200: { slidesPerView: 3, spaceBetween: 28 }
-                },
-                pagination: {
-                    el: '.swiper-pagination',
-                    type: 'bullets',
-                },
-                navigation: {
-                    nextEl: '.swiper-button-next',
-                    prevEl: '.swiper-button-prev',
-                }
-            });
-        </script>
-
-        <a href="https://wa.me/5511958723409" class="whatsapp-fixo" target="_blank">
-            <img src="img/whatsapp.png" alt="WhatsApp">
-        </a>
+    <!-- WhatsApp fixo -->
+    <a href="https://wa.me/5511958723409" class="whatsapp-fixo" target="_blank">
+        <img src="img/whatsapp.png" alt="WhatsApp">
+    </a>
 
 </body>
 

@@ -1,28 +1,14 @@
-// api-config.js
-// --------------
-// Configuração central da URL da REST API (Spring Boot).
-//
-// Funcionamento automático:
-// - Abrindo o site localmente (file:// ou http://localhost/127.0.0.1)
-//   → usa a API local (http://localhost:8080/api)
-// - Publicado na Vercel (produção)
-//   → usa a API hospedada no Render (https://rosa-modas.onrender.com/api)
-//
-// Assim é possível rodar o backend local para testes SEM derrubar o Render.
+// api-config.js — URL da API (Spring Boot)
+// Local: http://localhost:8080/api
+// Produção (Vercel): https://rosa-modas.onrender.com/api
 
-const isLocal =
-    typeof window !== 'undefined' &&
-    (
-        window.location.protocol === 'file:' ||
-        window.location.hostname === 'localhost' ||
-        window.location.hostname === '127.0.0.1'
-    );
+const isLocal = typeof window !== 'undefined' && (
+    location.protocol === 'file:' ||
+    location.hostname === 'localhost' ||
+    location.hostname === '127.0.0.1'
+);
 
-export const API_URL = isLocal
-    ? 'http://localhost:8080/api'
-    : 'https://rosa-modas.onrender.com/api';
+export const API_URL = isLocal ? 'http://localhost:8080/api' : 'https://rosa-modas.onrender.com/api';
 
-// URL do site irmão ROSA MODAS (links cruzados entre os dois sites).
-// - Localmente: a home do Rosa Modas fica uma pasta acima desta.
-// - Em produção: troque pelo endereço real do site Rosa Modas.
+// Link pro site irmão (Rosa Modas)
 export const ROSA_MODAS_URL = '../index.html';

@@ -41,7 +41,6 @@ public class PromocaoController {
             if (dados.getDescricao() != null) p.setDescricao(dados.getDescricao());
             if (dados.getDataInicio() != null) p.setDataInicio(dados.getDataInicio());
             if (dados.getDataFim() != null) p.setDataFim(dados.getDataFim());
-            if (dados.getImagemUrl() != null) p.setImagemUrl(dados.getImagemUrl());
             return repository.save(p);
         }).orElseThrow(() -> new RuntimeException("Promoção não encontrada: " + id));
     }

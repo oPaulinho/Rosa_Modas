@@ -22,7 +22,6 @@ public class ConfigAgendaController {
             defaultConfig.setHoraFim("18:00");
             defaultConfig.setDiasSemana("1,2,3,4,5,6");
             defaultConfig.setDatasBloqueadas("");
-            defaultConfig.setNumerosAdmin("11958723409");
             return repository.save(defaultConfig);
         });
     }

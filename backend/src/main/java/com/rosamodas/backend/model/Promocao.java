@@ -17,19 +17,17 @@ public class Promocao {
     private String status; // ativa, inativa
     private String dataInicio; // YYYY-MM-DD
     private String dataFim; // YYYY-MM-DD
-    private String imagemUrl;
     private String site = "ROSA_MODAS"; // ROSA_MODAS | UNIVERSO_ROSA
 
     public Promocao() {
     }
 
-    public Promocao(String titulo, String descricao, String status, String dataInicio, String dataFim, String imagemUrl) {
+    public Promocao(String titulo, String descricao, String status, String dataInicio, String dataFim) {
         this.titulo = titulo;
         this.descricao = descricao;
         this.status = status;
         this.dataInicio = dataInicio;
         this.dataFim = dataFim;
-        this.imagemUrl = imagemUrl;
     }
 
     public Long getId() {
@@ -78,14 +76,6 @@ public class Promocao {
 
     public void setDataFim(String dataFim) {
         this.dataFim = dataFim;
-    }
-
-    public String getImagemUrl() {
-        return imagemUrl;
-    }
-
-    public void setImagemUrl(String imagemUrl) {
-        this.imagemUrl = imagemUrl;
     }
 
     public String getSite() {

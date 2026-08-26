@@ -32,6 +32,9 @@ public class ProdutoController {
         if (produto.getSite() == null || produto.getSite().isBlank()) {
             produto.setSite("ROSA_MODAS");
         }
+        if (produto.getIcone() == null || produto.getIcone().isBlank()) {
+            produto.setIcone("🌹"); // Emoji padrão: rosa
+        }
         return repository.save(produto);
     }
 
@@ -40,7 +43,7 @@ public class ProdutoController {
         return repository.findById(id).map(p -> {
             p.setNome(updated.getNome());
             p.setPreco(updated.getPreco());
-            if (updated.getImagemUrl() != null) p.setImagemUrl(updated.getImagemUrl());
+            if (updated.getIcone() != null) p.setIcone(updated.getIcone());
             p.setStatus(updated.getStatus());
             return repository.save(p);
         }).orElseGet(() -> {

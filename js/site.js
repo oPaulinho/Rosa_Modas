@@ -5,7 +5,7 @@
 // - Conteúdo dinâmico do banner (hero) pelo painel
 // - Promoções ativas (respeitando a validade) exibidas na home
 // - Novidades (produtos disponíveis) na home
-// - Carrosséis dinâmicos (procedimentos e produtos)
+// - Procedimentos e Moda como grade de cards com emoji
 // - Endereço e contatos centralizados (Configurações Gerais)
 // - Tema claro/escuro com identidade rosa
 // - Links cruzados com o Universo Rosa e acesso administrativo
@@ -18,8 +18,8 @@ document.addEventListener('DOMContentLoaded', () => {
     carregarConteudoCMS();
     carregarPromocoes();
     carregarNovidades();
-    carregarCarrossel('.swiper-hair', 'procedimentos', 'img/procedimento4.jpg');
-    carregarCarrossel('.swiper-fashion', 'produtos', 'img/roupa.jpg');
+    carregarProcedimentos();
+    carregarModa();
     carregarContatos();
 });
 
@@ -42,42 +42,29 @@ function precoBRL(valor) {
     return Number(valor || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 }
 
-// Ícone padrão dos procedimentos capilares (sem depender de imagem)
-// Se o procedimento tem ícone customizado (i.icone), usa ele; senão detecta pelo nome.
+// Ícone dos procedimentos: usa customizado (item.icone) ou detecta pelo nome
 function iconeProcedimento(item) {
-    // Se tem ícone customizado salvo, usa ele
-    if (item.icone && item.icone.trim()) {
-        return item.icone;
-    }
-    // Senão, detecta automaticamente pelo nome
+    if (item.icone && item.icone.trim()) return item.icone;
     const n = (item.nome || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
     const mapa = [
-        ['escova', '💇‍♀️'],
-        ['botox', '💆‍♀️'],
-        ['progressiva', '💁‍♀️'],
-        ['hidratacao', '💧'],
-        ['alisamento', '🧖‍♀️'],
-        ['tintura', '🎨'],
-        ['mechas', '✨'],
-        ['luzes', '✨'],
-        ['corte', '✂️'],
-        ['reconstrucao', '🔬'],
-        ['nutricao', '🧴'],
-        ['cauterizacao', '🧪'],
-        ['balayage', '🎀'],
-        ['selagem', '🌿'],
-        ['brilho', '💎']
+        ['escova', '💇‍♀️'], ['botox', '💆‍♀️'], ['progressiva', '💁‍♀️'],
+        ['hidratacao', '💧'], ['alisamento', '🧖‍♀️'], ['tintura', '🎨'],
+        ['mechas', '✨'], ['luzes', '✨'], ['corte', '✂️'],
+        ['reconstrucao', '🔬'], ['nutricao', '🧴'], ['cauterizacao', '🧪'],
+        ['balayage', '🎀'], ['selagem', '🌿'], ['brilho', '💎']
     ];
-    for (const [palavra, icone] of mapa) {
-        if (n.includes(palavra)) return icone;
-    }
+    for (const [p, i] of mapa) if (n.includes(p)) return i;
     return '💇';
+}
+
+// Ícone dos produtos: usa customizado (item.icone) ou 🌹 padrão
+function iconeProduto(item) {
+    return item.icone?.trim() || '🌹';
 }
 
 // ------------------------------------------------------------
 // TEMA CLARO/ESCURO (rosa)
 // ------------------------------------------------------------
-
 function inicializarTema() {
     const btn = document.getElementById('btn-dark-mode');
     if (!btn) return;
@@ -100,7 +87,6 @@ function inicializarTema() {
 // ------------------------------------------------------------
 // LINKS CRUZADOS E ACESSO ADMINISTRATIVO
 // ------------------------------------------------------------
-
 function aplicarLinksCruzados() {
     document.querySelectorAll('#link-universo-rosa, #link-universo-rosa-mobile, #link-universo-rosa-footer').forEach(l => {
         if (l) l.href = UNIVERSO_ROSA_URL;
@@ -113,9 +99,7 @@ function aplicarLinksCruzados() {
 // ------------------------------------------------------------
 // CONTEÚDO CMS (BANNER / HERO)
 // ------------------------------------------------------------
-
 async function carregarConteudoCMS() {
-    // O banner hero dinâmico só existe na home (página com promoções/novidades)
     if (!document.getElementById('promo-destaques')) return;
     try {
         const c = await fetchJSON(`${API_URL}/conteudo?site=ROSA_MODAS`);
@@ -131,7 +115,6 @@ async function carregarConteudoCMS() {
 // ------------------------------------------------------------
 // PROMOÇÕES ATIVAS (respeitando a validade)
 // ------------------------------------------------------------
-
 async function carregarPromocoes() {
     const section = document.getElementById('promo-destaques');
     const grid = section && section.querySelector('.promo-destaques__grid');
@@ -156,7 +139,6 @@ async function carregarPromocoes() {
             const card = document.createElement('article');
             card.className = 'promo-destaques__card';
             card.innerHTML = `
-                ${p.imagemUrl ? `<img src="${p.imagemUrl}" alt="${p.titulo}" onerror="this.style.display='none'">` : ''}
                 <div class="promo-destaques__info">
                     <h3>${p.titulo}</h3>
                     <p>${p.descricao || ''}</p>
@@ -170,9 +152,8 @@ async function carregarPromocoes() {
 }
 
 // ------------------------------------------------------------
-// NOVIDADES (produtos disponíveis)
+// NOVIDADES (produtos disponíveis) — cards com emoji
 // ------------------------------------------------------------
-
 async function carregarNovidades() {
     const section = document.getElementById('novidades');
     const grid = section && section.querySelector('.novidades__grid');
@@ -191,8 +172,9 @@ async function carregarNovidades() {
         disponiveis.forEach(p => {
             const card = document.createElement('article');
             card.className = 'novidades__card';
+            const icone = iconeProduto(p);
             card.innerHTML = `
-                <img src="${p.imagemUrl || 'img/roupa.jpg'}" alt="${p.nome}" onerror="this.src='img/roupa.jpg'">
+                <div class="novidades__icone" aria-hidden="true">${icone}</div>
                 <div class="novidades__info">
                     <h3>${p.nome}</h3>
                     <span class="novidades__preco">${precoBRL(p.preco)}</span>
@@ -206,69 +188,82 @@ async function carregarNovidades() {
 }
 
 // ------------------------------------------------------------
-// CARROSSÉIS DINÂMICOS (procedimentos e produtos)
+// PROCEDIMENTOS CAPILARES — grade de cards com emoji
 // ------------------------------------------------------------
-
-async function carregarCarrossel(selector, tipo, fallbackImg) {
-    const swiper = document.querySelector(selector);
-    if (!swiper) return;
-    const wrapper = swiper.querySelector('.swiper-wrapper');
-    if (!wrapper) return;
+async function carregarProcedimentos() {
+    const section = document.getElementById('procedimentos-section');
+    const grid = section && section.querySelector('#procedimentos-grid');
+    if (!section || !grid) return;
 
     try {
-        const url = tipo === 'procedimentos'
-            ? `${API_URL}/procedimentos?site=ROSA_MODAS`
-            : `${API_URL}/produtos?site=ROSA_MODAS`;
-        const itens = await fetchJSON(url);
+        const itens = await fetchJSON(`${API_URL}/procedimentos?site=ROSA_MODAS`);
         const disponiveis = itens.filter(i => !i.status || i.status === 'Disponível');
-        if (!disponiveis.length) return;
 
-        wrapper.innerHTML = '';
-        disponiveis.forEach(i => {
-            const slide = document.createElement('div');
-            slide.className = 'swiper-slide';
-            if (tipo === 'procedimentos') {
-                slide.innerHTML = `
-                    <div class="slide-icon">${iconeProcedimento(i)}</div>
-                    <div class="slide-caption">${i.nome}</div>
-                    ${i.descricao ? `<p class="slide-desc">${i.descricao}</p>` : ''}`;
-            } else {
-                slide.innerHTML = `
-                    <img src="${i.imagemUrl || fallbackImg}" alt="${i.nome}" onerror="this.src='${fallbackImg}'">
-                    <div class="slide-caption">${i.nome}</div>`;
-            }
-            wrapper.appendChild(slide);
+        if (!disponiveis.length) {
+            section.style.display = 'none';
+            return;
+        }
+
+        grid.innerHTML = '';
+        disponiveis.forEach(item => {
+            const card = document.createElement('article');
+            card.className = 'product-card';
+            const icone = iconeProcedimento(item);
+            card.innerHTML = `
+                <div class="product-icon" aria-hidden="true">${icone}</div>
+                <div class="product-info">
+                    <h3 class="product-title">${item.nome}</h3>
+                    <p class="product-desc">${item.descricao || 'Procedimento capilar disponível.'}</p>
+                </div>`;
+            grid.appendChild(card);
         });
-
-        reiniciarSwiper(swiper);
     } catch (e) {
-        console.error(`Erro ao carregar carrossel ${selector}:`, e);
+        console.error('Erro ao carregar procedimentos:', e);
+        section.style.display = 'none';
     }
 }
 
-function reiniciarSwiper(swiper) {
-    if (swiper.swiper) swiper.swiper.destroy(true, true);
-    if (typeof Swiper !== 'undefined') {
-        new Swiper(swiper, {
-            slidesPerView: 1.3,
-            spaceBetween: 16,
-            breakpoints: {
-                768: { slidesPerView: 2, spaceBetween: 24 },
-                1200: { slidesPerView: 3, spaceBetween: 28 }
-            },
-            pagination: { el: swiper.querySelector('.swiper-pagination'), type: 'bullets' },
-            navigation: {
-                nextEl: swiper.querySelector('.swiper-button-next'),
-                prevEl: swiper.querySelector('.swiper-button-prev')
-            }
+// ------------------------------------------------------------
+// MODA FEMININA — grade de cards com emoji
+// ------------------------------------------------------------
+async function carregarModa() {
+    const section = document.getElementById('moda-section');
+    const grid = section && section.querySelector('#moda-grid');
+    if (!section || !grid) return;
+
+    try {
+        const itens = await fetchJSON(`${API_URL}/produtos?site=ROSA_MODAS`);
+        const disponiveis = itens.filter(i => i.status === 'Disponível');
+
+        if (!disponiveis.length) {
+            section.style.display = 'none';
+            return;
+        }
+
+        grid.innerHTML = '';
+        disponiveis.forEach(item => {
+            const card = document.createElement('article');
+            card.className = 'product-card';
+            const icone = iconeProduto(item);
+            const preco = precoBRL(item.preco);
+            card.innerHTML = `
+                <div class="product-icon" aria-hidden="true">${icone}</div>
+                <div class="product-info">
+                    <h3 class="product-title">${item.nome}</h3>
+                    <p class="product-desc">${item.descricao || 'Peça disponível na loja.'}</p>
+                    ${preco ? `<p class="product-price">${preco}</p>` : ''}
+                </div>`;
+            grid.appendChild(card);
         });
+    } catch (e) {
+        console.error('Erro ao carregar moda:', e);
+        section.style.display = 'none';
     }
 }
 
 // ------------------------------------------------------------
 // ENDEREÇO E CONTATOS CENTRALIZADOS (Configurações Gerais)
 // ------------------------------------------------------------
-
 async function carregarContatos() {
     try {
         const cfg = await fetchJSON(`${API_URL}/site-config`);
@@ -286,7 +281,7 @@ async function carregarContatos() {
         }
 
         // Coluna Endereço no rodapé
-        const footerEndereco = document.querySelector('footer .lista-rodape:nth-of-type(3) .lista-rodape__item');
+        const footerEndereco = document.query.querySelector('footer .lista-rodape:nth-of-type(3) .lista-rodape__item');
         if (footerEndereco && cfg.endereco) {
             const partes = cfg.endereco.split('-').map(p => p.trim()).filter(Boolean);
             footerEndereco.innerHTML = partes.join('<br>');

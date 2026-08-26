@@ -14,7 +14,6 @@ public class ConfigAgenda {
     private String horaFim = "18:00";
     private String diasSemana = "1,2,3,4,5"; // Segunda a Sexta
     private String datasBloqueadas = ""; // Separadas por vírgula: YYYY-MM-DD
-    private String numerosAdmin = ""; // Separados por vírgula
 
     public ConfigAgenda() {
     }
@@ -65,13 +64,5 @@ public class ConfigAgenda {
 
     public void setDatasBloqueadas(String datasBloqueadas) {
         this.datasBloqueadas = datasBloqueadas;
-    }
-
-    public String getNumerosAdmin() {
-        return numerosAdmin;
-    }
-
-    public void setNumerosAdmin(String numerosAdmin) {
-        this.numerosAdmin = numerosAdmin;
     }
 }

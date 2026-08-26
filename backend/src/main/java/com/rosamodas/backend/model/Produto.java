@@ -14,7 +14,7 @@ public class Produto {
     
     private String nome;
     private Double preco;
-    private String imagemUrl;
+    private String icone; // emoji/ícone do produto (ex: 👗, 👠, 🌹)
     private String status; // Disponível, Esgotado
     private String criadoEm;
     private String site = "ROSA_MODAS"; // ROSA_MODAS | UNIVERSO_ROSA
@@ -22,10 +22,10 @@ public class Produto {
     public Produto() {
     }
 
-    public Produto(String nome, Double preco, String imagemUrl, String status, String criadoEm) {
+    public Produto(String nome, Double preco, String icone, String status, String criadoEm) {
         this.nome = nome;
         this.preco = preco;
-        this.imagemUrl = imagemUrl;
+        this.icone = icone;
         this.status = status;
         this.criadoEm = criadoEm;
     }
@@ -54,12 +54,12 @@ public class Produto {
         this.preco = preco;
     }
 
-    public String getImagemUrl() {
-        return imagemUrl;
+    public String getIcone() {
+        return icone;
     }
 
-    public void setImagemUrl(String imagemUrl) {
-        this.imagemUrl = imagemUrl;
+    public void setIcone(String icone) {
+        this.icone = icone;
     }
 
     public String getStatus() {
