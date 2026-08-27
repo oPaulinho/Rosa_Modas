@@ -13,8 +13,6 @@ public class Admin {
     private Long id;
     
     private String email;
-    // Em um projeto de produção a senha seria armazenada com hash (ex.: BCrypt).
-    // Aqui mantemos simples por se tratar de um projeto acadêmico.
     private String senha;
 
     public Admin() {

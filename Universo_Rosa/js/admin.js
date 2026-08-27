@@ -183,8 +183,12 @@ window.excluirAgendamento = async id => {
     try {
         const r = await fetch(`${API_URL}/agendamentos/${id}`, { method: 'DELETE' });
         if (!r.ok) throw new Error();
-        alert('Excluído!'); carregarAgendamentos();
-    } catch (e) { console.error('Erro excluir:', e); alert('Erro ao excluir.'); }
+        alert('Excluído!');
+        carregarAgendamentos();
+    } catch (e) {
+        console.error('Erro excluir:', e);
+        alert('Erro ao excluir.');
+    }
 };
 
 // Confirma agendamento + abre WhatsApp pro cliente
@@ -197,10 +201,17 @@ window.confirmarAgendamento = async (id, tel, nome, dh, serv, mod) => {
         const conflito = todos.some(a => String(a.id) !== String(id) && (a.status||'').toLowerCase() !== 'cancelado' && a.dataHora === dh);
         if (conflito) return alert(`⚠️ Já existe outro agendamento ativo pra ${new Date(dh).toLocaleString('pt-BR')}.`);
 
-        await fetch(`${API_URL}/agendamentos/${id}`, {
-            method: 'PUT', headers: { 'Content-Type': 'application/json' },
+        // Atualiza status no backend
+        const res = await fetch(`${API_URL}/agendamentos/${id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ status: 'confirmado', modalidade: mod })
         });
+
+        // Verifica se a API respondeu com sucesso
+        if (!res.ok) {
+            throw new Error('Falha ao confirmar no servidor');
+        }
 
         const fmt = new Date(dh).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' });
         const online = (mod || '').trim().toLowerCase() === 'online';
@@ -221,10 +232,18 @@ window.confirmarAgendamento = async (id, tel, nome, dh, serv, mod) => {
 window.cancelarAgendamento = async (id, tel, nome, dh, serv, mod) => {
     if (!confirm(`Cancelar ${nome}?`)) return;
     try {
-        await fetch(`${API_URL}/agendamentos/${id}`, {
-            method: 'PUT', headers: { 'Content-Type': 'application/json' },
+        // Atualiza status no backend
+        const res = await fetch(`${API_URL}/agendamentos/${id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ status: 'cancelado' })
         });
+
+        // Verifica se a API respondeu com sucesso
+        if (!res.ok) {
+            throw new Error('Falha ao cancelar no servidor');
+        }
+
         const fmt = new Date(dh).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' });
         const msg = encodeURIComponent(
             `Olá ${nome}.\nInfelizmente tivemos um imprevisto e não dá pra fazer seu agendamento de ${serv} dia ${fmt}.\n\nDesculpe o transtorno.\n\nChama a gente pra remarcar.\n\nObrigado pela compreensão.`
@@ -232,7 +251,10 @@ window.cancelarAgendamento = async (id, tel, nome, dh, serv, mod) => {
         if (tel.length >= 10) window.open(`https://wa.me/55${tel}?text=${msg}`, '_blank');
         alert('Cancelado! WhatsApp aberto pro cliente.');
         carregarAgendamentos();
-    } catch (e) { console.error('Erro cancelar:', e); alert('Erro ao cancelar.'); }
+    } catch (e) {
+        console.error('Erro cancelar:', e);
+        alert('Erro ao cancelar.');
+    }
 };
 
 // --- Produtos (só texto + emoji) ---
@@ -245,17 +267,39 @@ if (formProduto) {
         const btn = document.getElementById('btn-add-produto');
         const id = document.getElementById('prod-id').value;
         const edit = !!id;
-        btn.disabled = true; btn.textContent = edit ? 'Atualizando...' : 'Salvando...';
+        btn.disabled = true;
+        btn.textContent = edit ? 'Atualizando...' : 'Salvando...';
         const nome = document.getElementById('prod-nome').value;
         const preco = document.getElementById('prod-preco').value;
         const icone = document.getElementById('prod-icone').value || '🌹';
         try {
             const u = edit ? `${API_URL}/produtos/${id}` : `${API_URL}/produtos`;
-            const r = await fetch(u, { method: edit ? 'PUT' : 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ nome, preco: Number(preco), icone, status: 'Disponível', site: document.getElementById('prod-site')?.value || 'ROSA_MODAS' }) });
+            const r = await fetch(u, {
+                method: edit ? 'PUT' : 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    nome,
+                    preco: Number(preco),
+                    icone,
+                    status: 'Disponível',
+                    site: document.getElementById('prod-site')?.value || 'ROSA_MODAS'
+                })
+            });
             if (!r.ok) throw new Error(edit ? 'Erro ao atualizar.' : 'Erro ao salvar.');
-            produtoAlert.className = 'alert success'; produtoAlert.textContent = edit ? 'Atualizado!' : 'Salvo!';
-            formProduto.reset(); document.getElementById('prod-id').value = ''; btn.textContent = 'Salvar Produto'; carregarProdutosAdmin();
-        } catch (er) { console.error(er); produtoAlert.className = 'alert error'; produtoAlert.textContent = er.message; } finally { btn.disabled = false; if (!edit) btn.textContent = 'Salvar Produto'; }
+            produtoAlert.className = 'alert success';
+            produtoAlert.textContent = edit ? 'Atualizado!' : 'Salvo!';
+            formProduto.reset();
+            document.getElementById('prod-id').value = '';
+            btn.textContent = 'Salvar Produto';
+            carregarProdutosAdmin();
+        } catch (er) {
+            console.error(er);
+            produtoAlert.className = 'alert error';
+            produtoAlert.textContent = er.message;
+        } finally {
+            btn.disabled = false;
+            if (!edit) btn.textContent = 'Salvar Produto';
+        }
     });
 }
 
@@ -278,12 +322,26 @@ async function carregarProdutosAdmin() {
 }
 
 window.alterarStatusProduto = async (id, st) => {
-    try { await fetch(`${API_URL}/produtos/${id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ status: st }) }); alert('Status: ' + st); } catch { alert('Erro status.'); }
+    try {
+        await fetch(`${API_URL}/produtos/${id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status: st })
+        });
+        alert('Status: ' + st);
+    } catch {
+        alert('Erro status.');
+    }
 };
 
 window.excluirProduto = async id => {
     if (!confirm('Excluir esta peça?')) return;
-    try { await fetch(`${API_URL}/produtos/${id}`, { method: 'DELETE' }); carregarProdutosAdmin(); } catch { alert('Erro excluir.'); }
+    try {
+        await fetch(`${API_URL}/produtos/${id}`, { method: 'DELETE' });
+        carregarProdutosAdmin();
+    } catch {
+        alert('Erro excluir.');
+    }
 };
 
 window.editarProduto = (id, nome, preco, icone, status, site) => {
@@ -327,15 +385,44 @@ if (formPromocao) {
     formPromocao.addEventListener('submit', async e => {
         e.preventDefault();
         const btn = document.getElementById('btn-add-promocao');
-        btn.disabled = true; btn.textContent = 'Salvando...';
-        const nv = { titulo: document.getElementById('promo-titulo').value, descricao: document.getElementById('promo-descricao').value, status: document.getElementById('promo-status').value, dataInicio: document.getElementById('promo-data-inicio').value, dataFim: document.getElementById('promo-data-fim').value, site: document.getElementById('promo-site')?.value || 'ROSA_MODAS' };
-        try { await fetch(`${API_URL}/promocoes`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(nv) }); promoAlert.className = 'alert success'; promoAlert.textContent = 'Promoção salva!'; formPromocao.reset(); carregarPromocoesAdmin(); } catch { promoAlert.className = 'alert error'; promoAlert.textContent = 'Erro ao salvar.'; } finally { btn.disabled = false; btn.textContent = 'Salvar Promoção'; }
+        btn.disabled = true;
+        btn.textContent = 'Salvando...';
+        const nv = {
+            titulo: document.getElementById('promo-titulo').value,
+            descricao: document.getElementById('promo-descricao').value,
+            status: document.getElementById('promo-status').value,
+            dataInicio: document.getElementById('promo-data-inicio').value,
+            dataFim: document.getElementById('promo-data-fim').value,
+            site: document.getElementById('promo-site')?.value || 'ROSA_MODAS'
+        };
+        try {
+            await fetch(`${API_URL}/promocoes`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(nv)
+            });
+            promoAlert.className = 'alert success';
+            promoAlert.textContent = 'Promoção salva!';
+            formPromocao.reset();
+            carregarPromocoesAdmin();
+        } catch {
+            promoAlert.className = 'alert error';
+            promoAlert.textContent = 'Erro ao salvar.';
+        } finally {
+            btn.disabled = false;
+            btn.textContent = 'Salvar Promoção';
+        }
     });
 }
 
 window.excluirPromocao = async id => {
     if (!confirm('Excluir promoção?')) return;
-    try { await fetch(`${API_URL}/promocoes/${id}`, { method: 'DELETE' }); carregarPromocoesAdmin(); } catch { alert('Erro excluir.'); }
+    try {
+        await fetch(`${API_URL}/promocoes/${id}`, { method: 'DELETE' });
+        carregarPromocoesAdmin();
+    } catch {
+        alert('Erro excluir.');
+    }
 };
 
 // --- Procedimentos ---
@@ -391,7 +478,12 @@ window.editarProcedimento = (id, nome, desc, status, icone, site) => {
 
 window.excluirProcedimento = async id => {
     if (!confirm('Excluir?')) return;
-    try { await fetch(`${API_URL}/procedimentos/${id}`, { method: 'DELETE' }); carregarProcedimentosAdmin(); } catch { alert('Erro excluir.'); }
+    try {
+        await fetch(`${API_URL}/procedimentos/${id}`, { method: 'DELETE' });
+        carregarProcedimentosAdmin();
+    } catch {
+        alert('Erro excluir.');
+    }
 };
 
 // --- Serviços Espirituais ---
@@ -443,7 +535,12 @@ if (formServico) {
 
 window.excluirServico = async id => {
     if (!confirm('Excluir serviço?')) return;
-    try { await fetch(`${API_URL}/servicos/${id}`, { method: 'DELETE' }); carregarServicosAdmin(); } catch { alert('Erro excluir.'); }
+    try {
+        await fetch(`${API_URL}/servicos/${id}`, { method: 'DELETE' });
+        carregarServicosAdmin();
+    } catch {
+        alert('Erro excluir.');
+    }
 };
 
 window.editarServico = (id, nome, preco, desc, status, modalidades, icone) => {
@@ -570,7 +667,10 @@ async function carregarConfigGeral() {
     try {
         const c = await obterSiteConfig(); if (!c) return;
         const set = (id, v) => { const el = document.getElementById(id); if (el) el.value = v || ''; };
-        set('cfg-endereco', c.endereco); set('cfg-telefone', c.telefone); set('cfg-whatsapp', c.whatsapp); set('cfg-email', c.email); set('cfg-instagram', c.instagram);
+        set('cfg-endereco', c.endereco);
+        set('cfg-telefone', c.telefone);
+        set('cfg-email', c.email);
+        set('cfg-instagram', c.instagram);
     } catch (e) { console.error('Erro config geral:', e); }
 }
 if (formSiteConfig) {
@@ -578,13 +678,38 @@ if (formSiteConfig) {
         e.preventDefault();
         const btn = document.getElementById('btn-save-config-geral');
         btn.disabled = true; btn.textContent = 'Salvando...';
-        const p = { id: 'main', endereco: document.getElementById('cfg-endereco').value, telefone: document.getElementById('cfg-telefone').value, whatsapp: document.getElementById('cfg-whatsapp').value, email: document.getElementById('cfg-email').value, instagram: document.getElementById('cfg-instagram').value };
-        try { const r = await fetch(`${API_URL}/site-config`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(p) }); if (!r.ok) throw new Error(); siteConfigCache = p; configGeralAlert.className = 'alert success'; configGeralAlert.textContent = 'Configurações salvas!'; } catch { configGeralAlert.className = 'alert error'; configGeralAlert.textContent = 'Erro ao salvar.'; } finally { btn.disabled = false; btn.textContent = 'Salvar Configurações'; }
+        const p = {
+            id: 'main',
+            endereco: document.getElementById('cfg-endereco').value,
+            telefone: document.getElementById('cfg-telefone').value,
+            email: document.getElementById('cfg-email').value,
+            instagram: document.getElementById('cfg-instagram').value
+        };
+        try {
+            const r = await fetch(`${API_URL}/site-config`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(p) });
+            if (!r.ok) throw new Error();
+            siteConfigCache = p;
+            configGeralAlert.className = 'alert success';
+            configGeralAlert.textContent = 'Configurações salvas!';
+        } catch {
+            configGeralAlert.className = 'alert error';
+            configGeralAlert.textContent = 'Erro ao salvar.';
+        } finally {
+            btn.disabled = false;
+            btn.textContent = 'Salvar Configurações';
+        }
     });
 }
 
 // Carrega tudo depois do login
 function carregarAdminExtras() {
-    carregarAgendamentos(); carregarProdutosAdmin(); carregarPromocoesAdmin(); carregarProcedimentosAdmin(); carregarServicosAdmin(); carregarConteudoCMS(); carregarConfigAgenda(); carregarConfigGeral();
+    carregarAgendamentos();
+    carregarProdutosAdmin();
+    carregarPromocoesAdmin();
+    carregarProcedimentosAdmin();
+    carregarServicosAdmin();
+    carregarConteudoCMS();
+    carregarConfigAgenda();
+    carregarConfigGeral();
 }
 verificarSessao();

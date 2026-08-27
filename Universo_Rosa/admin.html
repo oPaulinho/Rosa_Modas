@@ -553,10 +553,9 @@
 
                 <div id="config-agenda-alert" class="alert"></div>
 
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1.5rem;">
+                <div class="form-grid" style="margin-top: 1.5rem;">
                     <!-- Configurações Gerais -->
-                    <form id="form-config-agenda-geral"
-                        style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px;">
+                    <form id="form-config-agenda-geral" class="config-section">
                         <h4 style="margin-bottom: 1rem; color: var(--color-aesthetics-text);">Expediente e Intervalo
                         </h4>
 
@@ -570,7 +569,7 @@
                             </select>
                         </div>
 
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-grid">
                             <div class="input-group">
                                 <label>Início do Expediente</label>
                                 <input type="time" id="cfg-inicio" required>
@@ -606,20 +605,18 @@
                             Gerais</button>
                     </form>
 
-                    <!-- Datas Bloqueadas (Sem atendimento) -->
-                    <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px;">
+<!-- Datas Bloqueadas (Sem atendimento) -->
+                    <div class="config-section">
                         <h4 style="margin-bottom: 1rem; color: #c62828;">Bloquear Datas (Feriados/Folgas)</h4>
 
-                        <form id="form-bloquear-data" style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+                        <form id="form-bloquear-data" class="flex-between" style="margin-bottom: 1rem;">
                             <input type="date" id="cfg-bloquear-data" required
-                                style="flex: 1; padding: 0.8rem; border-radius: 8px; border: 2px solid var(--color-gray);">
-                            <button type="submit" class="btn-submit"
-                                style="width: auto; padding: 0.8rem 1.5rem; background: #c62828;">Bloquear</button>
+                                class="flex-1" style="padding: 0.8rem; border-radius: 8px; border: 2px solid var(--color-gray);">
+                            <button type="submit" class="btn-danger">Bloquear</button>
                         </form>
 
-                        <div
-                            style="max-height: 250px; overflow-y: auto; background: white; border-radius: 8px; border: 1px solid var(--color-gray); padding: 0.5rem;">
-                            <table class="data-table" style="margin: 0; font-size: 0.9rem;">
+                        <div class="table-scroll">
+                            <table class="data-table">
                                 <thead>
                                     <tr>
                                         <th>Data Bloqueada</th>
@@ -628,11 +625,12 @@
                                 </thead>
                                 <tbody id="tabela-datas-bloqueadas">
                                     <tr>
-                                        <td colspan="2" style="text-align: center;">Nenhuma data bloqueada.</td>
+                                        <td colspan="2" class="text-center">Nenhuma data bloqueada.</td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
+                    </div>
 
                 </div>
             </section>
@@ -645,25 +643,20 @@
 
                 <div id="config-geral-alert" class="alert"></div>
 
-                <form id="form-config-geral"
-                    style="margin-top: 1.5rem; display: grid; gap: 1rem; grid-template-columns: 1fr 1fr;">
-                    <div class="input-group" style="margin: 0; grid-column: 1 / -1;">
+                <form id="form-config-geral" class="form-grid" style="margin-top: 1.5rem;">
+                    <div class="input-group">
                         <label>Endereço do Estabelecimento</label>
                         <input type="text" id="cfg-endereco" placeholder="Rua, número, bairro, cidade/UF">
                     </div>
-                    <div class="input-group" style="margin: 0;">
+                    <div class="input-group">
                         <label>Telefone (exibição)</label>
                         <input type="text" id="cfg-telefone" placeholder="(11) 90000-0000">
                     </div>
-                    <div class="input-group" style="margin: 0;">
-                        <label>WhatsApp (somente dígitos)</label>
-                        <input type="text" id="cfg-whatsapp" placeholder="5511900000000">
-                    </div>
-                    <div class="input-group" style="margin: 0;">
+                    <div class="input-group">
                         <label>E-mail</label>
                         <input type="email" id="cfg-email" placeholder="contato@exemplo.com">
                     </div>
-                    <div class="input-group" style="margin: 0;">
+                    <div class="input-group">
                         <label>Instagram</label>
                         <input type="text" id="cfg-instagram" placeholder="@seu_perfil">
                     </div>
