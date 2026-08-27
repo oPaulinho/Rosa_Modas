@@ -3,6 +3,14 @@
 
 import { API_URL, ROSA_MODAS_URL } from './api-config.js';
 
+// Escapa caracteres especiais para inserção segura em HTML
+function escapeHtml(texto) {
+    if (!texto) return '';
+    const div = document.createElement('div');
+    div.textContent = texto;
+    return div.innerHTML;
+}
+
 // --- Máscara de telefone (formato (11) 99999-9999) ---
 const telInput = document.getElementById('telefone');
 if (telInput) {
@@ -52,6 +60,7 @@ if (formAgendamento) {
         try {
             // Evita agendamento duplicado pro mesmo telefone
             const resp = await fetch(`${API_URL}/agendamentos`);
+            if (!resp.ok) throw new Error('Erro ao verificar agendamentos.');
             const existentes = await resp.json();
             const agora = new Date();
 
@@ -176,8 +185,8 @@ async function carregarServicos() {
                 card.innerHTML = `
                     <div class="product-icon" aria-hidden="true">${iconeServico(s)}</div>
                     <div class="product-info">
-                        <h3 class="product-title">${s.nome}</h3>
-                        <p class="product-desc">${s.descricao || 'Atendimento espiritual disponível.'}</p>
+                        <h3 class="product-title">${escapeHtml(s.nome)}</h3>
+                        <p class="product-desc">${escapeHtml(s.descricao) || 'Atendimento espiritual disponível.'}</p>
                         ${preco ? `<p class="product-price">${preco}</p>` : ''}
                         ${mods ? `<p class="product-modalities">${mods}</p>` : ''}
                         <a href="#agendamento" class="hero-btn btn-spiritual" style="padding:.6rem 1.5rem;font-size:.95rem" data-servico="${s.nome}">Agendar</a>
@@ -236,6 +245,7 @@ async function inicializarAgenda() {
     try {
         // Config
         const cfgResp = await fetch(`${API_URL}/config-agenda`);
+        if (!cfgResp.ok) throw new Error('Erro ao carregar configuração da agenda.');
         const cfg = await cfgResp.json();
         if (cfg) {
             agendaConfig.intervalo = parseInt(cfg.intervalo || '60');
@@ -247,6 +257,7 @@ async function inicializarAgenda() {
 
         // Agendamentos existentes
         const agResp = await fetch(`${API_URL}/agendamentos`);
+        if (!agResp.ok) throw new Error('Erro ao carregar agendamentos.');
         const agendamentos = await agResp.json();
 
         carousel.innerHTML = '';
@@ -342,6 +353,7 @@ function carregarHorariosDoDia(dataStr, agendamentos) {
 async function carregarConteudoCMS() {
     try {
         const resp = await fetch(`${API_URL}/conteudo?site=UNIVERSO_ROSA`);
+        if (!resp.ok) throw new Error('Erro ao carregar conteúdo.');
         const c = await resp.json();
         if (!c) return;
         const ht = document.querySelector('.hero-spiritual-only .hero-title');
@@ -374,7 +386,11 @@ function inicializarModoNoturno() {
     const btn = document.getElementById('btn-dark-mode');
     if (!btn) return;
     const pref = localStorage.getItem('modoNoturno');
-    if (pref === 'ativo') { document.body.classList.add('dark-mode'); btn.textContent = '☀️'; btn.setAttribute('aria-label', 'Desativar modo noturno'); }
+    if (pref === 'ativo') {
+        document.body.classList.add('dark-mode');
+        btn.textContent = '☀️';
+        btn.setAttribute('aria-label', 'Desativar modo noturno');
+    }
     btn.addEventListener('click', () => {
         const on = document.body.classList.toggle('dark-mode');
         btn.textContent = on ? '☀️' : '🌙';

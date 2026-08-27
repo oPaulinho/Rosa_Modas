@@ -11,6 +11,8 @@ public class SiteConfig {
 
     private String endereco;
     private String telefone;
+    // Campo usado pelo site Rosa Modas (js/site.js) para montar link WhatsApp de contato.
+    // Não editável no painel admin — valor definido pelo DataSeeder ou API.
     private String whatsapp;
     private String email;
     private String instagram;

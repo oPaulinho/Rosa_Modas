@@ -16,7 +16,6 @@
 @import url("rodape.css");
 @import url("portfolio.css");
 @import url("about.css");
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap');
 
 :root {
     --cor-de-fundo: #fff5f8;
@@ -199,7 +198,7 @@ body.dark-mode .titulo__portfolio {
 }
 
 body.dark-mode .texto__portfolio {
-    color: #e8c8d4.
+    color: #e8c8d4;
 }
 
 body.dark-mode .section-portfolio,
@@ -342,7 +341,7 @@ body.dark-mode .product-title {
 }
 
 body.dark-mode .product-desc {
-    color: #d9b9c6.
+    color: #d9b9c6;
 }
 
 .product-price {
@@ -449,7 +448,7 @@ body.dark-mode .novidades__preco {
 }
 
 body.dark-mode .carrossel {
-    background: #1e1230.
+    background: #1e1230;
 }
 
 .carrossel__titulo {
@@ -461,7 +460,7 @@ body.dark-mode .carrossel {
 }
 
 body.dark-mode .carrossel__titulo {
-    color: var(--rosa-claro).
+    color: var(--rosa-claro);
 }
 
 /* Remove estilos antigos do Swiper que não usamos mais */

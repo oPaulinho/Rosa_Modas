@@ -12,6 +12,14 @@
 
 import { API_URL, UNIVERSO_ROSA_URL, ADMIN_URL } from './api-config.js';
 
+// Escapa caracteres especiais para inserção segura em HTML
+function escapeHtml(texto) {
+    if (!texto) return '';
+    const div = document.createElement('div');
+    div.textContent = texto;
+    return div.innerHTML;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     inicializarTema();
     aplicarLinksCruzados();
@@ -140,8 +148,8 @@ async function carregarPromocoes() {
             card.className = 'promo-destaques__card';
             card.innerHTML = `
                 <div class="promo-destaques__info">
-                    <h3>${p.titulo}</h3>
-                    <p>${p.descricao || ''}</p>
+                    <h3>${escapeHtml(p.titulo)}</h3>
+                    <p>${escapeHtml(p.descricao) || ''}</p>
                 </div>`;
             grid.appendChild(card);
         });
@@ -176,7 +184,7 @@ async function carregarNovidades() {
             card.innerHTML = `
                 <div class="novidades__icone" aria-hidden="true">${icone}</div>
                 <div class="novidades__info">
-                    <h3>${p.nome}</h3>
+                    <h3>${escapeHtml(p.nome)}</h3>
                     <span class="novidades__preco">${precoBRL(p.preco)}</span>
                 </div>`;
             grid.appendChild(card);
@@ -212,8 +220,8 @@ async function carregarProcedimentos() {
             card.innerHTML = `
                 <div class="product-icon" aria-hidden="true">${icone}</div>
                 <div class="product-info">
-                    <h3 class="product-title">${item.nome}</h3>
-                    <p class="product-desc">${item.descricao || 'Procedimento capilar disponível.'}</p>
+                    <h3 class="product-title">${escapeHtml(item.nome)}</h3>
+                    <p class="product-desc">${escapeHtml(item.descricao) || 'Procedimento capilar disponível.'}</p>
                 </div>`;
             grid.appendChild(card);
         });
@@ -249,8 +257,8 @@ async function carregarModa() {
             card.innerHTML = `
                 <div class="product-icon" aria-hidden="true">${icone}</div>
                 <div class="product-info">
-                    <h3 class="product-title">${item.nome}</h3>
-                    <p class="product-desc">${item.descricao || 'Peça disponível na loja.'}</p>
+                    <h3 class="product-title">${escapeHtml(item.nome)}</h3>
+                    <p class="product-desc">${escapeHtml(item.descricao) || 'Peça disponível na loja.'}</p>
                     ${preco ? `<p class="product-price">${preco}</p>` : ''}
                 </div>`;
             grid.appendChild(card);

@@ -51,17 +51,14 @@ public class ProcedimentoController {
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Procedimento updated) {
         try {
-            return ResponseEntity.ok(repository.findById(id).map(p -> {
+            return repository.findById(id).map(p -> {
                 if (updated.getNome() != null) p.setNome(updated.getNome());
                 if (updated.getDescricao() != null) p.setDescricao(updated.getDescricao());
                 if (updated.getStatus() != null) p.setStatus(updated.getStatus());
                 if (updated.getSite() != null && !updated.getSite().isBlank()) p.setSite(updated.getSite());
                 if (updated.getIcone() != null) p.setIcone(updated.getIcone());
-                return repository.save(p);
-            }).orElseGet(() -> {
-                updated.setId(id);
-                return repository.save(updated);
-            }));
+                return ResponseEntity.ok(repository.save(p));
+            }).orElse(ResponseEntity.notFound().build());
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(500).body(Map.of("message", "Erro ao atualizar procedimento: " + e.getMessage()));
@@ -69,7 +66,11 @@ public class ProcedimentoController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        if (!repository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
         repository.deleteById(id);
+        return ResponseEntity.ok().build();
     }
 }

@@ -1,6 +1,7 @@
 package com.rosamodas.backend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.rosamodas.backend.model.Promocao;
 import com.rosamodas.backend.repository.PromocaoRepository;
@@ -33,7 +34,7 @@ public class PromocaoController {
     }
 
     @PutMapping("/{id}")
-    public Promocao update(@PathVariable Long id, @RequestBody Promocao dados) {
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Promocao dados) {
         return repository.findById(id).map(p -> {
             if (dados.getStatus() != null) p.setStatus(dados.getStatus());
             if (dados.getSite() != null && !dados.getSite().isBlank()) p.setSite(dados.getSite());
@@ -41,12 +42,16 @@ public class PromocaoController {
             if (dados.getDescricao() != null) p.setDescricao(dados.getDescricao());
             if (dados.getDataInicio() != null) p.setDataInicio(dados.getDataInicio());
             if (dados.getDataFim() != null) p.setDataFim(dados.getDataFim());
-            return repository.save(p);
-        }).orElseThrow(() -> new RuntimeException("Promoção não encontrada: " + id));
+            return ResponseEntity.ok(repository.save(p));
+        }).orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        if (!repository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
         repository.deleteById(id);
+        return ResponseEntity.ok().build();
     }
 }

@@ -956,13 +956,6 @@ footer p {
 /* ============================================================
    UTILITÁRIOS ADMIN (substituem inline styles)
    ============================================================ */
-.config-section {
-  background: #f8f9fa;
-  padding: 1.5rem;
-  border-radius: 8px;
-  margin: 1.5rem 0;
-}
-
 .config-card {
   background: #fff;
   border-radius: 8px;
@@ -970,12 +963,6 @@ footer p {
   padding: 0.5rem;
   max-height: 250px;
   overflow-y: auto;
-}
-
-.form-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
 }
 
 .form-grid-full {
@@ -1000,6 +987,85 @@ footer p {
   text-align: center;
 }
 
+/* Alertas com espaçamento superior */
+.alert-spaced {
+  margin-top: 1rem;
+}
+
+/* Selects de ícone com fonte maior */
+.icon-select {
+  font-size: 1.2rem;
+}
+
+/* Campos que ocupam toda a largura do grid */
+.full-width-field {
+  margin: 0;
+  grid-column: 1 / -1;
+}
+
+/* Títulos de seção com espaçamento */
+.section-heading {
+  margin-bottom: 1rem;
+}
+
+/* Cards de configuração simples */
+.config-card-simple {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+}
+
+/* Labels de checkbox sem negrito */
+.checkbox-label {
+  font-weight: normal;
+}
+
+/* Links de login */
+.login-link {
+  color: var(--color-gray);
+  text-decoration: none;
+}
+
+/* Botão de logout */
+.btn-logout {
+  width: 100%;
+  margin-top: 2rem;
+  padding: 0.8rem;
+  background: #ffebee;
+  color: #c62828;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* Layout flex para modalidades */
+.flex-gap {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+/* Grid de dias da semana */
+.days-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+/* Título da seção de bloqueio */
+.blocking-title {
+  margin-bottom: 1rem;
+  color: #c62828;
+}
+
+/* Título da seção de expediente */
+.schedule-heading {
+  margin-bottom: 1rem;
+  color: var(--color-aesthetics-text);
+}
+
 .flex-between {
   display: flex;
   gap: 0.5rem;
@@ -1018,23 +1084,42 @@ footer p {
   padding: 0.5rem;
 }
 
-.alert {
-  padding: 1rem;
+/* ============================================================
+   UTILITÁRIOS DO PAINEL ADMINISTRATIVO
+   ============================================================ */
+
+/* Container de formulário com fundo cinza */
+.config-section {
+  background: #f8f9fa;
+  padding: 1.5rem;
   border-radius: 8px;
-  margin-bottom: 1rem;
-  display: none;
+  margin: 1.5rem 0;
 }
 
-.alert.success {
-  background: #e8f5e9;
-  color: #2e7d32;
-  display: block;
+/* Grid de formulário com 2 colunas */
+.form-grid {
+  margin-top: 1rem;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr 1fr;
 }
 
-.alert.error {
-  background: #ffebee;
-  color: #c62828;
-  display: block;
+/* Input group sem margem extra dentro de grids */
+.form-grid .input-group {
+  margin: 0;
+}
+
+/* Botão que ocupa as 2 colunas do grid */
+.form-grid button[type="submit"] {
+  grid-column: 1 / -1;
+}
+
+/* Textarea padronizado */
+.form-grid textarea {
+  width: 100%;
+  padding: 1rem;
+  border-radius: 10px;
+  border: 2px solid var(--color-gray);
 }
 
 /* ============================================================
@@ -1499,11 +1584,6 @@ body.dark-mode .mobile-module-toggle {
   background: linear-gradient(135deg, #7e57c2, #512da8);
 }
 
-body.dark-mode .module-link-chip {
-  background: #fff;
-  border-color: #e5e7eb;
-}
-
 body.dark-mode .data-table th {
   background: #2a1a40;
   color: #ce93d8;
@@ -1528,21 +1608,8 @@ body.dark-mode .alert.error {
   color: #ef9a9a;
 }
 
-body.dark-mode .modalidade-label {
-  background: #2a1a40;
-  border-color: rgba(179, 157, 219, 0.25);
-  color: #ce93d8;
-}
-
 body.dark-mode .btn-submit {
   background: linear-gradient(135deg, #7e57c2, #512da8);
-}
-
-body.dark-mode .input-group input,
-body.dark-mode .input-group select {
-  background: #2a1a40;
-  border-color: rgba(126, 87, 194, 0.30);
-  color: #e8ddff;
 }
 
 body.dark-mode .input-group input:focus,

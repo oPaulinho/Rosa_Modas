@@ -36,8 +36,8 @@
                 </div>
                 <button type="submit" class="btn-submit" id="btn-login">Entrar</button>
             </form>
-            <p style="text-align: center; margin-top: 1rem;">
-                <a href="index.html" style="color: var(--color-gray); text-decoration: none;">Voltar para o site</a>
+            <p class="text-center" style="margin-top: 1rem;">
+                <a href="index.html" class="login-link">Voltar para o site</a>
             </p>
         </div>
     </section>
@@ -71,8 +71,7 @@
                 <li><a data-panel="config-geral" onclick="showPanel('config-geral', this)">Configurações Gerais</a></li>
             </ul>
 
-            <button id="btn-logout"
-                style="width: 100%; margin-top: 2rem; padding: 0.8rem; background: #ffebee; color: #c62828; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">Sair</button>
+            <button id="btn-logout" class="btn-logout">Sair</button>
         </aside>
 
         <!-- Conteúdo Principal -->
@@ -191,45 +190,45 @@
                 <p>Cadastre promoções com texto e período de validade. A promoção aparece no topo do site apenas
                     durante a data escolhida.</p>
 
-                <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0;">
+                <div style="class="config-section"">
                     <h4>Nova Promoção</h4>
                     <form id="form-promocao"
-                        style="margin-top: 1rem; display: grid; gap: 1rem; grid-template-columns: 1fr 1fr;">
-                        <div class="input-group" style="margin: 0;">
+                        class="form-grid">
+                        <div class="input-group">
                             <label>Título da Promoção</label>
                             <input type="text" id="promo-titulo" required>
                         </div>
-                        <div class="input-group" style="margin: 0;">
+                        <div class="input-group">
                             <label>Status</label>
                             <select id="promo-status" required>
                                 <option value="Ativa">Ativa</option>
                                 <option value="Inativa">Inativa</option>
                             </select>
                         </div>
-                        <div class="input-group" style="margin: 0;">
+                        <div class="input-group">
                             <label>Site</label>
                             <select id="promo-site" required>
                                 <option value="ROSA_MODAS">🌸 Rosa Modas</option>
                                 <option value="UNIVERSO_ROSA">💜 Universo Rosa</option>
                             </select>
                         </div>
-                        <div class="input-group" style="margin: 0; grid-column: 1 / -1;">
+                        <div class="input-group full-width-field">
                             <label>Descrição Curta</label>
                             <textarea id="promo-descricao" rows="3" required
-                                style="width: 100%; padding: 1rem; border-radius: 10px; border: 2px solid var(--color-gray);"></textarea>
+                                </textarea>
                         </div>
-                        <div class="input-group" style="margin: 0;">
+                        <div class="input-group">
                             <label>Data Início</label>
                             <input type="date" id="promo-data-inicio" required>
                         </div>
-                        <div class="input-group" style="margin: 0;">
+                        <div class="input-group">
                             <label>Data Fim</label>
                             <input type="date" id="promo-data-fim" required>
                         </div>
                         <button type="submit" class="btn-submit" id="btn-add-promocao"
-                            style="grid-column: 1 / -1;">Salvar Promoção</button>
+                            >Salvar Promoção</button>
                     </form>
-                    <div id="promo-alert" class="alert" style="margin-top: 1rem;"></div>
+                    <div id="promo-alert" class="alert alert-spaced"></div>
                 </div>
 
                 <table class="data-table">
@@ -255,24 +254,24 @@
                 <h3>Gerenciar Roupas</h3>
                 <p>Adicione novas peças de roupa ou altere o status das existentes.</p>
 
-                <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0;">
+                <div style="class="config-section"">
                     <h4>Adicionar Nova Peça</h4>
                     <form id="form-produto"
-                        style="margin-top: 1rem; display: grid; gap: 1rem; grid-template-columns: 1fr 1fr;">
+                        class="form-grid">
 
                         <input type="hidden" id="prod-id">
 
-                        <div class="input-group" style="margin: 0;">
+                        <div class="input-group">
                             <label>Nome da Peça</label>
                             <input type="text" id="prod-nome" required>
                         </div>
 
-                        <div class="input-group" style="margin: 0;">
+                        <div class="input-group">
                             <label>Preço (R$)</label>
                             <input type="number" id="prod-preco" step="0.01" required>
                         </div>
 
-                        <div class="input-group" style="margin: 0;">
+                        <div class="input-group">
                             <label>Site</label>
                             <select id="prod-site" required>
                                 <option value="ROSA_MODAS">🌸 Rosa Modas</option>
@@ -280,7 +279,7 @@
                             </select>
                         </div>
 
-                        <div class="input-group" style="margin: 0;">
+                        <div class="input-group">
                             <label>Status</label>
                             <select id="prod-status" required>
                                 <option value="Disponível">Disponível</option>
@@ -288,9 +287,9 @@
                             </select>
                         </div>
 
-                        <div class="input-group" style="margin: 0;">
+                        <div class="input-group">
                             <label>Ícone (Emoji)</label>
-                            <select id="prod-icone" style="font-size: 1.2rem;">
+                            <select id="prod-icone" class="icon-select">
                                 <option value="🌹">🌹  Rosa (padrão)</option>
                                 <option value="👗">👗  Vestido</option>
                                 <option value="👚">👚  Blusa</option>
@@ -308,9 +307,9 @@
                         </div>
 
                         <button type="submit" class="btn-submit" id="btn-add-produto"
-                            style="grid-column: 1 / -1;">Salvar Produto</button>
+                            >Salvar Produto</button>
                     </form>
-                    <div id="produto-alert" class="alert" style="margin-top: 1rem;"></div>
+                    <div id="produto-alert" class="alert alert-spaced"></div>
                 </div>
 
                 <table class="data-table">
@@ -337,37 +336,36 @@
                 <h3>Gerenciar Procedimentos</h3>
                 <p>Cadastre os procedimentos estéticos que aparecem na página principal.</p>
 
-                <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0;">
+                <div class="config-section">
                     <h4>Adicionar Procedimento</h4>
-                    <form id="form-procedimento"
-                        style="margin-top: 1rem; display: grid; gap: 1rem; grid-template-columns: 1fr 1fr;">
+                    <form id="form-procedimento" class="form-grid">
                         <input type="hidden" id="proc-id">
-                        <div class="input-group" style="margin: 0;">
+                        <div class="input-group">
                             <label>Nome do Procedimento</label>
                             <input type="text" id="proc-nome" required>
                         </div>
-                        <div class="input-group" style="margin: 0;">
+                        <div class="input-group">
                             <label>Status</label>
                             <select id="proc-status" required>
                                 <option value="Disponível">Disponível</option>
                                 <option value="Indisponível">Indisponível</option>
                             </select>
                         </div>
-                        <div class="input-group" style="margin: 0;">
+                        <div class="input-group">
                             <label>Site</label>
                             <select id="proc-site" required>
                                 <option value="ROSA_MODAS">🌸 Rosa Modas</option>
                                 <option value="UNIVERSO_ROSA">💜 Universo Rosa</option>
                             </select>
                         </div>
-                        <div class="input-group" style="margin: 0; grid-column: 1 / -1;">
+                        <div class="input-group full-width-field">
                             <label>Descrição</label>
                             <textarea id="proc-descricao" rows="3" required
-                                style="width: 100%; padding: 1rem; border-radius: 10px; border: 2px solid var(--color-gray);"></textarea>
+                                </textarea>
                         </div>
-                        <div class="input-group" style="margin: 0;">
+                        <div class="input-group">
                             <label>Ícone</label>
-                            <select id="proc-icone" style="font-size: 1.2rem;">
+                            <select id="proc-icone" class="icon-select">
                                 <option value="✦">✦  Padrão</option>
                                 <option value="💇‍♀️">💇‍♀️  Escova</option>
                                 <option value="💆‍♀️">💆‍♀️  Botox/Hidratação</option>
@@ -382,11 +380,10 @@
                                 <option value="✨">✨  Genérico</option>
                             </select>
                         </div>
-                        <input type="hidden" id="proc-id">
-                        <button type="submit" class="btn-submit" id="btn-add-proc" style="grid-column: 1 / -1;">Salvar
+                        <button type="submit" class="btn-submit" id="btn-add-proc" >Salvar
                             Procedimento</button>
                     </form>
-                    <div id="proc-alert" class="alert" style="margin-top: 1rem;"></div>
+                    <div id="proc-alert" class="alert alert-spaced"></div>
                 </div>
 
                 <table class="data-table">
@@ -412,49 +409,49 @@
                 <h3>Gerenciar Serviços Espirituais</h3>
                 <p>Defina os atendimentos espirituais que aparecem no site.</p>
 
-                <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0;">
+                <div style="class="config-section"">
                     <h4>Adicionar Serviço Espiritual</h4>
                     <form id="form-servico"
-                        style="margin-top: 1rem; display: grid; gap: 1rem; grid-template-columns: 1fr 1fr;">
-                        <div class="input-group" style="margin: 0;">
+                        class="form-grid">
+                        <div class="input-group">
                             <label>Nome do Serviço</label>
                             <input type="text" id="serv-nome" required>
                         </div>
-                        <div class="input-group" style="margin: 0;">
+                        <div class="input-group">
                             <label>Preço (R$)</label>
                             <input type="number" id="serv-preco" step="0.01" min="0" required>
                         </div>
-                        <div class="input-group" style="margin: 0;">
+                        <div class="input-group">
                             <label>Status</label>
                             <select id="serv-status" required>
                                 <option value="Disponível">Disponível</option>
                                 <option value="Indisponível">Indisponível</option>
                             </select>
                         </div>
-                        <div class="input-group" style="margin: 0;">
+                        <div class="input-group">
                             <label>Site</label>
                             <select id="serv-site" required>
                                 <option value="UNIVERSO_ROSA">💜 Universo Rosa</option>
                                 <option value="ROSA_MODAS">🌸 Rosa Modas</option>
                             </select>
                         </div>
-                        <div class="input-group" style="margin: 0;">
+                        <div class="input-group">
                             <label>Modalidades do Atendimento</label>
-                            <div style="display:flex; gap:1rem; margin-top:0.5rem;">
-                                <label style="font-weight:normal;"><input type="checkbox" id="serv-modal-presencial"
+                            <div class="flex-gap">
+                                <label class="checkbox-label"><input type="checkbox" id="serv-modal-presencial"
                                         value="PRESENCIAL"> 🏠 Presencial</label>
-                                <label style="font-weight:normal;"><input type="checkbox" id="serv-modal-online"
+                                <label class="checkbox-label"><input type="checkbox" id="serv-modal-online"
                                         value="ONLINE"> 💻 Online</label>
                             </div>
                         </div>
-                        <div class="input-group" style="margin: 0; grid-column: 1 / -1;">
+                        <div class="input-group full-width-field">
                             <label>Descrição</label>
                             <textarea id="serv-descricao" rows="3" required
-                                style="width: 100%; padding: 1rem; border-radius: 10px; border: 2px solid var(--color-gray);"></textarea>
+                                </textarea>
                         </div>
-                        <div class="input-group" style="margin: 0;">
+                        <div class="input-group">
                             <label>Ícone</label>
-                            <select id="serv-icone" style="font-size: 1.2rem;">
+                            <select id="serv-icone" class="icon-select">
                                 <option value="✦">✦  Padrão</option>
                                 <option value="🔮">🔮  Consulta</option>
                                 <option value="🃏">🃏  Cartas/Jogo</option>
@@ -468,10 +465,10 @@
                             </select>
                         </div>
                         <input type="hidden" id="serv-id">
-                        <button type="submit" class="btn-submit" id="btn-add-serv" style="grid-column: 1 / -1;">Salvar
+                        <button type="submit" class="btn-submit" id="btn-add-serv" >Salvar
                             Serviço</button>
                     </form>
-                    <div id="serv-alert" class="alert" style="margin-top: 1rem;"></div>
+                    <div id="serv-alert" class="alert alert-spaced"></div>
                 </div>
 
                 <table class="data-table">
@@ -503,8 +500,8 @@
                 <div id="conteudo-alert" class="alert"></div>
                 <form id="form-conteudo" style="display: grid; gap: 1.5rem; margin-top: 1.5rem;">
                     <!-- Site alvo do conteúdo -->
-                    <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px;">
-                        <h4 style="margin-bottom: 1rem;">Site</h4>
+                    <div class="config-card-simple">
+                        <h4 class="section-heading">Site</h4>
                         <div class="input-group">
                             <label>Conteúdo exibido em qual site?</label>
                             <select id="cms-site" onchange="window.carregarConteudoCMS()" required>
@@ -515,9 +512,8 @@
                     </div>
 
                     <!-- Seção Hero -->
-                    <div
-                        style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--color-aesthetics-primary);">
-                        <h4 style="margin-bottom: 1rem; color: var(--color-aesthetics-text);">Seção de Abertura (Hero)
+                    <div class="config-card-simple" style="border-left: 4px solid var(--color-aesthetics-primary);">
+                        <h4 class="section-heading" style="color: var(--color-aesthetics-text);">Seção de Abertura (Hero)
                         </h4>
                         <div class="input-group">
                             <label>Título Principal</label>
@@ -526,14 +522,13 @@
                         <div class="input-group">
                             <label>Descrição / Apresentação</label>
                             <textarea id="cms-hero-descricao" rows="3" required
-                                style="width: 100%; padding: 1rem; border-radius: 10px; border: 2px solid var(--color-gray);"></textarea>
+                                </textarea>
                         </div>
                     </div>
 
                     <!-- Rodapé -->
-                    <div
-                        style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--color-text-dark);">
-                        <h4 style="margin-bottom: 1rem;">Rodapé & Contato</h4>
+                    <div class="config-card-simple" style="border-left: 4px solid var(--color-text-dark);">
+                        <h4 class="section-heading">Rodapé & Contato</h4>
                         <div class="input-group">
                             <label>Slogan do Rodapé</label>
                             <input type="text" id="cms-footer-slogan" required>
@@ -556,7 +551,7 @@
                 <div class="form-grid" style="margin-top: 1.5rem;">
                     <!-- Configurações Gerais -->
                     <form id="form-config-agenda-geral" class="config-section">
-                        <h4 style="margin-bottom: 1rem; color: var(--color-aesthetics-text);">Expediente e Intervalo
+                        <h4 class="schedule-heading">Expediente e Intervalo
                         </h4>
 
                         <div class="input-group">
@@ -582,21 +577,20 @@
 
                         <div class="input-group">
                             <label>Dias de Atendimento</label>
-                            <div
-                                style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-top: 0.5rem;">
-                                <label style="font-weight:normal;"><input type="checkbox" id="cfg-dia-0" value="0">
+                            <div class="days-grid">
+                                <label class="checkbox-label"><input type="checkbox" id="cfg-dia-0" value="0">
                                     Domingo</label>
-                                <label style="font-weight:normal;"><input type="checkbox" id="cfg-dia-1" value="1">
+                                <label class="checkbox-label"><input type="checkbox" id="cfg-dia-1" value="1">
                                     Segunda-feira</label>
-                                <label style="font-weight:normal;"><input type="checkbox" id="cfg-dia-2" value="2">
+                                <label class="checkbox-label"><input type="checkbox" id="cfg-dia-2" value="2">
                                     Terça-feira</label>
-                                <label style="font-weight:normal;"><input type="checkbox" id="cfg-dia-3" value="3">
+                                <label class="checkbox-label"><input type="checkbox" id="cfg-dia-3" value="3">
                                     Quarta-feira</label>
-                                <label style="font-weight:normal;"><input type="checkbox" id="cfg-dia-4" value="4">
+                                <label class="checkbox-label"><input type="checkbox" id="cfg-dia-4" value="4">
                                     Quinta-feira</label>
-                                <label style="font-weight:normal;"><input type="checkbox" id="cfg-dia-5" value="5">
+                                <label class="checkbox-label"><input type="checkbox" id="cfg-dia-5" value="5">
                                     Sexta-feira</label>
-                                <label style="font-weight:normal;"><input type="checkbox" id="cfg-dia-6" value="6">
+                                <label class="checkbox-label"><input type="checkbox" id="cfg-dia-6" value="6">
                                     Sábado</label>
                             </div>
                         </div>
@@ -607,7 +601,7 @@
 
 <!-- Datas Bloqueadas (Sem atendimento) -->
                     <div class="config-section">
-                        <h4 style="margin-bottom: 1rem; color: #c62828;">Bloquear Datas (Feriados/Folgas)</h4>
+                        <h4 class="blocking-title">Bloquear Datas (Feriados/Folgas)</h4>
 
                         <form id="form-bloquear-data" class="flex-between" style="margin-bottom: 1rem;">
                             <input type="date" id="cfg-bloquear-data" required
@@ -661,7 +655,7 @@
                         <input type="text" id="cfg-instagram" placeholder="@seu_perfil">
                     </div>
                     <button type="submit" class="btn-submit" id="btn-save-config-geral"
-                        style="grid-column: 1 / -1;">Salvar Configurações Gerais</button>
+                        >Salvar Configurações Gerais</button>
                 </form>
             </section>
 

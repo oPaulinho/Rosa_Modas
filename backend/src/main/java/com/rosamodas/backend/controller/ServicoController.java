@@ -54,7 +54,7 @@ public class ServicoController {
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Servico updated) {
         try {
-            return ResponseEntity.ok(repository.findById(id).map(s -> {
+            return repository.findById(id).map(s -> {
                 if (updated.getNome() != null) s.setNome(updated.getNome());
                 if (updated.getDescricao() != null) s.setDescricao(updated.getDescricao());
                 if (updated.getPreco() != null) s.setPreco(updated.getPreco());
@@ -63,11 +63,8 @@ public class ServicoController {
                 if (updated.getSite() != null && !updated.getSite().isBlank()) s.setSite(updated.getSite());
                 if (updated.getStatus() != null) s.setStatus(updated.getStatus());
                 if (updated.getIcone() != null) s.setIcone(updated.getIcone());
-                return repository.save(s);
-            }).orElseGet(() -> {
-                updated.setId(id);
-                return repository.save(updated);
-            }));
+                return ResponseEntity.ok(repository.save(s));
+            }).orElse(ResponseEntity.notFound().build());
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(500).body(Map.of("message", "Erro ao atualizar serviço: " + e.getMessage()));
@@ -75,7 +72,11 @@ public class ServicoController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        if (!repository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
         repository.deleteById(id);
+        return ResponseEntity.ok().build();
     }
 }

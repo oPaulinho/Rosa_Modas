@@ -9,7 +9,7 @@ async function obterSiteConfig() {
     if (siteConfigCache) return siteConfigCache;
     try {
         const r = await fetch(`${API_URL}/site-config`);
-        if (!r.ok) throw new Error();
+        if (!r.ok) throw new Error('Erro ao carregar configuração geral.');
         siteConfigCache = await r.json();
     } catch (e) {
         console.error('Erro ao carregar config geral:', e);
@@ -44,6 +44,14 @@ function iconeVisual(nome) {
 // Extrai mensagem de erro da resposta da API
 async function lerErroResposta(r) {
     try { const d = await r.json(); return (d && d.message) || null; } catch { return null; }
+}
+
+// Escapa caracteres especiais para inserção segura em HTML
+function escapeHtml(texto) {
+    if (!texto) return '';
+    const div = document.createElement('div');
+    div.textContent = texto;
+    return div.innerHTML;
 }
 
 // --- DOM ---
@@ -140,6 +148,7 @@ async function carregarAgendamentos() {
     const tbody = document.getElementById('tabela-agendamentos');
     try {
         const r = await fetch(`${API_URL}/agendamentos`);
+        if (!r.ok) throw new Error('Erro ao carregar agendamentos.');
         const ags = await r.json();
         ags.sort((a, b) => new Date(b.dataHora) - new Date(a.dataHora));
 
@@ -166,8 +175,8 @@ async function carregarAgendamentos() {
 
             const tr = document.createElement('tr');
             tr.innerHTML = `
-                <td>${dt}</td><td><strong>${ag.nomeCliente}</strong></td><td>${ag.servico}</td>
-                <td>${mod}</td><td><a href="https://wa.me/55${(ag.telefone||'').replace(/\D/g,'')}" target="_blank" style="color:#25D366;font-weight:bold">${ag.telefone}</a></td>
+                <td>${dt}</td><td><strong>${escapeHtml(ag.nomeCliente)}</strong></td><td>${escapeHtml(ag.servico)}</td>
+                <td>${mod}</td><td><a href="https://wa.me/55${(ag.telefone||'').replace(/\D/g,'')}" target="_blank" style="color:#25D366;font-weight:bold">${escapeHtml(ag.telefone)}</a></td>
                 <td>${badge}</td><td style="white-space:nowrap">${btnConf}${btnCan}<button onclick="window.excluirAgendamento('${ag.id}')" style="background:#ffebee;color:#c62828;border:none;padding:.4rem .7rem;border-radius:5px;cursor:pointer;font-size:.8rem">🗑 Excluir</button></td>`;
             tbody.appendChild(tr);
         });
@@ -182,7 +191,7 @@ window.excluirAgendamento = async id => {
     if (!confirm('Excluir esta reserva? Horário volta a ficar livre.')) return;
     try {
         const r = await fetch(`${API_URL}/agendamentos/${id}`, { method: 'DELETE' });
-        if (!r.ok) throw new Error();
+        if (!r.ok) throw new Error('Erro ao excluir agendamento.');
         alert('Excluído!');
         carregarAgendamentos();
     } catch (e) {
@@ -197,6 +206,7 @@ window.confirmarAgendamento = async (id, tel, nome, dh, serv, mod) => {
     try {
         // Evita confirmar se já tem outro ativo no mesmo horário
         const r = await fetch(`${API_URL}/agendamentos`);
+        if (!r.ok) throw new Error('Erro ao verificar conflitos.');
         const todos = await r.json();
         const conflito = todos.some(a => String(a.id) !== String(id) && (a.status||'').toLowerCase() !== 'cancelado' && a.dataHora === dh);
         if (conflito) return alert(`⚠️ Já existe outro agendamento ativo pra ${new Date(dh).toLocaleString('pt-BR')}.`);
@@ -307,6 +317,7 @@ async function carregarProdutosAdmin() {
     const t = document.getElementById('tabela-produtos');
     try {
         const r = await fetch(`${API_URL}/produtos`);
+        if (!r.ok) throw new Error('Erro ao carregar produtos.');
         const ps = await r.json();
         if (!ps.length) { t.innerHTML = '<tr><td colspan="6" style="text-align:center">Nenhum produto.</td></tr>'; return; }
         t.innerHTML = '';
@@ -315,7 +326,7 @@ async function carregarProdutosAdmin() {
             const preco = Number(p.preco).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
             const ic = p.icone || '🌹';
             const sel = `<select onchange="window.alterarStatusProduto('${p.id}',this.value)" style="padding:.3rem;border-radius:5px"><option value="Disponível" ${p.status==='Disponível'?'selected':''}>Disponível</option><option value="Esgotado" ${p.status==='Esgotado'?'selected':''}>Esgotado</option></select>`;
-            tr.innerHTML = `<td><span class="admin-icon" style="font-size:1.8rem">${ic}</span></td><td>${p.nome}</td><td>${preco}</td><td>${sel}</td><td>${siteBadge(p.site)}</td><td style="white-space:nowrap"><button onclick="window.editarProduto('${p.id}','${(p.nome||'').replace(/'/g,"\\'")}','${Number(p.preco)||0}','${p.icone||'🌹'}','${p.status||'Disponível'}','${p.site||'ROSA_MODAS'}')" style="background:#e3f2fd;color:#1565c0;border:none;padding:.5rem;border-radius:5px;cursor:pointer;margin-right:4px">✏️ Editar</button><button onclick="window.excluirProduto('${p.id}')" style="background:#ffebee;color:#c62828;border:none;padding:.5rem;border-radius:5px;cursor:pointer">Excluir</button></td>`;
+            tr.innerHTML = `<td><span class="admin-icon" style="font-size:1.8rem">${ic}</span></td><td>${escapeHtml(p.nome)}</td><td>${preco}</td><td>${sel}</td><td>${siteBadge(p.site)}</td><td style="white-space:nowrap"><button onclick="window.editarProduto('${p.id}','${(p.nome||'').replace(/'/g,"\\'")}','${Number(p.preco)||0}','${p.icone||'🌹'}','${p.status||'Disponível'}','${p.site||'ROSA_MODAS'}')" style="background:#e3f2fd;color:#1565c0;border:none;padding:.5rem;border-radius:5px;cursor:pointer;margin-right:4px">✏️ Editar</button><button onclick="window.excluirProduto('${p.id}')" style="background:#ffebee;color:#c62828;border:none;padding:.5rem;border-radius:5px;cursor:pointer">Excluir</button></td>`;
             t.appendChild(tr);
         });
     } catch (e) { console.error('Erro produtos:', e); }
@@ -323,13 +334,15 @@ async function carregarProdutosAdmin() {
 
 window.alterarStatusProduto = async (id, st) => {
     try {
-        await fetch(`${API_URL}/produtos/${id}`, {
+        const r = await fetch(`${API_URL}/produtos/${id}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ status: st })
         });
+        if (!r.ok) throw new Error('Erro ao alterar status.');
         alert('Status: ' + st);
-    } catch {
+    } catch (e) {
+        console.error('Erro status:', e);
         alert('Erro status.');
     }
 };
@@ -337,9 +350,11 @@ window.alterarStatusProduto = async (id, st) => {
 window.excluirProduto = async id => {
     if (!confirm('Excluir esta peça?')) return;
     try {
-        await fetch(`${API_URL}/produtos/${id}`, { method: 'DELETE' });
+        const r = await fetch(`${API_URL}/produtos/${id}`, { method: 'DELETE' });
+        if (!r.ok) throw new Error('Erro ao excluir produto.');
         carregarProdutosAdmin();
-    } catch {
+    } catch (e) {
+        console.error('Erro excluir produto:', e);
         alert('Erro excluir.');
     }
 };
@@ -364,6 +379,7 @@ async function carregarPromocoesAdmin() {
     if (!tabelaPromocoes) return;
     try {
         const r = await fetch(`${API_URL}/promocoes`);
+        if (!r.ok) throw new Error('Erro ao carregar promoções.');
         const ps = await r.json();
         if (!ps.length) { tabelaPromocoes.innerHTML = '<tr><td colspan="5" style="text-align:center">Nenhuma promoção.</td></tr>'; return; }
         tabelaPromocoes.innerHTML = '';
@@ -375,7 +391,7 @@ async function carregarPromocoesAdmin() {
                 per = `${String(id).padStart(2,'0')}/${String(im).padStart(2,'0')}/${iy} até ${String(fd).padStart(2,'0')}/${String(fm).padStart(2,'0')}/${fy}`;
             }
             const tr = document.createElement('tr');
-            tr.innerHTML = `<td>${p.titulo}</td><td>${per}</td><td>${p.status||'Inativa'}</td><td>${siteBadge(p.site)}</td><td><button onclick="window.excluirPromocao('${p.id}')" style="background:#ffebee;color:#c62828;border:none;padding:.5rem;border-radius:5px;cursor:pointer">Excluir</button></td>`;
+            tr.innerHTML = `<td>${escapeHtml(p.titulo)}</td><td>${per}</td><td>${p.status||'Inativa'}</td><td>${siteBadge(p.site)}</td><td><button onclick="window.excluirPromocao('${p.id}')" style="background:#ffebee;color:#c62828;border:none;padding:.5rem;border-radius:5px;cursor:pointer">Excluir</button></td>`;
             tabelaPromocoes.appendChild(tr);
         });
     } catch (e) { console.error('Erro promoções:', e); }
@@ -396,16 +412,18 @@ if (formPromocao) {
             site: document.getElementById('promo-site')?.value || 'ROSA_MODAS'
         };
         try {
-            await fetch(`${API_URL}/promocoes`, {
+            const r = await fetch(`${API_URL}/promocoes`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(nv)
             });
+            if (!r.ok) throw new Error('Erro ao salvar promoção.');
             promoAlert.className = 'alert success';
             promoAlert.textContent = 'Promoção salva!';
             formPromocao.reset();
             carregarPromocoesAdmin();
-        } catch {
+        } catch (e) {
+            console.error('Erro promoção:', e);
             promoAlert.className = 'alert error';
             promoAlert.textContent = 'Erro ao salvar.';
         } finally {
@@ -418,9 +436,11 @@ if (formPromocao) {
 window.excluirPromocao = async id => {
     if (!confirm('Excluir promoção?')) return;
     try {
-        await fetch(`${API_URL}/promocoes/${id}`, { method: 'DELETE' });
+        const r = await fetch(`${API_URL}/promocoes/${id}`, { method: 'DELETE' });
+        if (!r.ok) throw new Error('Erro ao excluir promoção.');
         carregarPromocoesAdmin();
-    } catch {
+    } catch (e) {
+        console.error('Erro excluir promoção:', e);
         alert('Erro excluir.');
     }
 };
@@ -434,13 +454,14 @@ async function carregarProcedimentosAdmin() {
     if (!tabelaProcedimentos) return;
     try {
         const r = await fetch(`${API_URL}/procedimentos`);
+        if (!r.ok) throw new Error('Erro ao carregar procedimentos.');
         const ps = await r.json();
         if (!ps.length) { tabelaProcedimentos.innerHTML = '<tr><td colspan="5" style="text-align:center">Nenhum procedimento.</td></tr>'; return; }
         tabelaProcedimentos.innerHTML = '';
         ps.forEach(p => {
             const ic = p.icone || iconeVisual(p.nome);
             const tr = document.createElement('tr');
-            tr.innerHTML = `<td><span class="admin-icon">${ic}</span></td><td>${p.nome}</td><td>${p.status||'Disponível'}</td><td>${siteBadge(p.site)}</td><td style="white-space:nowrap"><button onclick="window.editarProcedimento('${p.id}','${(p.nome||'').replace(/'/g,"\\'")}','${(p.descricao||'').replace(/'/g,"\\'")}','${p.status||'Disponível'}','${p.icone||''}','${p.site||'ROSA_MODAS'}')" style="background:#e3f2fd;color:#1565c0;border:none;padding:.5rem;border-radius:5px;cursor:pointer;margin-right:4px">✏️ Editar</button><button onclick="window.excluirProcedimento('${p.id}')" style="background:#ffebee;color:#c62828;border:none;padding:.5rem;border-radius:5px;cursor:pointer">🗑 Excluir</button></td>`;
+            tr.innerHTML = `<td><span class="admin-icon">${ic}</span></td><td>${escapeHtml(p.nome)}</td><td>${p.status||'Disponível'}</td><td>${siteBadge(p.site)}</td><td style="white-space:nowrap"><button onclick="window.editarProcedimento('${p.id}','${(p.nome||'').replace(/'/g,"\\'")}','${(p.descricao||'').replace(/'/g,"\\'")}','${p.status||'Disponível'}','${p.icone||''}','${p.site||'ROSA_MODAS'}')" style="background:#e3f2fd;color:#1565c0;border:none;padding:.5rem;border-radius:5px;cursor:pointer;margin-right:4px">✏️ Editar</button><button onclick="window.excluirProcedimento('${p.id}')" style="background:#ffebee;color:#c62828;border:none;padding:.5rem;border-radius:5px;cursor:pointer">🗑 Excluir</button></td>`;
             tabelaProcedimentos.appendChild(tr);
         });
     } catch (e) { console.error('Erro procedimentos:', e); }
@@ -460,8 +481,19 @@ if (formProcedimento) {
             const err = await lerErroResposta(r);
             if (!r.ok) throw new Error(err || (edit ? 'Erro ao atualizar.' : 'Erro ao salvar.'));
             procAlert.className = 'alert success'; procAlert.textContent = edit ? 'Atualizado!' : 'Salvo!';
-            formProcedimento.reset(); document.getElementById('proc-id').value = ''; btn.textContent = 'Salvar Procedimento'; carregarProcedimentosAdmin();
-        } catch (er) { console.error(er); procAlert.className = 'alert error'; procAlert.textContent = er.message; } finally { btn.disabled = false; if (!edit) btn.textContent = 'Salvar Procedimento'; }
+            // Limpa o formulário e recarrega a lista
+            formProcedimento.reset();
+            document.getElementById('proc-id').value = '';
+            btn.textContent = 'Salvar Procedimento';
+            carregarProcedimentosAdmin();
+        } catch (er) {
+            console.error(er);
+            procAlert.className = 'alert error';
+            procAlert.textContent = er.message;
+        } finally {
+            btn.disabled = false;
+            if (!edit) btn.textContent = 'Salvar Procedimento';
+        }
     });
 }
 
@@ -479,9 +511,11 @@ window.editarProcedimento = (id, nome, desc, status, icone, site) => {
 window.excluirProcedimento = async id => {
     if (!confirm('Excluir?')) return;
     try {
-        await fetch(`${API_URL}/procedimentos/${id}`, { method: 'DELETE' });
+        const r = await fetch(`${API_URL}/procedimentos/${id}`, { method: 'DELETE' });
+        if (!r.ok) throw new Error('Erro ao excluir procedimento.');
         carregarProcedimentosAdmin();
-    } catch {
+    } catch (e) {
+        console.error('Erro excluir procedimento:', e);
         alert('Erro excluir.');
     }
 };
@@ -495,6 +529,7 @@ async function carregarServicosAdmin() {
     if (!tabelaServicos) return;
     try {
         const r = await fetch(`${API_URL}/servicos`);
+        if (!r.ok) throw new Error('Erro ao carregar serviços.');
         const ss = await r.json();
         if (!ss.length) { tabelaServicos.innerHTML = '<tr><td colspan="7" style="text-align:center">Nenhum serviço.</td></tr>'; return; }
         tabelaServicos.innerHTML = '';
@@ -505,7 +540,7 @@ async function carregarServicosAdmin() {
             const ic = s.icone || iconeVisual(s.nome);
             const ms = s.modalidades || '';
             const tr = document.createElement('tr');
-            tr.innerHTML = `<td><span class="admin-icon">${ic}</span></td><td>${s.nome}</td><td>${preco}</td><td>${modsFmt}</td><td>${s.status||'Disponível'}</td><td>${siteBadge(s.site)}</td><td style="white-space:nowrap"><button onclick="window.editarServico('${s.id}','${(s.nome||'').replace(/'/g,"\\'")}','${Number(s.preco)||0}','${(s.descricao||'').replace(/'/g,"\\'")}','${s.status||'Disponível'}','${ms}','${s.icone||''}')" style="background:#e3f2fd;color:#1565c0;border:none;padding:.5rem;border-radius:5px;cursor:pointer;margin-right:4px">✏️ Editar</button><button onclick="window.excluirServico('${s.id}')" style="background:#ffebee;color:#c62828;border:none;padding:.5rem;border-radius:5px;cursor:pointer">Excluir</button></td>`;
+            tr.innerHTML = `<td><span class="admin-icon">${ic}</span></td><td>${escapeHtml(s.nome)}</td><td>${preco}</td><td>${modsFmt}</td><td>${s.status||'Disponível'}</td><td>${siteBadge(s.site)}</td><td style="white-space:nowrap"><button onclick="window.editarServico('${s.id}','${(s.nome||'').replace(/'/g,"\\'")}','${Number(s.preco)||0}','${(s.descricao||'').replace(/'/g,"\\'")}','${s.status||'Disponível'}','${ms}','${s.icone||''}')" style="background:#e3f2fd;color:#1565c0;border:none;padding:.5rem;border-radius:5px;cursor:pointer;margin-right:4px">✏️ Editar</button><button onclick="window.excluirServico('${s.id}')" style="background:#ffebee;color:#c62828;border:none;padding:.5rem;border-radius:5px;cursor:pointer">Excluir</button></td>`;
             tabelaServicos.appendChild(tr);
         });
     } catch (e) { console.error('Erro serviços:', e); }
@@ -528,17 +563,30 @@ if (formServico) {
             const err = await lerErroResposta(r);
             if (!r.ok) throw new Error(err || (edit ? 'Erro ao atualizar.' : 'Erro ao salvar.'));
             servAlert.className = 'alert success'; servAlert.textContent = edit ? 'Atualizado!' : 'Salvo!';
-            formServico.reset(); document.getElementById('serv-id').value = ''; btn.textContent = 'Salvar Serviço'; carregarServicosAdmin();
-        } catch (er) { console.error(er); servAlert.className = 'alert error'; servAlert.textContent = er.message; } finally { btn.disabled = false; if (!edit) btn.textContent = 'Salvar Serviço'; }
+            // Limpa o formulário e recarrega a lista
+            formServico.reset();
+            document.getElementById('serv-id').value = '';
+            btn.textContent = 'Salvar Serviço';
+            carregarServicosAdmin();
+        } catch (er) {
+            console.error(er);
+            servAlert.className = 'alert error';
+            servAlert.textContent = er.message;
+        } finally {
+            btn.disabled = false;
+            if (!edit) btn.textContent = 'Salvar Serviço';
+        }
     });
 }
 
 window.excluirServico = async id => {
     if (!confirm('Excluir serviço?')) return;
     try {
-        await fetch(`${API_URL}/servicos/${id}`, { method: 'DELETE' });
+        const r = await fetch(`${API_URL}/servicos/${id}`, { method: 'DELETE' });
+        if (!r.ok) throw new Error('Erro ao excluir serviço.');
         carregarServicosAdmin();
-    } catch {
+    } catch (e) {
+        console.error('Erro excluir serviço:', e);
         alert('Erro excluir.');
     }
 };
@@ -549,7 +597,11 @@ window.editarServico = (id, nome, preco, desc, status, modalidades, icone) => {
     document.getElementById('serv-preco').value = preco;
     document.getElementById('serv-descricao').value = desc;
     document.getElementById('serv-status').value = status;
-    if (modalidades) { const ms = modalidades.split(','); document.getElementById('serv-modal-presencial').checked = ms.includes('PRESENCIAL'); document.getElementById('serv-modal-online').checked = ms.includes('ONLINE'); }
+    if (modalidades) {
+        const ms = modalidades.split(',');
+        document.getElementById('serv-modal-presencial').checked = ms.includes('PRESENCIAL');
+        document.getElementById('serv-modal-online').checked = ms.includes('ONLINE');
+    }
     if (icone) document.getElementById('serv-icone').value = icone;
     document.getElementById('btn-add-serv').textContent = 'Atualizar Serviço';
     document.getElementById('btn-add-serv').scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -563,9 +615,14 @@ window.carregarConteudoCMS = async () => {
     try {
         const site = document.getElementById('cms-site')?.value || 'UNIVERSO_ROSA';
         const r = await fetch(`${API_URL}/conteudo?site=${site}`);
+        if (!r.ok) throw new Error('Erro ao carregar conteúdo.');
         const c = await r.json();
-        if (c) { document.getElementById('cms-hero-titulo').value = c.heroTitulo || ''; document.getElementById('cms-hero-descricao').value = c.heroDescricao || ''; document.getElementById('cms-footer-slogan').value = c.footerSlogan || ''; }
-    } catch (e) { console.error('Erro CMS:', e); }
+        if (c) {
+        document.getElementById('cms-hero-titulo').value = c.heroTitulo || '';
+        document.getElementById('cms-hero-descricao').value = c.heroDescricao || '';
+        document.getElementById('cms-footer-slogan').value = c.footerSlogan || '';
+    }
+    } catch (e) { console.error('Erro CMS:', e); if (conteudoAlert) { conteudoAlert.className = 'alert error'; conteudoAlert.textContent = 'Erro ao carregar conteúdo.'; } }
 };
 
 if (formConteudo) {
@@ -574,7 +631,19 @@ if (formConteudo) {
         const btn = document.getElementById('btn-save-conteudo');
         btn.disabled = true; btn.textContent = 'Salvando...';
         const p = { site: document.getElementById('cms-site')?.value || 'UNIVERSO_ROSA', heroTitulo: document.getElementById('cms-hero-titulo').value, heroDescricao: document.getElementById('cms-hero-descricao').value, footerSlogan: document.getElementById('cms-footer-slogan').value };
-        try { await fetch(`${API_URL}/conteudo`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(p) }); conteudoAlert.className = 'alert success'; conteudoAlert.textContent = 'Conteúdo salvo!'; } catch { conteudoAlert.className = 'alert error'; conteudoAlert.textContent = 'Erro ao salvar.'; } finally { btn.disabled = false; btn.textContent = 'Salvar Conteúdo'; }
+        try {
+            const r = await fetch(`${API_URL}/conteudo`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(p) });
+            if (!r.ok) throw new Error('Erro ao salvar conteúdo.');
+            conteudoAlert.className = 'alert success';
+            conteudoAlert.textContent = 'Conteúdo salvo!';
+        } catch (e) {
+            console.error('Erro conteúdo:', e);
+            conteudoAlert.className = 'alert error';
+            conteudoAlert.textContent = 'Erro ao salvar.';
+        } finally {
+            btn.disabled = false;
+            btn.textContent = 'Salvar Conteúdo';
+        }
     });
 }
 
@@ -585,12 +654,13 @@ let agendaConfigCache = null;
 
 async function obterConfigAgenda() {
     const r = await fetch(`${API_URL}/config-agenda`);
+    if (!r.ok) throw new Error('Erro ao carregar configuração da agenda.');
     const c = await r.json();
     agendaConfigCache = c; return c;
 }
 async function salvarConfigAgenda(p) {
     const r = await fetch(`${API_URL}/config-agenda`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(p) });
-    if (!r.ok) throw new Error();
+    if (!r.ok) throw new Error('Erro ao salvar configuração da agenda.');
     agendaConfigCache = p;
 }
 function renderDatasBloqueadas(d) {
@@ -615,10 +685,13 @@ async function carregarConfigAgenda() {
             document.getElementById('cfg-inicio').value = c.horaInicio || '09:00';
             document.getElementById('cfg-fim').value = c.horaFim || '18:00';
             const ds = (c.diasSemana || '1,2,3,4,5,6').split(',');
-            for (let i = 0; i <= 6; i++) { const cb = document.getElementById(`cfg-dia-${i}`); if (cb) cb.checked = ds.includes(String(i)); }
+            for (let i = 0; i <= 6; i++) {
+                const cb = document.getElementById(`cfg-dia-${i}`);
+                if (cb) cb.checked = ds.includes(String(i));
+            }
             renderDatasBloqueadas(c.datasBloqueadas);
         }
-    } catch (e) { console.error('Erro config agenda:', e); }
+    } catch (e) { console.error('Erro config agenda:', e); if (configAlert) { configAlert.className = 'alert error'; configAlert.textContent = 'Erro ao carregar configurações da agenda.'; } }
 }
 if (formConfigGeral) {
     formConfigGeral.addEventListener('submit', async e => {
@@ -626,7 +699,10 @@ if (formConfigGeral) {
         const btn = document.getElementById('btn-save-cfg-geral');
         btn.disabled = true; btn.textContent = 'Salvando...';
         const sel = [];
-        for (let i = 0; i <= 6; i++) { const cb = document.getElementById(`cfg-dia-${i}`); if (cb && cb.checked) sel.push(String(i)); }
+        for (let i = 0; i <= 6; i++) {
+            const cb = document.getElementById(`cfg-dia-${i}`);
+            if (cb && cb.checked) sel.push(String(i));
+        }
         try {
             const c = await obterConfigAgenda();
             await salvarConfigAgenda({ ...c, intervalo: parseInt(document.getElementById('cfg-intervalo').value), horaInicio: document.getElementById('cfg-inicio').value, horaFim: document.getElementById('cfg-fim').value, diasSemana: sel.join(',') });
@@ -647,7 +723,7 @@ if (formBloquearData) {
             await salvarConfigAgenda({ ...c, datasBloqueadas: ds.join(',') });
             renderDatasBloqueadas(ds.join(',')); inp.value = '';
             if (configAlert) { configAlert.className = 'alert success'; configAlert.textContent = 'Data bloqueada!'; }
-        } catch { if (configAlert) { configAlert.className = 'alert error'; configAlert.textContent = 'Erro ao bloquear.'; } }
+        } catch (e) { console.error('Erro bloquear data:', e); if (configAlert) { configAlert.className = 'alert error'; configAlert.textContent = 'Erro ao bloquear.'; } }
     });
 }
 window.desbloquearData = async d => {
@@ -656,7 +732,7 @@ window.desbloquearData = async d => {
         const ds = (c.datasBloqueadas || '').split(',').map(x => x.trim()).filter(Boolean).filter(x => x !== d);
         await salvarConfigAgenda({ ...c, datasBloqueadas: ds.join(',') });
         renderDatasBloqueadas(ds.join(','));
-    } catch (e) { console.error('Erro desbloquear:', e); }
+    } catch (e) { console.error('Erro desbloquear:', e); alert('Erro ao desbloquear data.'); }
 };
 
 // --- Config Geral (endereço/contatos) ---
@@ -665,13 +741,20 @@ const configGeralAlert = document.getElementById('config-geral-alert');
 
 async function carregarConfigGeral() {
     try {
-        const c = await obterSiteConfig(); if (!c) return;
-        const set = (id, v) => { const el = document.getElementById(id); if (el) el.value = v || ''; };
+        const c = await obterSiteConfig();
+        if (!c) return;
+
+        // Função auxiliar para preencher campos do formulário
+        const set = (id, v) => {
+            const el = document.getElementById(id);
+            if (el) el.value = v || '';
+        };
+
         set('cfg-endereco', c.endereco);
         set('cfg-telefone', c.telefone);
         set('cfg-email', c.email);
         set('cfg-instagram', c.instagram);
-    } catch (e) { console.error('Erro config geral:', e); }
+    } catch (e) { console.error('Erro config geral:', e); if (configGeralAlert) { configGeralAlert.className = 'alert error'; configGeralAlert.textContent = 'Erro ao carregar configurações.'; } }
 }
 if (formSiteConfig) {
     formSiteConfig.addEventListener('submit', async e => {
@@ -687,11 +770,12 @@ if (formSiteConfig) {
         };
         try {
             const r = await fetch(`${API_URL}/site-config`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(p) });
-            if (!r.ok) throw new Error();
+            if (!r.ok) throw new Error('Erro ao salvar configurações gerais.');
             siteConfigCache = p;
             configGeralAlert.className = 'alert success';
             configGeralAlert.textContent = 'Configurações salvas!';
-        } catch {
+        } catch (e) {
+            console.error('Erro config geral:', e);
             configGeralAlert.className = 'alert error';
             configGeralAlert.textContent = 'Erro ao salvar.';
         } finally {

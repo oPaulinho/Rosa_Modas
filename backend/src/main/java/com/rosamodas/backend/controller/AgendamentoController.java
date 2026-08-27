@@ -47,14 +47,15 @@ public class AgendamentoController {
         return repository.findById(id).map(a -> {
             a.setStatus(novoStatus.toLowerCase());
             return ResponseEntity.ok(repository.save(a));
-        }).orElseGet(() -> {
-            updated.setId(id);
-            return ResponseEntity.ok(repository.save(updated));
-        });
+        }).orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        if (!repository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
         repository.deleteById(id);
+        return ResponseEntity.ok().build();
     }
 }

@@ -1,6 +1,7 @@
 package com.rosamodas.backend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.rosamodas.backend.model.Produto;
 import com.rosamodas.backend.repository.ProdutoRepository;
@@ -39,21 +40,22 @@ public class ProdutoController {
     }
 
     @PutMapping("/{id}")
-    public Produto update(@PathVariable Long id, @RequestBody Produto updated) {
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Produto updated) {
         return repository.findById(id).map(p -> {
             p.setNome(updated.getNome());
             p.setPreco(updated.getPreco());
             if (updated.getIcone() != null) p.setIcone(updated.getIcone());
             p.setStatus(updated.getStatus());
-            return repository.save(p);
-        }).orElseGet(() -> {
-            updated.setId(id);
-            return repository.save(updated);
-        });
+            return ResponseEntity.ok(repository.save(p));
+        }).orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        if (!repository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
         repository.deleteById(id);
+        return ResponseEntity.ok().build();
     }
 }
