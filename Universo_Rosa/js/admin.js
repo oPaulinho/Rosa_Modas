@@ -329,7 +329,7 @@ async function carregarProdutosAdmin() {
             tr.innerHTML = `<td><span class="admin-icon" style="font-size:1.8rem">${ic}</span></td><td>${escapeHtml(p.nome)}</td><td>${preco}</td><td>${sel}</td><td>${siteBadge(p.site)}</td><td style="white-space:nowrap"><button onclick="window.editarProduto('${p.id}','${(p.nome||'').replace(/'/g,"\\'")}','${Number(p.preco)||0}','${p.icone||'🌹'}','${p.status||'Disponível'}','${p.site||'ROSA_MODAS'}')" style="background:#e3f2fd;color:#1565c0;border:none;padding:.5rem;border-radius:5px;cursor:pointer;margin-right:4px">✏️ Editar</button><button onclick="window.excluirProduto('${p.id}')" style="background:#ffebee;color:#c62828;border:none;padding:.5rem;border-radius:5px;cursor:pointer">Excluir</button></td>`;
             t.appendChild(tr);
         });
-    } catch (e) { console.error('Erro produtos:', e); }
+    } catch (e) { console.error('Erro produtos:', e); t.innerHTML = '<tr><td colspan="6" style="color:red;text-align:center">Erro ao carregar produtos. Verifique a conexão com o servidor.</td></tr>'; }
 }
 
 window.alterarStatusProduto = async (id, st) => {
@@ -464,7 +464,7 @@ async function carregarProcedimentosAdmin() {
             tr.innerHTML = `<td><span class="admin-icon">${ic}</span></td><td>${escapeHtml(p.nome)}</td><td>${p.status||'Disponível'}</td><td>${siteBadge(p.site)}</td><td style="white-space:nowrap"><button onclick="window.editarProcedimento('${p.id}','${(p.nome||'').replace(/'/g,"\\'")}','${(p.descricao||'').replace(/'/g,"\\'")}','${p.status||'Disponível'}','${p.icone||''}','${p.site||'ROSA_MODAS'}')" style="background:#e3f2fd;color:#1565c0;border:none;padding:.5rem;border-radius:5px;cursor:pointer;margin-right:4px">✏️ Editar</button><button onclick="window.excluirProcedimento('${p.id}')" style="background:#ffebee;color:#c62828;border:none;padding:.5rem;border-radius:5px;cursor:pointer">🗑 Excluir</button></td>`;
             tabelaProcedimentos.appendChild(tr);
         });
-    } catch (e) { console.error('Erro procedimentos:', e); }
+    } catch (e) { console.error('Erro procedimentos:', e); tabelaProcedimentos.innerHTML = '<tr><td colspan="5" style="color:red;text-align:center">Erro ao carregar procedimentos. Verifique a conexão com o servidor.</td></tr>'; }
 }
 
 if (formProcedimento) {
@@ -543,7 +543,7 @@ async function carregarServicosAdmin() {
             tr.innerHTML = `<td><span class="admin-icon">${ic}</span></td><td>${escapeHtml(s.nome)}</td><td>${preco}</td><td>${modsFmt}</td><td>${s.status||'Disponível'}</td><td>${siteBadge(s.site)}</td><td style="white-space:nowrap"><button onclick="window.editarServico('${s.id}','${(s.nome||'').replace(/'/g,"\\'")}','${Number(s.preco)||0}','${(s.descricao||'').replace(/'/g,"\\'")}','${s.status||'Disponível'}','${ms}','${s.icone||''}')" style="background:#e3f2fd;color:#1565c0;border:none;padding:.5rem;border-radius:5px;cursor:pointer;margin-right:4px">✏️ Editar</button><button onclick="window.excluirServico('${s.id}')" style="background:#ffebee;color:#c62828;border:none;padding:.5rem;border-radius:5px;cursor:pointer">Excluir</button></td>`;
             tabelaServicos.appendChild(tr);
         });
-    } catch (e) { console.error('Erro serviços:', e); }
+    } catch (e) { console.error('Erro serviços:', e); tabelaServicos.innerHTML = '<tr><td colspan="7" style="color:red;text-align:center">Erro ao carregar serviços. Verifique a conexão com o servidor.</td></tr>'; }
 }
 
 if (formServico) {

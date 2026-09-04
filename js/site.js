@@ -289,7 +289,7 @@ async function carregarContatos() {
         }
 
         // Coluna Endereço no rodapé
-        const footerEndereco = document.query.querySelector('footer .lista-rodape:nth-of-type(3) .lista-rodape__item');
+        const footerEndereco = document.querySelector('footer .lista-rodape:nth-of-type(3) .lista-rodape__item');
         if (footerEndereco && cfg.endereco) {
             const partes = cfg.endereco.split('-').map(p => p.trim()).filter(Boolean);
             footerEndereco.innerHTML = partes.join('<br>');

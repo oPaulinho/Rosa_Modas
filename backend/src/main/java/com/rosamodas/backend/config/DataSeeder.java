@@ -27,10 +27,10 @@ public class DataSeeder {
         return args -> {
             // Seed de Roupas
             if (produtoRepository.count() == 0) {
-                // Parâmetros: Produto(String nome, Double preco, String imagemUrl, String status, String criadoEm)
-                produtoRepository.save(new Produto("Body Feminino Moderno", 59.90, "img/roupa.jpg", "Disponível", new java.util.Date().toString()));
-                produtoRepository.save(new Produto("Cropped Style", 39.90, "img/roupa2.jpg", "Disponível", new java.util.Date().toString()));
-                produtoRepository.save(new Produto("Short Casual Verão", 49.90, "img/roupa3.jpg", "Esgotado", new java.util.Date().toString()));
+                // Parâmetros: Produto(String nome, Double preco, String icone, String status, String criadoEm)
+                produtoRepository.save(new Produto("Body Feminino Moderno", 59.90, "👚", "Disponível", new java.util.Date().toString()));
+                produtoRepository.save(new Produto("Cropped Style", 39.90, "👗", "Disponível", new java.util.Date().toString()));
+                produtoRepository.save(new Produto("Short Casual Verão", 49.90, "🩳", "Esgotado", new java.util.Date().toString()));
                 System.out.println("Seed: Roupas inseridas!");
             }
 

@@ -46,6 +46,7 @@ public class ProdutoController {
             p.setPreco(updated.getPreco());
             if (updated.getIcone() != null) p.setIcone(updated.getIcone());
             p.setStatus(updated.getStatus());
+            if (updated.getSite() != null && !updated.getSite().isBlank()) p.setSite(updated.getSite());
             return ResponseEntity.ok(repository.save(p));
         }).orElse(ResponseEntity.notFound().build());
     }
